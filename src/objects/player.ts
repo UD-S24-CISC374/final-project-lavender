@@ -1,3 +1,5 @@
+import Phaser from "phaser";
+
 interface PlayerProps {
     scene: Phaser.Scene;
     x: number;
