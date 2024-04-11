@@ -16,16 +16,17 @@ export default class Game_1 extends Phaser.Scene {
     private scoreText?: Phaser.GameObjects.Text;
 
     create() {
-        this.add.image(400, 300, "tomato");
+        //this.add.image(400, 300, "tomato");
         //temporary image
         this.add.image(640, 280, "kitchen1");
 
-        this.tomato = this.physics.add.group({
-            key: "tomato",
-            repeat: 10,
-            setXY: { x: 200, y: 20, stepX: 100 },
-            collideWorldBounds: true,
-        });
+        this.tomato = this.physics.add.group();
+        for (let i = 0; i < 10; i++) {
+            let x = Phaser.Math.RND.between(0, 1280);
+            let y = Phaser.Math.RND.between(0, 720);
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            this.tomato.create(x, y, "tomato");
+        }
 
         //Creates player input and player object.
         this.cursors = this.input.keyboard?.createCursorKeys();
