@@ -59,7 +59,7 @@ export default class informationScene2 extends Phaser.Scene {
         //Button click event
         nextButton2.on("pointerdown", () => {
             // switch to next scene
-            this.scene.start("Game_1");
+            this.scene.start("GameIntro");
         });
 
         backButton.on("pointerdown", () => {
