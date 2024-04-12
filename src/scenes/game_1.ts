@@ -5,9 +5,9 @@ export type Collidable =
     | Phaser.Types.Physics.Arcade.GameObjectWithBody
     | Phaser.Tilemaps.Tile;
 
-export default class Game_1 extends Phaser.Scene {
+export default class game_1 extends Phaser.Scene {
     constructor() {
-        super({ key: "Game_1" });
+        super({ key: "game_1" });
     }
 
     private player?: Player;

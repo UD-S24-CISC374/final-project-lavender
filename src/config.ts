@@ -5,7 +5,8 @@ import PreloadScene from "./scenes/preloadScene";
 import InformationScene from "./scenes/informationScene";
 import InformationScene2 from "./scenes/informationScene2";
 
-import Game_1 from "./scenes/gameScene_1";
+import Game_1 from "./scenes/game_1";
+import GameIntro from "./scenes/GameIntro";
 
 const DEFAULT_WIDTH = 1280;
 const DEFAULT_HEIGHT = 720;
@@ -28,6 +29,7 @@ export const CONFIG = {
         InformationScene,
         InformationScene2,
         Game_1,
+        GameIntro,
     ],
     physics: {
         default: "arcade",
