@@ -1,5 +1,9 @@
 import Phaser from "phaser";
 
+export type Collidable =
+    | Phaser.Types.Physics.Arcade.GameObjectWithBody
+    | Phaser.Tilemaps.Tile;
+
 interface ArmsProps {
     scene: Phaser.Scene;
     x: number;
@@ -7,8 +11,13 @@ interface ArmsProps {
 }
 
 export class Player_Arms extends Phaser.Physics.Arcade.Sprite {
+    hasItem: boolean;
+    overlapping: boolean;
+
     constructor(config: ArmsProps) {
         super(config.scene, config.x, config.y, "chef_arms");
+        this.hasItem = false;
+        this.overlapping = false;
         config.scene.add.existing(this);
         config.scene.physics.add.existing(this, false);
         this.setCollideWorldBounds(true);
@@ -37,8 +46,18 @@ export class Player_Arms extends Phaser.Physics.Arcade.Sprite {
         });
     }
 
-    grabObject(t_angle: number) {
-        this.anims.play("grab", true);
-        this.setAngle(t_angle - 90);
-    }
+    //grabObject(scene: Scene) {
+    //    var targetAngle =
+    //        Phaser.Math.RAD_TO_DEG *
+    //        Phaser.Math.Angle.Between(
+    //            this.x,
+    //            this.y,
+    //            scene.input.activePointer.x,
+    //            scene.input.activePointer.y
+    //        );
+    //    if (!this.hasItem) {
+    //        this.anims.play("grab", true);
+    //        this.setAngle(targetAngle - 90);
+    //    }
+    //}
 }
