@@ -46,6 +46,7 @@ export class Player_Arms extends Phaser.Physics.Arcade.Sprite {
         });
     }
 
+    ////Ignore this. Was playing around with having the arms rotate towards the mouse.
     //grabObject(scene: Scene) {
     //    var targetAngle =
     //        Phaser.Math.RAD_TO_DEG *
