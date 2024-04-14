@@ -23,8 +23,6 @@ export class Player_Arms extends Phaser.Physics.Arcade.Sprite {
         this.setCollideWorldBounds(true);
     }
 
-    target = 0;
-
     createAnims() {
         this.anims.create({
             key: "idle",
@@ -45,20 +43,4 @@ export class Player_Arms extends Phaser.Physics.Arcade.Sprite {
             repeat: -1,
         });
     }
-
-    ////Ignore this. Was playing around with having the arms rotate towards the mouse.
-    //grabObject(scene: Scene) {
-    //    var targetAngle =
-    //        Phaser.Math.RAD_TO_DEG *
-    //        Phaser.Math.Angle.Between(
-    //            this.x,
-    //            this.y,
-    //            scene.input.activePointer.x,
-    //            scene.input.activePointer.y
-    //        );
-    //    if (!this.hasItem) {
-    //        this.anims.play("grab", true);
-    //        this.setAngle(targetAngle - 90);
-    //    }
-    //}
 }
