@@ -40,17 +40,18 @@ export default class game_1 extends Phaser.Scene {
             }
         );
     }
-
     create() {
-        //temporary image
-        this.add.image(640, 280, "kitchen1");
+        //Creates tile and map.
+        const map = this.make.tilemap({ key: "map_1" });
+        const tileset = map.addTilesetImage("Room_Builder_48x48", "tiles"); //Tilemap name, then key preloader name
 
+        //Creates and randomizes tomato position.
         let x, y;
         const numOfObjects = 10;
         this.itemGroup = this.physics.add.group();
         for (let i = 0; i < numOfObjects; i++) {
-            x = Phaser.Math.RND.between(0, 1200);
-            y = Phaser.Math.RND.between(0, 720);
+            x = Phaser.Math.RND.between(20, 1180);
+            y = Phaser.Math.RND.between(20, 700);
             this.itemGroup.add(this.physics.add.sprite(x, y, "tomato"));
         }
 
@@ -58,7 +59,7 @@ export default class game_1 extends Phaser.Scene {
         this.cursors = this.input.keyboard;
         this.player = new Player({
             scene: this,
-            x: this.cameras.main.displayWidth / 2,
+            x: this.cameras.main.displayWidth / 2 - 20,
             y: this.cameras.main.displayHeight / 2,
         });
         this.player.createAnims();
@@ -84,6 +85,46 @@ export default class game_1 extends Phaser.Scene {
             },
             this
         );
+
+        if (tileset) {
+            //Tile Parameters
+            const belowLayer = map.createLayer("Below Player", tileset, 0, 0);
+            const aboveLayer = map.createLayer("Above Player", tileset, 0, 0);
+
+            //Set collision for tiles with collides key
+            //belowLayer?.setCollisionByProperty({ collides: true });
+            aboveLayer?.setCollisionByProperty({ collides: true });
+
+            //Set scale & depth of layers
+            belowLayer?.setScale(1);
+            belowLayer?.setDepth(-2);
+            aboveLayer?.setScale(1);
+            aboveLayer?.setDepth(-1);
+
+            //Set collision
+            //if (belowLayer) {
+            //    this.physics.add.collider(this.player, belowLayer);
+            //}
+            if (aboveLayer) {
+                this.physics.add.collider(this.player, aboveLayer);
+                this.physics.add.collider(this.player_arms, aboveLayer);
+            }
+
+            //Graphics Debugger
+            const debugGraphics = this.add.graphics().setAlpha(0.75);
+            if (aboveLayer) {
+                aboveLayer.renderDebug(debugGraphics, {
+                    tileColor: null, // Color of non-colliding tiles
+                    collidingTileColor: new Phaser.Display.Color(
+                        243,
+                        134,
+                        48,
+                        255
+                    ), // Color of colliding tiles
+                    faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
+                });
+            }
+        }
     }
 
     update() {
