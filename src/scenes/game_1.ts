@@ -49,7 +49,7 @@ export default class game_1 extends Phaser.Scene {
         const numOfObjects = 10;
         this.itemGroup = this.physics.add.group();
         for (let i = 0; i < numOfObjects; i++) {
-            x = Phaser.Math.RND.between(0, 1280);
+            x = Phaser.Math.RND.between(0, 1200);
             y = Phaser.Math.RND.between(0, 720);
             this.itemGroup.add(this.physics.add.sprite(x, y, "tomato"));
         }

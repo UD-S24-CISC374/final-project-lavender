@@ -9,7 +9,7 @@ import Game_1 from "./scenes/game_1";
 import GameIntro from "./scenes/GameIntro";
 
 //608x480 or 1280x720
-const DEFAULT_WIDTH = 1280;
+const DEFAULT_WIDTH = 1200;
 const DEFAULT_HEIGHT = 720;
 
 export const CONFIG = {
