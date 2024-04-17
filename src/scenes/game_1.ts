@@ -25,6 +25,10 @@ export default class game_1 extends Phaser.Scene {
     private textBackground: Phaser.GameObjects.Rectangle;
     private instructions: Phaser.GameObjects.Text;
 
+    private secondPopupVisible: boolean = false;
+    private secondTextBackground: Phaser.GameObjects.Rectangle;
+    private secondInstructions: Phaser.GameObjects.Text;
+
     preload() {
         //Character Spritesheet
         this.load.spritesheet(
@@ -57,16 +61,18 @@ export default class game_1 extends Phaser.Scene {
         const textYPosition = screenHeight - textBoxHeight - 50; //adjust Y position of text box, move up 100 pixels
 
         // transparent rectangle for text background
-         this.textBackground = this.add.rectangle(
-            screenWidth / 2, // X position (center of the screen)
-            textYPosition,
-            textBoxWidth, // Width of the rectangle
-            textBoxHeight, // Height of the rectangle
-            0x6495ED, // Color of the rectangle (black)
-            0.5 // Transparency of the rectangle
-        ).setDepth(100);    //set in front of objects
+        this.textBackground = this.add
+            .rectangle(
+                screenWidth / 2, // X position (center of the screen)
+                textYPosition,
+                textBoxWidth, // Width of the rectangle
+                textBoxHeight, // Height of the rectangle
+                0x6495ed, // Color of the rectangle (black)
+                0.5 // Transparency of the rectangle
+            )
+            .setDepth(100); //set in front of objects
 
-        
+        //WASD text instructions
         this.instructions = this.add
             .text(
                 screenWidth / 2, // X position (center of the screen)
@@ -78,10 +84,39 @@ export default class game_1 extends Phaser.Scene {
                     align: "center",
                 }
             )
-            .setOrigin(0.5).setDepth(100);  // set in front of objects
+            .setOrigin(0.5)
+            .setDepth(100); // set in front of objects
 
-            this.textBackground.setVisible(this.popupVisible);
-            this.instructions.setVisible(this.popupVisible);
+        this.textBackground.setVisible(this.popupVisible);
+        this.instructions.setVisible(this.popupVisible);
+
+        // Second set of text
+        this.secondTextBackground = this.add
+            .rectangle(
+                screenWidth / 2,
+                textYPosition - 150, // Positioned slightly above the first text
+                textBoxWidth,
+                textBoxHeight,
+                0x6495ed,
+                0.5
+            )
+            .setDepth(100)
+            .setVisible(false); // Initially invisible
+
+        this.secondInstructions = this.add
+            .text(
+                screenWidth / 2,
+                textYPosition - 150,
+                "Try picking up a tomato by clicking your mouse",
+                {
+                    font: "bold 30px Arial",
+                    color: "#ffffff",
+                    align: "center",
+                }
+            )
+            .setOrigin(0.5)
+            .setDepth(100)
+            .setVisible(false);
 
         //Creates and randomizes tomato position.
         let x, y;
@@ -90,9 +125,7 @@ export default class game_1 extends Phaser.Scene {
         for (let i = 0; i < numOfObjects; i++) {
             x = Phaser.Math.RND.between(20, 1180);
             y = Phaser.Math.RND.between(50, 700);
-            //this.itemGroup.add(this.physics.add.sprite(x, y, "tomato");
-            let tomato = this.physics.add.sprite(x, y, "tomato");
-            tomato.setDepth(1);
+            this.itemGroup.add(this.physics.add.sprite(x, y, "tomato"));
         }
 
         //Creates player input and player object.
@@ -186,6 +219,7 @@ export default class game_1 extends Phaser.Scene {
                 onComplete: () => {
                     this.textBackground.destroy();
                     this.instructions.destroy();
+                    this.fadeInSecondText();
                 },
             });
         }
@@ -263,5 +297,15 @@ export default class game_1 extends Phaser.Scene {
             this.mouseClicked = false;
         }
         this.player_arms.overlapping = false;
+    }
+    fadeInSecondText() {
+        this.secondPopupVisible = true;
+        this.secondTextBackground.setVisible(true);
+        this.secondInstructions.setVisible(true);
+        this.tweens.add({
+            targets: [this.secondTextBackground, this.secondInstructions],
+            alpha: { from: 0, to: 1 },
+            duration: 5000,
+        });
     }
 }
