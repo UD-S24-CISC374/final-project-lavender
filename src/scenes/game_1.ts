@@ -18,8 +18,6 @@ export default class game_1 extends Phaser.Scene {
 
     private itemGroup?: Phaser.Physics.Arcade.Group;
     private heldItem: Phaser.Physics.Arcade.Sprite | null;
-    //private score = 0;
-    //private scoreText?: Phaser.GameObjects.Text;
 
     private popupVisible: boolean = true;
     private textBackground: Phaser.GameObjects.Rectangle;
@@ -364,6 +362,7 @@ export default class game_1 extends Phaser.Scene {
         }
         this.player_arms.overlapping = false;
     }
+
     fadeInSecondText() {
         this.secondPopupVisible = true;
         this.secondTextBackground.setVisible(true);
@@ -393,6 +392,7 @@ export default class game_1 extends Phaser.Scene {
             },
         });
     }
+
     fadeInThirdText() {
         this.thirdTextBackground.setVisible(true);
         this.thirdInstructions.setVisible(true);
