@@ -29,6 +29,11 @@ export default class game_1 extends Phaser.Scene {
     private secondTextBackground: Phaser.GameObjects.Rectangle;
     private secondInstructions: Phaser.GameObjects.Text;
 
+    private thirdTextBackground: Phaser.GameObjects.Rectangle;
+    private thirdInstructions: Phaser.GameObjects.Text;
+
+    private continueButton: Phaser.GameObjects.Text;
+
     preload() {
         //Character Spritesheet
         this.load.spritesheet(
@@ -117,6 +122,65 @@ export default class game_1 extends Phaser.Scene {
             .setOrigin(0.5)
             .setDepth(100)
             .setVisible(false);
+
+        const textYPositionThird = this.cameras.main.height / 2; // Adjust position based on layout
+
+        // Creates third text background
+        this.thirdTextBackground = this.add
+            .rectangle(
+                this.cameras.main.width / 2,
+                textYPositionThird,
+                700, // Width of the rectangle
+                100, // Height of the rectangle
+                0x6495ed, // Color of the rectangle (dark blue)
+                0.5 // Transparency of the rectangle
+            )
+            .setDepth(100)
+            .setVisible(false);
+
+        // Creates third text instruction
+        this.thirdInstructions = this.add
+            .text(
+                this.cameras.main.width / 2,
+                textYPositionThird,
+                "Great work!",
+                {
+                    font: "bold 40px Arial",
+                    color: "#ffffff",
+                    align: "center",
+                }
+            )
+            .setOrigin(0.5)
+            .setDepth(101)
+            .setVisible(false);
+
+        // Initialize the continue button
+        this.continueButton = this.add
+            .text(
+                this.cameras.main.width - 150, // Positioned in the bottom right
+                this.cameras.main.height - 50,
+                "Continue",
+                {
+                    font: "bold 24px Arial",
+                    backgroundColor: "#6495ED", // Blue background
+                    color: "#FFFFFF", // White text
+                    padding: {
+                        left: 16,
+                        right: 16,
+                        top: 10,
+                        bottom: 10,
+                    },
+                    fixedWidth: 100,
+                }
+            )
+            .setInteractive({ useHandCursor: true }) // Makes the button clickable
+            .setOrigin(0.5, 0.5)
+            .setVisible(false); // Start with the button hidden
+
+        // Add a click event listener to the button
+        this.continueButton.on("pointerdown", () => {
+            this.scene.start("nextSceneKey"); // Change 'nextSceneKey' to your actual scene key
+        });
 
         //Creates and randomizes tomato position.
         let x, y;
@@ -306,6 +370,38 @@ export default class game_1 extends Phaser.Scene {
             targets: [this.secondTextBackground, this.secondInstructions],
             alpha: { from: 0, to: 1 },
             duration: 5000,
+            onComplete: () => {
+                // Delay the call to fade out the text by 6000 milliseconds (6 seconds)
+                this.time.delayedCall(6000, () => {
+                    this.fadeOutSecondText();
+                });
+            },
+        });
+    }
+
+    fadeOutSecondText() {
+        this.tweens.add({
+            targets: [this.secondTextBackground, this.secondInstructions],
+            alpha: { from: 1, to: 0 },
+            duration: 5000, // Adjust duration for a slower or faster fade
+            onComplete: () => {
+                this.secondTextBackground.setVisible(false);
+                this.secondInstructions.setVisible(false);
+                this.fadeInThirdText(); // call to fade to 3rd scene
+            },
+        });
+    }
+    fadeInThirdText() {
+        this.thirdTextBackground.setVisible(true);
+        this.thirdInstructions.setVisible(true);
+        this.tweens.add({
+            targets: [this.thirdTextBackground, this.thirdInstructions],
+            alpha: { from: 0, to: 1 },
+            duration: 5000,
+            onComplete: () => {
+                // Show the continue button after the text fades in
+                this.continueButton.setVisible(true);
+            },
         });
     }
 }
