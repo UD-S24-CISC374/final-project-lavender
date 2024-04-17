@@ -158,7 +158,7 @@ export default class game_1 extends Phaser.Scene {
         this.continueButton = this.add
             .text(
                 this.cameras.main.width - 200, // Positioned in the bottom right
-                this.cameras.main.height - 80,
+                this.cameras.main.height - 90,
                 "Continue",
                 {
                     font: "bold 28px Arial",
@@ -166,6 +166,13 @@ export default class game_1 extends Phaser.Scene {
                     color: "#FFFFFF", // White text
                     align: "center",
                     fixedWidth: 180,
+                    fixedHeight: 50,
+                    padding: {
+                        top: 10,
+                        bottom: 10,
+                        left: 10,
+                        right: 10,
+                    },
                 }
             )
             .setInteractive({ useHandCursor: true }) // Makes the button clickable
