@@ -157,20 +157,15 @@ export default class game_1 extends Phaser.Scene {
         // Initialize the continue button
         this.continueButton = this.add
             .text(
-                this.cameras.main.width - 150, // Positioned in the bottom right
-                this.cameras.main.height - 50,
+                this.cameras.main.width - 200, // Positioned in the bottom right
+                this.cameras.main.height - 80,
                 "Continue",
                 {
-                    font: "bold 24px Arial",
+                    font: "bold 28px Arial",
                     backgroundColor: "#6495ED", // Blue background
                     color: "#FFFFFF", // White text
-                    padding: {
-                        left: 16,
-                        right: 16,
-                        top: 10,
-                        bottom: 10,
-                    },
-                    fixedWidth: 100,
+                    align: "center",
+                    fixedWidth: 180,
                 }
             )
             .setInteractive({ useHandCursor: true }) // Makes the button clickable
@@ -179,7 +174,7 @@ export default class game_1 extends Phaser.Scene {
 
         // Add a click event listener to the button
         this.continueButton.on("pointerdown", () => {
-            this.scene.start("nextSceneKey"); // Change 'nextSceneKey' to your actual scene key
+            this.scene.start("game_2.ts");
         });
 
         //Creates and randomizes tomato position.
