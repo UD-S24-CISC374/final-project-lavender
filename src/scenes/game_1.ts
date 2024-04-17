@@ -198,6 +198,7 @@ export default class game_1 extends Phaser.Scene {
             scene: this,
             x: this.cameras.main.displayWidth / 2 - 20,
             y: this.cameras.main.displayHeight / 2,
+            cursors: this.cursors,
         });
         this.player.createAnims();
         this.player_arms = new Player_Arms({
@@ -287,36 +288,7 @@ export default class game_1 extends Phaser.Scene {
                 },
             });
         }
-        if (
-            this.cursors?.addKey(Phaser.Input.Keyboard.KeyCodes.W).isDown ||
-            this.cursors?.addKey(Phaser.Input.Keyboard.KeyCodes.A).isDown ||
-            this.cursors?.addKey(Phaser.Input.Keyboard.KeyCodes.S).isDown ||
-            this.cursors?.addKey(Phaser.Input.Keyboard.KeyCodes.D).isDown
-        ) {
-            if (this.cursors.addKey(Phaser.Input.Keyboard.KeyCodes.A).isDown) {
-                this.player.setVelocityX(-230);
-                this.player_arms.setVelocityX(-230);
-                this.player.flipX = true;
-            } else if (
-                this.cursors.addKey(Phaser.Input.Keyboard.KeyCodes.D).isDown
-            ) {
-                this.player.setVelocityX(230);
-                this.player_arms.setVelocityX(230);
-                this.player.flipX = false;
-            }
-            if (this.cursors.addKey(Phaser.Input.Keyboard.KeyCodes.W).isDown) {
-                this.player.setVelocityY(-230);
-                this.player_arms.setVelocityY(-230);
-            } else if (
-                this.cursors.addKey(Phaser.Input.Keyboard.KeyCodes.S).isDown
-            ) {
-                this.player.setVelocityY(230);
-                this.player_arms.setVelocityY(230);
-            }
-            this.player.anims.play("move", true);
-        } else {
-            this.player.anims.play("idle", true);
-        }
+        this.player.movePlayer(this.player_arms);
 
         //GrabObjects function and associated math.
         if (!this.player_arms.hasItem) {
