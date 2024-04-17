@@ -2,7 +2,7 @@ import Phaser from "phaser";
 
 export default class GameIntro extends Phaser.Scene {
     private content =
-        "Chef, thank heavens you're here, where have you been?! We've been swamped with orders and we have six reservations coming in the next hour. Sam called out so it's just you and me today, but we got this!";
+        "Chef, thank goodness you're here, where have you been?! We've been swamped with orders and we have six reservations coming in the next hour. Sam called out so it's just you and me today, but we got this!";
     private dialogText?: Phaser.GameObjects.Text;
     private index = 0;
     private timerEvent?: Phaser.Time.TimerEvent;

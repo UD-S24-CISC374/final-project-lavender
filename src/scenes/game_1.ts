@@ -21,6 +21,10 @@ export default class game_1 extends Phaser.Scene {
     //private score = 0;
     //private scoreText?: Phaser.GameObjects.Text;
 
+    private popupVisible: boolean = true;
+    private textBackground: Phaser.GameObjects.Rectangle;
+    private instructions: Phaser.GameObjects.Text;
+
     preload() {
         //Character Spritesheet
         this.load.spritesheet(
@@ -40,10 +44,44 @@ export default class game_1 extends Phaser.Scene {
             }
         );
     }
+
     create() {
         //Creates tile and map.
         const map = this.make.tilemap({ key: "map_1" });
         const tileset = map.addTilesetImage("Room_Builder_48x48", "tiles"); //Tilemap name, then key preloader name
+
+        const textBoxWidth = 700;
+        const textBoxHeight = 100;
+        const screenWidth = this.cameras.main.width;
+        const screenHeight = this.cameras.main.height;
+        const textYPosition = screenHeight - textBoxHeight - 50; //adjust Y position of text box, move up 100 pixels
+
+        // transparent rectangle for text background
+         this.textBackground = this.add.rectangle(
+            screenWidth / 2, // X position (center of the screen)
+            textYPosition,
+            textBoxWidth, // Width of the rectangle
+            textBoxHeight, // Height of the rectangle
+            0x6495ED, // Color of the rectangle (black)
+            0.5 // Transparency of the rectangle
+        ).setDepth(100);    //set in front of objects
+
+        
+        this.instructions = this.add
+            .text(
+                screenWidth / 2, // X position (center of the screen)
+                textYPosition,
+                "Try pressing WASD to move around", // Text to display
+                {
+                    font: "bold 40px Arial",
+                    color: "#ffffff",
+                    align: "center",
+                }
+            )
+            .setOrigin(0.5).setDepth(100);  // set in front of objects
+
+            this.textBackground.setVisible(this.popupVisible);
+            this.instructions.setVisible(this.popupVisible);
 
         //Creates and randomizes tomato position.
         let x, y;
@@ -52,7 +90,9 @@ export default class game_1 extends Phaser.Scene {
         for (let i = 0; i < numOfObjects; i++) {
             x = Phaser.Math.RND.between(20, 1180);
             y = Phaser.Math.RND.between(50, 700);
-            this.itemGroup.add(this.physics.add.sprite(x, y, "tomato"));
+            //this.itemGroup.add(this.physics.add.sprite(x, y, "tomato");
+            let tomato = this.physics.add.sprite(x, y, "tomato");
+            tomato.setDepth(1);
         }
 
         //Creates player input and player object.
@@ -131,6 +171,24 @@ export default class game_1 extends Phaser.Scene {
         //Movement
         this.player.setVelocity(0);
         this.player_arms.setVelocity(0);
+        if (
+            this.popupVisible &&
+            (this.cursors?.addKey(Phaser.Input.Keyboard.KeyCodes.W).isDown ||
+                this.cursors?.addKey(Phaser.Input.Keyboard.KeyCodes.A).isDown ||
+                this.cursors?.addKey(Phaser.Input.Keyboard.KeyCodes.S).isDown ||
+                this.cursors?.addKey(Phaser.Input.Keyboard.KeyCodes.D).isDown)
+        ) {
+            this.popupVisible = false;
+            this.tweens.add({
+                targets: [this.textBackground, this.instructions],
+                alpha: { from: 1, to: 0 },
+                duration: 5000,
+                onComplete: () => {
+                    this.textBackground.destroy();
+                    this.instructions.destroy();
+                },
+            });
+        }
         if (
             this.cursors?.addKey(Phaser.Input.Keyboard.KeyCodes.W).isDown ||
             this.cursors?.addKey(Phaser.Input.Keyboard.KeyCodes.A).isDown ||
