@@ -19,8 +19,6 @@ export default class game_2 extends Phaser.Scene {
     private itemGroup?: Phaser.Physics.Arcade.Group;
     private heldItem: Phaser.Physics.Arcade.Sprite | null;
 
-    private popupVisible: boolean = true;
-
     preload() {
         //Character Spritesheet
         this.load.spritesheet(
@@ -111,21 +109,6 @@ export default class game_2 extends Phaser.Scene {
                 this.physics.add.collider(this.player, aboveLayer);
                 this.physics.add.collider(this.player_arms, aboveLayer);
             }
-
-            //Graphics Debugger
-            //const debugGraphics = this.add.graphics().setAlpha(0.75);
-            //if (aboveLayer) {
-            //    aboveLayer.renderDebug(debugGraphics, {
-            //        tileColor: null, // Color of non-colliding tiles
-            //       collidingTileColor: new Phaser.Display.Color(
-            //            243,
-            //            134,
-            //            48,
-            //            255
-            //        ), // Color of colliding tiles
-            //        faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
-            //    });
-            //}
         }
     }
 
@@ -133,13 +116,6 @@ export default class game_2 extends Phaser.Scene {
         //Movement
         this.player.setVelocity(0);
         this.player_arms.setVelocity(0);
-        if (
-            this.popupVisible &&
-            (this.cursors?.addKey(Phaser.Input.Keyboard.KeyCodes.W).isDown ||
-                this.cursors?.addKey(Phaser.Input.Keyboard.KeyCodes.A).isDown ||
-                this.cursors?.addKey(Phaser.Input.Keyboard.KeyCodes.S).isDown ||
-                this.cursors?.addKey(Phaser.Input.Keyboard.KeyCodes.D).isDown)
-        )
         this.player.movePlayer(this.player_arms);
 
         //GrabObjects function and associated math.
@@ -186,4 +162,6 @@ export default class game_2 extends Phaser.Scene {
         }
         this.player_arms.overlapping = false;
     }
+
+    
 }
