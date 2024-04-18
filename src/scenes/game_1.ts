@@ -249,19 +249,19 @@ export default class game_1 extends Phaser.Scene {
             }
 
             //Graphics Debugger
-            const debugGraphics = this.add.graphics().setAlpha(0.75);
-            if (aboveLayer) {
-                aboveLayer.renderDebug(debugGraphics, {
-                    tileColor: null, // Color of non-colliding tiles
-                    collidingTileColor: new Phaser.Display.Color(
-                        243,
-                        134,
-                        48,
-                        255
-                    ), // Color of colliding tiles
-                    faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
-                });
-            }
+            //const debugGraphics = this.add.graphics().setAlpha(0.75);
+            //if (aboveLayer) {
+            //    aboveLayer.renderDebug(debugGraphics, {
+            //        tileColor: null, // Color of non-colliding tiles
+            //       collidingTileColor: new Phaser.Display.Color(
+            //            243,
+            //            134,
+            //            48,
+            //            255
+            //        ), // Color of colliding tiles
+            //        faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
+            //    });
+            //}
         }
     }
 
@@ -303,7 +303,7 @@ export default class game_1 extends Phaser.Scene {
                 this.player_arms.flipY = true;
                 this.player_arms.anims.play("grab");
                 //Position item above the player.
-                this.heldItem?.setPosition(this.player.x, this.player.y - 40);
+                this.heldItem?.setPosition(this.player.x, this.player.y - 50);
                 this.mouseClicked = true;
             } else {
                 //If no item is grabbed/LMB not pressed
@@ -315,7 +315,7 @@ export default class game_1 extends Phaser.Scene {
             this.player_arms.flipY = true;
             this.player_arms.anims.play("grab");
             //Position above head.
-            this.heldItem?.setPosition(this.player.x, this.player.y - 40);
+            this.heldItem?.setPosition(this.player.x, this.player.y - 50);
             //If LMB released while holding item, drop it
             if (
                 this.input.mousePointer.leftButtonDown() &&
