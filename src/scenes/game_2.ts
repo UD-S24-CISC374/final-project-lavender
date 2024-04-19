@@ -44,16 +44,6 @@ export default class game_2 extends Phaser.Scene {
         const map = this.make.tilemap({ key: "map_1" });
         const tileset = map.addTilesetImage("Room_Builder_48x48", "tiles"); //Tilemap name, then key preloader name
 
-        //Creates and randomizes tomato position.
-        let x, y;
-        const numOfObjects = 10;
-        this.itemGroup = this.physics.add.group();
-        for (let i = 0; i < numOfObjects; i++) {
-            x = Phaser.Math.RND.between(20, 1180);
-            y = Phaser.Math.RND.between(50, 700);
-            this.itemGroup.add(this.physics.add.sprite(x, y, "tomato"));
-        }
-
         //Creates player input and player object.
         this.cursors = this.input.keyboard;
         this.player = new Player({
@@ -69,22 +59,6 @@ export default class game_2 extends Phaser.Scene {
             y: this.player.y,
         });
         this.player_arms.createAnims();
-
-        //Add overlap between player_arms and game objects.
-        this.physics.add.overlap(
-            this.player_arms,
-            this.itemGroup,
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            (playerArms, item) => {
-                (playerArms as Player_Arms).overlapping = true;
-                //(playerArms as Player_Arms).hasItem = true;
-                this.heldItem = item as Phaser.Physics.Arcade.Sprite;
-            },
-            (playerArms) => {
-                return !(playerArms as Player_Arms).hasItem;
-            },
-            this
-        );
 
         if (tileset) {
             //Tile Parameters
@@ -162,6 +136,4 @@ export default class game_2 extends Phaser.Scene {
         }
         this.player_arms.overlapping = false;
     }
-
-    
 }
