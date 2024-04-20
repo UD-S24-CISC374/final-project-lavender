@@ -31,11 +31,9 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.audio("backgroundMusic", "assets/sounds/overcookedSound.mp3");
 
         //Additional Images
+        this.load.image("tomato", "assets/img/Tomato.png");
         this.load.image("kitchen1", "assets/img/cartoon-kitchen.jpg");
         this.load.image("kitchen2", "assets/img/restaurant_oven.jpg");
-        this.load.image("tomato", "assets/img/Tomato.png");
-        this.load.image("bread", "assets/img/bread.png");
-        this.load.image("waitress", "assets/img/jennac.jpg");
     }
 
     create() {
