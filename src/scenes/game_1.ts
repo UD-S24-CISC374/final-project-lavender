@@ -112,7 +112,7 @@ export default class game_1 extends Phaser.Scene {
                 textYPosition - 150,
                 "Pick up items by standing on them & by clicking your mouse!",
                 {
-                    font: "bold 22px Arial",
+                    font: "bold 23px Arial",
                     color: "#ffffff",
                     align: "center",
                 }
