@@ -42,7 +42,7 @@ export default class game_2 extends Phaser.Scene {
     create() {
         //Creates tile and map.
         const map = this.make.tilemap({ key: "map_1" });
-        const tileset = map.addTilesetImage("Room_Builder_48x48", "tiles"); //Tilemap name, then key preloader name
+        const tileset = map.addTilesetImage("Room_Builder_48x48", "tiles");
 
         //Creates player input and player object.
         this.cursors = this.input.keyboard;
@@ -64,21 +64,14 @@ export default class game_2 extends Phaser.Scene {
             //Tile Parameters
             const belowLayer = map.createLayer("Below Player", tileset, 0, 0);
             const aboveLayer = map.createLayer("Above Player", tileset, 0, 0);
-
             //Set collision for tiles with collides key
-            //belowLayer?.setCollisionByProperty({ collides: true });
             aboveLayer?.setCollisionByProperty({ collides: true });
-
             //Set scale & depth of layers
             belowLayer?.setScale(1);
             belowLayer?.setDepth(-2);
             aboveLayer?.setScale(1);
             aboveLayer?.setDepth(-1);
-
             //Set collision
-            //if (belowLayer) {
-            //    this.physics.add.collider(this.player, belowLayer);
-            //}
             if (aboveLayer) {
                 this.physics.add.collider(this.player, aboveLayer);
                 this.physics.add.collider(this.player_arms, aboveLayer);
@@ -92,33 +85,26 @@ export default class game_2 extends Phaser.Scene {
         this.player_arms.setVelocity(0);
         this.player.movePlayer(this.player_arms);
 
-        //GrabObjects function and associated math.
+        //Grab items, and reset click.
         if (!this.player_arms.hasItem) {
-            // If player_arms is not holding an item.
             if (
                 this.input.mousePointer.leftButtonDown() &&
                 this.player_arms.overlapping &&
                 !this.mouseClicked
             ) {
-                //If LMB is clicked, and arms are overlapping, grab item.
                 this.player_arms.hasItem = true;
                 this.player_arms.flipY = true;
                 this.player_arms.anims.play("grab");
-                //Position item above the player.
                 this.heldItem?.setPosition(this.player.x, this.player.y - 50);
                 this.mouseClicked = true;
             } else {
-                //If no item is grabbed/LMB not pressed
                 this.player_arms.flipY = false;
                 this.player_arms.anims.play("idle");
             }
         } else {
-            //If holding item
             this.player_arms.flipY = true;
             this.player_arms.anims.play("grab");
-            //Position above head.
             this.heldItem?.setPosition(this.player.x, this.player.y - 50);
-            //If LMB released while holding item, drop it
             if (
                 this.input.mousePointer.leftButtonDown() &&
                 !this.mouseClicked
@@ -129,8 +115,6 @@ export default class game_2 extends Phaser.Scene {
                 this.mouseClicked = true;
             }
         }
-
-        //Simple mouseclick check
         if (!this.input.mousePointer.leftButtonDown()) {
             this.mouseClicked = false;
         }

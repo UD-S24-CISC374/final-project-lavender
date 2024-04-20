@@ -212,10 +212,8 @@ export default class game_1 extends Phaser.Scene {
         this.physics.add.overlap(
             this.player_arms,
             this.itemGroup,
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             (playerArms, item) => {
                 (playerArms as Player_Arms).overlapping = true;
-                //(playerArms as Player_Arms).hasItem = true;
                 this.heldItem = item as Phaser.Physics.Arcade.Sprite;
             },
             (playerArms) => {
@@ -228,40 +226,18 @@ export default class game_1 extends Phaser.Scene {
             //Tile Parameters
             const belowLayer = map.createLayer("Below Player", tileset, 0, 0);
             const aboveLayer = map.createLayer("Above Player", tileset, 0, 0);
-
             //Set collision for tiles with collides key
-            //belowLayer?.setCollisionByProperty({ collides: true });
             aboveLayer?.setCollisionByProperty({ collides: true });
-
             //Set scale & depth of layers
             belowLayer?.setScale(1);
             belowLayer?.setDepth(-2);
             aboveLayer?.setScale(1);
             aboveLayer?.setDepth(-1);
-
             //Set collision
-            //if (belowLayer) {
-            //    this.physics.add.collider(this.player, belowLayer);
-            //}
             if (aboveLayer) {
                 this.physics.add.collider(this.player, aboveLayer);
                 this.physics.add.collider(this.player_arms, aboveLayer);
             }
-
-            //Graphics Debugger
-            //const debugGraphics = this.add.graphics().setAlpha(0.75);
-            //if (aboveLayer) {
-            //    aboveLayer.renderDebug(debugGraphics, {
-            //        tileColor: null, // Color of non-colliding tiles
-            //       collidingTileColor: new Phaser.Display.Color(
-            //            243,
-            //            134,
-            //            48,
-            //            255
-            //        ), // Color of colliding tiles
-            //        faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
-            //    });
-            //}
         }
     }
 
@@ -327,7 +303,6 @@ export default class game_1 extends Phaser.Scene {
                 this.mouseClicked = true;
             }
         }
-
         //Simple mouseclick check
         if (!this.input.mousePointer.leftButtonDown()) {
             this.mouseClicked = false;
