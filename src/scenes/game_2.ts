@@ -19,26 +19,6 @@ export default class game_2 extends Phaser.Scene {
     private itemGroup?: Phaser.Physics.Arcade.Group;
     private heldItem: Phaser.Physics.Arcade.Sprite | null;
 
-    preload() {
-        //Character Spritesheet
-        this.load.spritesheet(
-            "chef_player",
-            "assets/img/player_assets/chef_dude2.png",
-            {
-                frameWidth: 64,
-                frameHeight: 64,
-            }
-        );
-        this.load.spritesheet(
-            "chef_arms",
-            "assets/img/player_assets/chef_dude_arms.png",
-            {
-                frameWidth: 64,
-                frameHeight: 64,
-            }
-        );
-    }
-
     create() {
         //Creates tile and map.
         const map = this.make.tilemap({ key: "map_1" });
