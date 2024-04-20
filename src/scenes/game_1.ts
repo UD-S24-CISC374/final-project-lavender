@@ -110,9 +110,9 @@ export default class game_1 extends Phaser.Scene {
             .text(
                 screenWidth / 2,
                 textYPosition - 150,
-                "Try picking up a tomato by clicking your mouse",
+                "Pick up items by standing on them & by clicking your mouse!",
                 {
-                    font: "bold 30px Arial",
+                    font: "bold 22px Arial",
                     color: "#ffffff",
                     align: "center",
                 }
