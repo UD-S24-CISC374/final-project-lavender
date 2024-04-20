@@ -256,7 +256,7 @@ export default class game_1 extends Phaser.Scene {
             this.tweens.add({
                 targets: [this.textBackground, this.instructions],
                 alpha: { from: 1, to: 0 },
-                duration: 5000,
+                duration: 3000,
                 onComplete: () => {
                     this.textBackground.destroy();
                     this.instructions.destroy();
@@ -317,7 +317,7 @@ export default class game_1 extends Phaser.Scene {
         this.tweens.add({
             targets: [this.secondTextBackground, this.secondInstructions],
             alpha: { from: 0, to: 1 },
-            duration: 5000,
+            duration: 3000,
             onComplete: () => {
                 // Delay the call to fade out the text by 6000 milliseconds (6 seconds)
                 this.time.delayedCall(6000, () => {
@@ -331,7 +331,7 @@ export default class game_1 extends Phaser.Scene {
         this.tweens.add({
             targets: [this.secondTextBackground, this.secondInstructions],
             alpha: { from: 1, to: 0 },
-            duration: 5000, // Adjust duration for a slower or faster fade
+            duration: 3000, // Adjust duration for a slower or faster fade
             onComplete: () => {
                 this.secondTextBackground.setVisible(false);
                 this.secondInstructions.setVisible(false);
@@ -346,7 +346,7 @@ export default class game_1 extends Phaser.Scene {
         this.tweens.add({
             targets: [this.thirdTextBackground, this.thirdInstructions],
             alpha: { from: 0, to: 1 },
-            duration: 5000,
+            duration: 3000,
             onComplete: () => {
                 // Show the continue button after the text fades in
                 this.continueButton.setVisible(true);

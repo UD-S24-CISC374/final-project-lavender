@@ -10,4 +10,15 @@ interface StoveProps {
     y: number;
 }
 
-export class Stove extends Phaser.Physics.Arcade.Sprite {}
+export class Stove extends Phaser.Physics.Arcade.Sprite {
+    inStove: Array<Phaser.Physics.Arcade.Sprite>;
+    pointer: Phaser.Input.Pointer;
+
+    constructor(config: StoveProps) {
+        super(config.scene, config.x, config.y, "");
+        this.inStove = [];
+        this.pointer = config.scene.input.mousePointer;
+        config.scene.add.existing(this);
+        config.scene.physics.add.existing(this, false);
+    }
+}
