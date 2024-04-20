@@ -1,6 +1,6 @@
 import Phaser from "phaser";
-import { Player } from "../objects/player";
-import { Player_Arms } from "../objects/player_arms";
+import { Player } from "../../objects/player";
+import { Player_Arms } from "../../objects/player_arms";
 
 export type Collidable =
     | Phaser.Types.Physics.Arcade.GameObjectWithBody
@@ -179,7 +179,7 @@ export default class game_1 extends Phaser.Scene {
 
         // Add a click event listener to the button
         this.continueButton.on("pointerdown", () => {
-            this.scene.start("game_2");
+            this.scene.start("LevelSelect");
         });
 
         //Creates and randomizes tomato position.
