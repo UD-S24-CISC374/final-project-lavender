@@ -35,4 +35,6 @@ export class Stove extends Phaser.Physics.Arcade.Sprite {
             this.itemCount++;
         }
     }
+
+    openGui() {}
 }
