@@ -44,6 +44,8 @@ export default class game_2 extends Phaser.Scene {
         const map = this.make.tilemap({ key: "map_1" });
         const tileset = map.addTilesetImage("Room_Builder_48x48", "tiles"); //Tilemap name, then key preloader name
 
+        
+
         //Creates and randomizes tomato position.
         let x, y;
         const numOfObjects = 10;
