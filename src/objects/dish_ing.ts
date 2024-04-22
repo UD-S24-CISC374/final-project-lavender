@@ -7,8 +7,11 @@ interface IngredientProps {
 }
 
 export class Ingredient extends Phaser.Physics.Arcade.Sprite {
-    constructor(config: IngredientProps) {
-        super(config.scene, config.x, config.y, "");
+    constructor(
+        config: IngredientProps,
+        texture: string | Phaser.Textures.Texture
+    ) {
+        super(config.scene, config.x, config.y, texture);
         config.scene.add.existing(this);
         config.scene.physics.add.existing(this, false);
         this.setCollideWorldBounds(true);

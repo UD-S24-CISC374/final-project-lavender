@@ -5,17 +5,17 @@ interface DishProps {
     scene: Phaser.Scene;
     x: number;
     y: number;
-    recipe: Array<Ingredient>;
+    //recipe: Array<Ingredient>;
 }
 
 export class Dish extends Phaser.Physics.Arcade.Sprite {
     recipe: Array<Ingredient>;
 
-    constructor(config: DishProps) {
-        super(config.scene, config.x, config.y, "");
+    constructor(config: DishProps, texture: string | Phaser.Textures.Texture) {
+        super(config.scene, config.x, config.y, texture);
         config.scene.add.existing(this);
         config.scene.physics.add.existing(this, false);
         this.setCollideWorldBounds(true);
-        this.recipe = config.recipe;
+        //this.recipe = config.recipe;
     }
 }

@@ -2,6 +2,7 @@ import Phaser from "phaser";
 //import { Player } from "./player";
 //import { Player_Arms } from "./player_arms";
 //import { Dish } from "./dish";
+//import { Ingredient } from "./dish_ing";
 
 export type Collidable =
     | Phaser.Types.Physics.Arcade.GameObjectWithBody
@@ -36,6 +37,4 @@ export class Stove extends Phaser.Physics.Arcade.Sprite {
             this.itemCount++;
         }
     }
-
-    openGui() {}
 }
