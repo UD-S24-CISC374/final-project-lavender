@@ -20,7 +20,7 @@ export class Stove extends Phaser.Physics.Arcade.Sprite {
     itemCount: number;
 
     constructor(config: StoveProps) {
-        super(config.scene, config.x, config.y, "");
+        super(config.scene, config.x, config.y, "stove");
         this.inStove = [];
         this.itemCount = 0;
         this.pointer = config.scene.input.mousePointer;

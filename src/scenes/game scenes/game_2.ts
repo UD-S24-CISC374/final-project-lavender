@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import { Player } from "../../objects/player";
 import { Player_Arms } from "../../objects/player_arms";
+import { Stove } from "../../objects/stove";
 
 export type Collidable =
     | Phaser.Types.Physics.Arcade.GameObjectWithBody
@@ -16,6 +17,7 @@ export default class game_2 extends Phaser.Scene {
     private player_arms: Player_Arms;
     private cursors: Phaser.Input.Keyboard.KeyboardPlugin | null;
 
+    private stove: Stove;
     private itemGroup?: Phaser.Physics.Arcade.Group;
     private heldItem: Phaser.Physics.Arcade.Sprite | null;
 
@@ -23,6 +25,13 @@ export default class game_2 extends Phaser.Scene {
         //Creates tile and map.
         const map = this.make.tilemap({ key: "map_1" });
         const tileset = map.addTilesetImage("Room_Builder_48x48", "tiles");
+
+        //Creates stove object.
+        this.stove = new Stove({
+            scene: this,
+            x: this.cameras.main.displayWidth / 2 - 40,
+            y: this.cameras.main.displayHeight / 2 + 20,
+        });
 
         //Creates player input and player object.
         this.cursors = this.input.keyboard;

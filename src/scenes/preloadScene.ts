@@ -34,6 +34,9 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image("tomato", "assets/img/Tomato.png");
         this.load.image("kitchen1", "assets/img/cartoon-kitchen.jpg");
         this.load.image("kitchen2", "assets/img/restaurant_oven.jpg");
+
+        //Stoves, Dishes, Ingredients
+        this.load.spritesheet("stove", "assets/img/cooking_pot.png");
     }
 
     create() {
