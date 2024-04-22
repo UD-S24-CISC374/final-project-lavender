@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 //import { Player } from "./player";
 //import { Player_Arms } from "./player_arms";
+//import { Dish } from "./dish";
 
 export type Collidable =
     | Phaser.Types.Physics.Arcade.GameObjectWithBody
