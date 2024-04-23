@@ -33,6 +33,7 @@ export default class game_2 extends Phaser.Scene {
             x: this.cameras.main.displayWidth / 2 - 40,
             y: this.cameras.main.displayHeight / 2 + 20,
         });
+        this.stove.createAnims();
 
         //Create itemgroup
         let x, y;
@@ -115,7 +116,7 @@ export default class game_2 extends Phaser.Scene {
         this.player_arms.setVelocity(0);
         this.player.movePlayer(this.player_arms);
 
-        //Grab items, and reset click.
+        //Player is not holding an item.
         if (!this.player_arms.hasItem) {
             if (
                 this.input.mousePointer.leftButtonDown() &&
@@ -130,7 +131,20 @@ export default class game_2 extends Phaser.Scene {
             } else {
                 this.player_arms.flipY = false;
                 this.player_arms.anims.play("idle");
+
+                //Check to see if player is overlapping with stove.
+                if (
+                    this.input.mousePointer.leftButtonDown() &&
+                    this.player_arms.stoveOverlap &&
+                    !this.mouseClicked &&
+                    !this.heldItem
+                ) {
+                    //Put in code here to start cooking of the item.
+                    this.stove.anims.play("on");
+                }
+                //this.stove.anims.play("off");
             }
+            //Player is holding an item.
         } else {
             this.player_arms.flipY = true;
             this.player_arms.anims.play("grab");
