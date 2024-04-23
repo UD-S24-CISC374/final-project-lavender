@@ -14,20 +14,27 @@ export class Dish extends Phaser.Physics.Arcade.Sprite {
     //Egg Sandwich (EGG); Fruit Smoothie (FRU)
     name: string;
     recipe: Array<string>;
+    static recipes = [
+        ["BA"],
+        ["BA", "BR", "BU", "EG"],
+        ["BL", "BR", "BU", "EG", "MI"],
+        ["BR", "EG"],
+        ["BA", "BL", "EG"],
+    ];
 
     constructor(config: DishProps, texture: string) {
         super(config.scene, config.x, config.y, texture);
         this.name = texture.slice(0, 2).toUpperCase();
         if (this.name == "BAK") {
-            this.recipe = ["BA"];
+            this.recipe = Dish.recipes[0];
         } else if (this.name == "BAN") {
-            this.recipe = ["BA", "BR", "BU", "EG"];
+            this.recipe = Dish.recipes[1];
         } else if (this.name == "BLU") {
-            this.recipe = ["BL", "BR", "BU", "EG", "MI"];
+            this.recipe = Dish.recipes[2];
         } else if (this.name == "EGG") {
-            this.recipe = ["BR", "EG"];
+            this.recipe = Dish.recipes[3];
         } else {
-            this.recipe = ["BA", "BL", "EG"];
+            this.recipe = Dish.recipes[4];
         }
         config.scene.add.existing(this);
         config.scene.physics.add.existing(this, false);

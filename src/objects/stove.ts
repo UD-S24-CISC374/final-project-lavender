@@ -1,7 +1,5 @@
 import Phaser from "phaser";
-//import { Player } from "./player";
-//import { Player_Arms } from "./player_arms";
-//import { Dish } from "./dish";
+import { Dish } from "./dish";
 import { Ingredient } from "./dish_ing";
 
 export type Collidable =
@@ -15,8 +13,9 @@ interface StoveProps {
 }
 
 export class Stove extends Phaser.Physics.Arcade.Sprite {
-    inStove: Array<Ingredient>;
     pointer: Phaser.Input.Pointer;
+
+    inStove: Array<Ingredient>;
     itemCount: number;
 
     constructor(config: StoveProps) {
@@ -59,22 +58,44 @@ export class Stove extends Phaser.Physics.Arcade.Sprite {
         }
     }
 
-    //makeDish(config: StoveProps): Dish {
-    //Types of dishes:
-    // - Blueberry French Toast: BL, BR, BU, EG, MI
-    // - Banana Bread: BA, BR, BU, EG
-    // - Fruit Smoothie: BA, BL, MI
-    // - Egg Sandwich: BR, EG
-    // - Baked Banana: BA
+    makeDish(): Dish | null {
+        //Iterate through each available recipe
+        for (const dishRecipe of Dish.recipes) {
+            if (this.matchRecipe(dishRecipe)) {
+                const dishTexture = dishRecipe.join("").toLowerCase(); //check this later, may be wrong
+                const dish = new Dish(
+                    {
+                        scene: this.scene,
+                        x: this.x,
+                        y: this.y,
+                        recipe: dishRecipe,
+                    },
+                    dishTexture
+                );
+                return dish;
+            }
+        }
+        return null; //returns null if no recipe is found, probably change to failed recipe
+    }
 
-    //let result = new Dish(
-    //    {
-    //        scene: config.scene,
-    //        x: config.x,
-    //        y: config.y,
-    //    },
-    //    "banana"
-    //);
-    //return result;
-    //}
+    matchRecipe(recipe: string[]): boolean {
+        //Create copy of ingredients in stove
+        const inStove_cpy = this.inStove.slice();
+        //Check if stove has enough ingredients to match recipe length
+        if (inStove_cpy.length < recipe.length) {
+            return false;
+        }
+
+        //Iterate through each ingredient in the recipe
+        for (const recIng of recipe) {
+            //Find & remove ingredient from stove copy
+            const ind = inStove_cpy.findIndex((ing) => ing.name === recIng);
+            if (ind === -1) {
+                //If ingredient is not found, return false
+                return false;
+            }
+            inStove_cpy.splice(ind, 1);
+        }
+        return true;
+    }
 }
