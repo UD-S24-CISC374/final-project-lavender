@@ -50,6 +50,7 @@ export class Stove extends Phaser.Physics.Arcade.Sprite {
 
     insertItem(item: Ingredient) {
         if (this.itemCount >= 5) {
+            this.inStove[0].destroy();
             this.inStove.shift;
             this.inStove.push(item);
         } else {
@@ -86,7 +87,6 @@ export class Stove extends Phaser.Physics.Arcade.Sprite {
         if (inStove_cpy.length < recipe.length) {
             return false;
         }
-
         //Iterate through each ingredient in the recipe
         for (const recIng of recipe) {
             //Find & remove ingredient from stove copy
