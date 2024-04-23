@@ -32,26 +32,6 @@ export default class game_1 extends Phaser.Scene {
 
     private continueButton: Phaser.GameObjects.Text;
 
-    preload() {
-        //Character Spritesheet
-        this.load.spritesheet(
-            "chef_player",
-            "assets/img/player_assets/chef_dude2.png",
-            {
-                frameWidth: 64,
-                frameHeight: 64,
-            }
-        );
-        this.load.spritesheet(
-            "chef_arms",
-            "assets/img/player_assets/chef_dude_arms.png",
-            {
-                frameWidth: 64,
-                frameHeight: 64,
-            }
-        );
-    }
-
     create() {
         //Creates tile and map.
         const map = this.make.tilemap({ key: "map_1" });

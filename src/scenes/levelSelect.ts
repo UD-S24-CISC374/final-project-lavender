@@ -6,13 +6,41 @@ export default class LevelSelect extends Phaser.Scene {
     }
 
     preload() {
+        //Tiles and Map
         this.load.image(
-            "tutorial_btn",
-            "assets/img/title_assets/tutorial_btn.png"
+            "tiles",
+            "assets/tilemaps/tilesets/Room_Builder_48x48.png"
         );
-        this.load.image("day1_btn", "assets/img/title_assets/day1_btn.png");
-        this.load.image("day2_btn", "assets/img/title_assets/day2_btn.png");
-        this.load.image("day3_btn", "assets/img/title_assets/day3_btn.png");
+        this.load.tilemapTiledJSON("map_1", "assets/tilemaps/map_one.json");
+
+        //Character Spritesheet
+        this.load.spritesheet(
+            "chef_player",
+            "assets/img/player_assets/chef_dude2.png",
+            {
+                frameWidth: 64,
+                frameHeight: 64,
+            }
+        );
+        this.load.spritesheet(
+            "chef_arms",
+            "assets/img/player_assets/chef_dude_arms.png",
+            {
+                frameWidth: 64,
+                frameHeight: 64,
+            }
+        );
+
+        //Additional Images
+        this.load.image("tomato", "assets/img/Tomato.png");
+        this.load.image("kitchen1", "assets/img/cartoon-kitchen.jpg");
+        this.load.image("kitchen2", "assets/img/restaurant_oven.jpg");
+
+        //Stoves, Dishes, Ingredients
+        this.load.spritesheet("stove", "assets/img/cooking_pot.png", {
+            frameWidth: 64,
+            frameHeight: 64,
+        });
     }
 
     create() {
