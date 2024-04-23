@@ -11,11 +11,10 @@ export class Ingredient extends Phaser.Physics.Arcade.Sprite {
     //Eggs (EG); Milk (MI); Butter (BU); Bread (BR); Banana (BA); Blueberry (BL)
     name: string;
 
-    constructor(
-        config: IngredientProps,
-        texture: string | Phaser.Textures.Texture
-    ) {
+    constructor(config: IngredientProps, texture: string) {
         super(config.scene, config.x, config.y, texture);
+        this.name = texture.slice(0, 1).toUpperCase();
+
         config.scene.add.existing(this);
         config.scene.physics.add.existing(this, false);
         this.setCollideWorldBounds(true);

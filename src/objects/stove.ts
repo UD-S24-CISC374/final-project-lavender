@@ -59,12 +59,22 @@ export class Stove extends Phaser.Physics.Arcade.Sprite {
         }
     }
 
-    checkIngredient() {
-        //Types of dishes:
-        // - Blueberry French Toast: BL, BR, BU, EG, MI
-        // - Banana Bread: BA, BR, BU, EG
-        // - Fruit Smoothie: BA, BL, MI
-        // - Egg Sandwich: BR, EG
-        // - Baked Banana: BA
-    }
+    //makeDish(config: StoveProps): Dish {
+    //Types of dishes:
+    // - Blueberry French Toast: BL, BR, BU, EG, MI
+    // - Banana Bread: BA, BR, BU, EG
+    // - Fruit Smoothie: BA, BL, MI
+    // - Egg Sandwich: BR, EG
+    // - Baked Banana: BA
+
+    //let result = new Dish(
+    //    {
+    //        scene: config.scene,
+    //        x: config.x,
+    //        y: config.y,
+    //    },
+    //    "banana"
+    //);
+    //return result;
+    //}
 }
