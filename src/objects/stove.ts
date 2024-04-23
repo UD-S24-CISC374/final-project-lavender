@@ -28,6 +28,27 @@ export class Stove extends Phaser.Physics.Arcade.Sprite {
         config.scene.physics.add.existing(this, false);
     }
 
+    createAnims() {
+        this.anims.create({
+            key: "off",
+            frames: this.anims.generateFrameNumbers("stove", {
+                start: 0,
+                end: 0,
+            }),
+            frameRate: 10,
+            repeat: -1,
+        });
+        this.anims.create({
+            key: "on",
+            frames: this.anims.generateFrameNumbers("stove", {
+                start: 1,
+                end: 4,
+            }),
+            frameRate: 10,
+            repeat: -1,
+        });
+    }
+
     insertItem(item: Phaser.Physics.Arcade.Sprite) {
         if (this.itemCount >= 5) {
             this.inStove.shift;

@@ -37,7 +37,7 @@ export default class LevelSelect extends Phaser.Scene {
         this.load.image("kitchen2", "assets/img/restaurant_oven.jpg");
 
         //Stoves, Dishes, Ingredients
-        this.load.spritesheet("stove", "assets/img/cooking_pot.png", {
+        this.load.spritesheet("stove", "assets/img/cooking_pot_anim.png", {
             frameWidth: 64,
             frameHeight: 64,
         });
