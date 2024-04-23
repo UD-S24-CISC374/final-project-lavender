@@ -2,7 +2,7 @@ import Phaser from "phaser";
 //import { Player } from "./player";
 //import { Player_Arms } from "./player_arms";
 //import { Dish } from "./dish";
-//import { Ingredient } from "./dish_ing";
+import { Ingredient } from "./dish_ing";
 
 export type Collidable =
     | Phaser.Types.Physics.Arcade.GameObjectWithBody
@@ -15,7 +15,7 @@ interface StoveProps {
 }
 
 export class Stove extends Phaser.Physics.Arcade.Sprite {
-    inStove: Array<Phaser.Physics.Arcade.Sprite>;
+    inStove: Array<Ingredient>;
     pointer: Phaser.Input.Pointer;
     itemCount: number;
 
@@ -49,7 +49,7 @@ export class Stove extends Phaser.Physics.Arcade.Sprite {
         });
     }
 
-    insertItem(item: Phaser.Physics.Arcade.Sprite) {
+    insertItem(item: Ingredient) {
         if (this.itemCount >= 5) {
             this.inStove.shift;
             this.inStove.push(item);
@@ -57,5 +57,14 @@ export class Stove extends Phaser.Physics.Arcade.Sprite {
             this.inStove.push(item);
             this.itemCount++;
         }
+    }
+
+    checkIngredient() {
+        //Types of dishes:
+        // - Blueberry French Toast: BL, BR, BU, EG, MI
+        // - Banana Bread: BA, BR, BU, EG
+        // - Fruit Smoothie: BA, BL, MI
+        // - Egg Sandwich: BR, EG
+        // - Baked Banana: BA
     }
 }

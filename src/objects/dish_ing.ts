@@ -7,6 +7,10 @@ interface IngredientProps {
 }
 
 export class Ingredient extends Phaser.Physics.Arcade.Sprite {
+    //Ingredient can be one of 6 items...
+    //Eggs (EG); Milk (MI); Butter (BU); Bread (BR); Banana (BA); Blueberry (BL)
+    name: string;
+
     constructor(
         config: IngredientProps,
         texture: string | Phaser.Textures.Texture

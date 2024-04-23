@@ -41,6 +41,16 @@ export default class LevelSelect extends Phaser.Scene {
             frameWidth: 64,
             frameHeight: 64,
         });
+
+        this.load.image("banana", "assets/img/dishes/ingredients/banana.png");
+        this.load.image(
+            "blueberry",
+            "assets/img/dishes/ingredients/blueberry_4.png"
+        );
+        this.load.image("bread", "assets/img/dishes/ingredients/bread.png");
+        this.load.image("butter", "assets/img/dishes/ingredients/butter.png");
+        this.load.image("eggs", "assets/img/dishes/ingredients/egg.png");
+        this.load.image("milk", "assets/img/dishes/ingredients/mulk.png");
     }
 
     create() {
