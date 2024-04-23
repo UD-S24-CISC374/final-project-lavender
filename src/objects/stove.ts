@@ -62,7 +62,8 @@ export class Stove extends Phaser.Physics.Arcade.Sprite {
         //Iterate through each available recipe
         for (const dishRecipe of Dish.recipes) {
             if (this.matchRecipe(dishRecipe)) {
-                const dishTexture = dishRecipe.join("").toLowerCase(); //check this later, may be wrong
+                //check length, use length to get name of dish
+                const dishTexture = "dish" + dishRecipe.length.toString(); //check this later, may be wrong
                 const dish = new Dish(
                     {
                         scene: this.scene,
