@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import { Player } from "../../objects/player";
 import { Player_Arms } from "../../objects/player_arms";
+import { Ingredient } from "../../objects/dish_ing";
 import { Stove } from "../../objects/stove";
 
 export type Collidable =
@@ -19,7 +20,7 @@ export default class game_2 extends Phaser.Scene {
 
     private stove: Stove;
     private itemGroup?: Phaser.Physics.Arcade.Group;
-    private heldItem: Phaser.Physics.Arcade.Sprite | null;
+    private heldItem: Ingredient | null;
 
     create() {
         //Creates tile and map.
@@ -32,6 +33,20 @@ export default class game_2 extends Phaser.Scene {
             x: this.cameras.main.displayWidth / 2 - 40,
             y: this.cameras.main.displayHeight / 2 + 20,
         });
+
+        //Create itemgroup
+        let x, y;
+        const numOfObjects = 10;
+        this.itemGroup = this.physics.add.group();
+        for (let i = 0; i < numOfObjects; i++) {
+            x = Phaser.Math.RND.between(30, 1170);
+            y = Phaser.Math.RND.between(60, 690);
+            this.itemGroup.add(
+                new Ingredient({ scene: this, x: x, y: y }, "banana").setScale(
+                    0.5
+                )
+            );
+        }
 
         //Creates player input and player object.
         this.cursors = this.input.keyboard;
@@ -48,6 +63,32 @@ export default class game_2 extends Phaser.Scene {
             y: this.player.y,
         });
         this.player_arms.createAnims();
+
+        //Add overlap between player_arms and game objects.
+        this.physics.add.overlap(
+            this.player_arms,
+            this.itemGroup,
+            (playerArms, item) => {
+                (playerArms as Player_Arms).overlapping = true;
+                this.heldItem = item as Ingredient;
+            },
+            (playerArms) => {
+                return !(playerArms as Player_Arms).hasItem;
+            },
+            this
+        );
+        //Add overlap between player_arms and stove.
+        this.physics.add.overlap(
+            this.player_arms,
+            this.stove,
+            (playerArms) => {
+                (playerArms as Player_Arms).stoveOverlap = true;
+            },
+            (playerArms) => {
+                return !(playerArms as Player_Arms).stoveOverlap;
+            },
+            this
+        );
 
         if (tileset) {
             //Tile Parameters
@@ -94,8 +135,25 @@ export default class game_2 extends Phaser.Scene {
             this.player_arms.flipY = true;
             this.player_arms.anims.play("grab");
             this.heldItem?.setPosition(this.player.x, this.player.y - 50);
+
+            //If statement that checks if overlapping with stove.
             if (
                 this.input.mousePointer.leftButtonDown() &&
+                this.player_arms.stoveOverlap &&
+                this.heldItem &&
+                !this.mouseClicked
+            ) {
+                //Disable rendering of item, put in stove, prevent from being able to be interacted with.
+                this.heldItem.setPosition(3000, 3000); //send item offscreen for now, will delete later
+                this.stove.insertItem(this.heldItem);
+                this.heldItem.disableBody(true, true);
+                //Clear referenced item, set hasItem to false.
+                this.heldItem = null;
+                this.player_arms.hasItem = false;
+                this.mouseClicked = true;
+            } else if (
+                this.input.mousePointer.leftButtonDown() &&
+                !this.player_arms.stoveOverlap &&
                 !this.mouseClicked
             ) {
                 this.heldItem?.setY(this.player.y + 10);
@@ -104,9 +162,11 @@ export default class game_2 extends Phaser.Scene {
                 this.mouseClicked = true;
             }
         }
+        //Reset clicked boolean
+        this.player_arms.overlapping = false;
+        this.player_arms.stoveOverlap = false;
         if (!this.input.mousePointer.leftButtonDown()) {
             this.mouseClicked = false;
         }
-        this.player_arms.overlapping = false;
     }
 }
