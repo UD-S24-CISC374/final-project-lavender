@@ -13,7 +13,7 @@ export class Ingredient extends Phaser.Physics.Arcade.Sprite {
 
     constructor(config: IngredientProps, texture: string) {
         super(config.scene, config.x, config.y, texture);
-        this.name = texture.slice(0, 1).toUpperCase();
+        this.name = texture.slice(0, 2).toUpperCase();
 
         config.scene.add.existing(this);
         config.scene.physics.add.existing(this, false);
