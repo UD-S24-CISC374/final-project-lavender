@@ -1,11 +1,9 @@
 import Phaser from "phaser";
-//import { Ingredient } from "./dish_ing";
 
 interface DishProps {
     scene: Phaser.Scene;
     x: number;
     y: number;
-    recipe: Array<string>;
 }
 
 export class Dish extends Phaser.Physics.Arcade.Sprite {

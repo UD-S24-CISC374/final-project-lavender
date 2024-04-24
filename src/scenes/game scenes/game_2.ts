@@ -136,11 +136,12 @@ export default class game_2 extends Phaser.Scene {
                 if (
                     this.input.mousePointer.leftButtonDown() &&
                     this.player_arms.stoveOverlap &&
+                    this.stove.inStove.length > 0 &&
                     !this.mouseClicked &&
                     !this.heldItem
                 ) {
                     //Put in code here to start cooking of the item.
-                    this.stove.anims.play("on");
+                    this.itemGroup?.add(this.stove.makeDish());
                 }
                 //this.stove.anims.play("off");
             }

@@ -5,54 +5,6 @@ export default class LevelSelect extends Phaser.Scene {
         super({ key: "LevelSelect" });
     }
 
-    preload() {
-        //Tiles and Map
-        this.load.image(
-            "tiles",
-            "assets/tilemaps/tilesets/Room_Builder_48x48.png"
-        );
-        this.load.tilemapTiledJSON("map_1", "assets/tilemaps/map_one.json");
-
-        //Character Spritesheet
-        this.load.spritesheet(
-            "chef_player",
-            "assets/img/player_assets/chef_dude2.png",
-            {
-                frameWidth: 64,
-                frameHeight: 64,
-            }
-        );
-        this.load.spritesheet(
-            "chef_arms",
-            "assets/img/player_assets/chef_dude_arms.png",
-            {
-                frameWidth: 64,
-                frameHeight: 64,
-            }
-        );
-
-        //Additional Images
-        this.load.image("tomato", "assets/img/Tomato.png");
-        this.load.image("kitchen1", "assets/img/cartoon-kitchen.jpg");
-        this.load.image("kitchen2", "assets/img/restaurant_oven.jpg");
-
-        //Stoves, Dishes, Ingredients
-        this.load.spritesheet("stove", "assets/img/cooking_pot_anim.png", {
-            frameWidth: 64,
-            frameHeight: 64,
-        });
-
-        this.load.image("banana", "assets/img/dishes/ingredients/banana.png");
-        this.load.image(
-            "blueberry",
-            "assets/img/dishes/ingredients/blueberry_4.png"
-        );
-        this.load.image("bread", "assets/img/dishes/ingredients/bread.png");
-        this.load.image("butter", "assets/img/dishes/ingredients/butter.png");
-        this.load.image("eggs", "assets/img/dishes/ingredients/egg.png");
-        this.load.image("milk", "assets/img/dishes/ingredients/mulk.png");
-    }
-
     create() {
         //Background
         const background = this.add.image(
