@@ -136,6 +136,7 @@ export default class game_2 extends Phaser.Scene {
                 if (
                     this.input.mousePointer.leftButtonDown() &&
                     this.player_arms.stoveOverlap &&
+                    this.stove.inStove.length > 0 &&
                     !this.mouseClicked &&
                     !this.heldItem
                 ) {

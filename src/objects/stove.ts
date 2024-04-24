@@ -2,10 +2,6 @@ import Phaser from "phaser";
 import { Dish } from "./dish";
 import { Ingredient } from "./dish_ing";
 
-export type Collidable =
-    | Phaser.Types.Physics.Arcade.GameObjectWithBody
-    | Phaser.Tilemaps.Tile;
-
 interface StoveProps {
     scene: Phaser.Scene;
     x: number;
@@ -60,17 +56,24 @@ export class Stove extends Phaser.Physics.Arcade.Sprite {
         let dish: Dish;
         let match = false;
         for (const recipe of Dish.recipes) {
-            recipe.sort();
-            this.inStove.sort();
-            match = recipe.every((ingredient: string) =>
-                this.inStove.some((item) => item.name === ingredient)
-            );
+            if (recipe.length === 1) {
+                //Single ingredient recipes.
+                match = this.inStove.some((item) => item.name === recipe[0]);
+            } else {
+                //Multi-ingredient recipes.
+                recipe.sort();
+                this.inStove.sort();
+                match = recipe.every((ingredient: string) =>
+                    this.inStove.some((item) => item.name === ingredient)
+                );
+            }
             if (match) {
                 const texture = this.getDishTexture(recipe);
                 dish = new Dish(
                     { scene: this.scene, x: this.x, y: this.y + 20 },
                     texture
                 );
+                this.clearStove();
                 return dish;
             }
         }
@@ -83,7 +86,15 @@ export class Stove extends Phaser.Physics.Arcade.Sprite {
             },
             "BL_BR_BU_EG_MI"
         ).setScale(0.1);
+        this.clearStove();
         return dish;
+    }
+
+    clearStove() {
+        for (const ing of this.inStove) {
+            ing.destroy();
+        }
+        this.inStove = [];
     }
 
     getDishTexture(recipe: Array<string>) {
