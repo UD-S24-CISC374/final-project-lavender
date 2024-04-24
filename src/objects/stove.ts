@@ -59,25 +59,29 @@ export class Stove extends Phaser.Physics.Arcade.Sprite {
         }
     }
 
-    makeDish(): Dish | null {
+    makeDish(): Dish {
         //Iterate through each available recipe
-        for (const dishRecipe of Dish.recipes) {
-            if (this.matchRecipe(dishRecipe)) {
-                //check length, use length to get name of dish
-                const dishTexture = "dish" + dishRecipe.length.toString(); //check this later, may be wrong
-                const dish = new Dish(
-                    {
-                        scene: this.scene,
-                        x: this.x,
-                        y: this.y,
-                        recipe: dishRecipe,
-                    },
-                    dishTexture
+        for (const recipe of Dish.recipes) {
+            if (this.matchRecipe(recipe)) {
+                let texture = "baked banana";
+                for (const ing of this.inStove) {
+                    ing.destroy();
+                }
+                this.inStove = [];
+                return new Dish(
+                    { scene: this.scene, x: this.x, y: this.y },
+                    texture
                 );
-                return dish;
             }
         }
-        return null; //returns null if no recipe is found, probably change to failed recipe
+        for (const ing of this.inStove) {
+            ing.destroy();
+        }
+        this.inStove = [];
+        return new Dish(
+            { scene: this.scene, x: this.x, y: this.y },
+            "blueberry french toast"
+        ).setScale(1 / 10); //sets dish5 as a failed recipe placeholder
     }
 
     matchRecipe(recipe: string[]): boolean {
