@@ -13,8 +13,6 @@ interface StoveProps {
 }
 
 export class Stove extends Phaser.Physics.Arcade.Sprite {
-    pointer: Phaser.Input.Pointer;
-
     inStove: Array<Ingredient>;
     itemCount: number;
 
@@ -22,7 +20,6 @@ export class Stove extends Phaser.Physics.Arcade.Sprite {
         super(config.scene, config.x, config.y, "stove");
         this.inStove = [];
         this.itemCount = 0;
-        this.pointer = config.scene.input.mousePointer;
         config.scene.add.existing(this);
         config.scene.physics.add.existing(this, false);
     }
@@ -51,7 +48,7 @@ export class Stove extends Phaser.Physics.Arcade.Sprite {
     insertItem(item: Ingredient) {
         if (this.itemCount >= 5) {
             this.inStove[0].destroy();
-            this.inStove.shift;
+            this.inStove.shift();
             this.inStove.push(item);
         } else {
             this.inStove.push(item);
@@ -59,48 +56,39 @@ export class Stove extends Phaser.Physics.Arcade.Sprite {
         }
     }
 
-    makeDish(): Dish {
-        //Iterate through each available recipe
+    makeDish() {
+        let dish: Dish;
+        let match = false;
         for (const recipe of Dish.recipes) {
-            if (this.matchRecipe(recipe)) {
-                let texture = "baked banana";
-                for (const ing of this.inStove) {
-                    ing.destroy();
-                }
-                this.inStove = [];
-                return new Dish(
-                    { scene: this.scene, x: this.x, y: this.y },
+            recipe.sort();
+            this.inStove.sort();
+            match = recipe.every((ingredient: string) =>
+                this.inStove.some((item) => item.name === ingredient)
+            );
+            if (match) {
+                const texture = this.getDishTexture(recipe);
+                dish = new Dish(
+                    { scene: this.scene, x: this.x, y: this.y + 20 },
                     texture
                 );
+                return dish;
             }
         }
-        for (const ing of this.inStove) {
-            ing.destroy();
-        }
-        this.inStove = [];
-        return new Dish(
-            { scene: this.scene, x: this.x, y: this.y },
-            "blueberry french toast"
-        ).setScale(1 / 10); //sets dish5 as a failed recipe placeholder
+        //If no matches are found, created failed dish.
+        dish = new Dish(
+            {
+                scene: this.scene,
+                x: this.x + Phaser.Math.RND.between(0, 5),
+                y: this.y + 20,
+            },
+            "BL_BR_BU_EG_MI"
+        ).setScale(0.1);
+        return dish;
     }
 
-    matchRecipe(recipe: string[]): boolean {
-        //Create copy of ingredients in stove
-        const inStove_cpy = this.inStove.slice();
-        //Check if stove has enough ingredients to match recipe length
-        if (inStove_cpy.length < recipe.length) {
-            return false;
-        }
-        //Iterate through each ingredient in the recipe
-        for (const recIng of recipe) {
-            //Find & remove ingredient from stove copy
-            const ind = inStove_cpy.findIndex((ing) => ing.name === recIng);
-            if (ind === -1) {
-                //If ingredient is not found, return false
-                return false;
-            }
-            inStove_cpy.splice(ind, 1);
-        }
-        return true;
+    getDishTexture(recipe: Array<string>) {
+        //BA, BL, BR, BU, EG, MI
+        recipe = recipe.sort();
+        return recipe.join("_");
     }
 }

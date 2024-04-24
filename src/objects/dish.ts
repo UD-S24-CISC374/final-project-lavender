@@ -1,5 +1,4 @@
 import Phaser from "phaser";
-//import { Ingredient } from "./dish_ing";
 
 interface DishProps {
     scene: Phaser.Scene;

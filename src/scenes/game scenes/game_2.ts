@@ -140,8 +140,7 @@ export default class game_2 extends Phaser.Scene {
                     !this.heldItem
                 ) {
                     //Put in code here to start cooking of the item.
-                    this.stove.anims.play("on");
-                    this.stove.makeDish();
+                    this.itemGroup?.add(this.stove.makeDish());
                 }
                 //this.stove.anims.play("off");
             }
