@@ -45,4 +45,14 @@ export class Player_Arms extends Phaser.Physics.Arcade.Sprite {
             repeat: -1,
         });
     }
+
+    playAnims(animation: boolean) {
+        if (animation) {
+            this.flipY = true;
+            this.anims.play("grab");
+        } else {
+            this.flipY = false;
+            this.anims.play("idle");
+        }
+    }
 }
