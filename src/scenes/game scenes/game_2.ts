@@ -110,50 +110,67 @@ export default class game_2 extends Phaser.Scene {
         }
     }
 
+    //Helper functions
+    resetClicked() {
+        this.player_arms.overlapping = false;
+        this.player_arms.stoveOverlap = false;
+        if (!this.input.mousePointer.leftButtonDown()) {
+            this.mouseClicked = false;
+        }
+    }
+    pickupItem(pickingUp: boolean) {
+        if (pickingUp) {
+            this.player_arms.hasItem = true;
+            this.player_arms.playAnims(true);
+            this.heldItem?.setPosition(this.player.x, this.player.y - 50);
+            this.mouseClicked = true;
+        } else {
+            //Holding item
+            this.player_arms.playAnims(true);
+            this.heldItem?.setPosition(this.player.x, this.player.y - 50);
+        }
+    }
+    interactWithStove() {
+        if (
+            this.input.mousePointer.leftButtonDown() &&
+            this.player_arms.stoveOverlap &&
+            this.stove.inStove.length > 0 &&
+            !this.mouseClicked &&
+            !this.heldItem
+        ) {
+            this.itemGroup?.add(this.stove.makeDish());
+        }
+    }
+
     update() {
         //Movement
         this.player.setVelocity(0);
         this.player_arms.setVelocity(0);
         this.player.movePlayer(this.player_arms);
 
+        //Left mouse button is down
+        const leftButtonDown = this.input.mousePointer.leftButtonDown();
+
         //Player is not holding an item.
         if (!this.player_arms.hasItem) {
             if (
-                this.input.mousePointer.leftButtonDown() &&
+                leftButtonDown &&
                 this.player_arms.overlapping &&
                 !this.mouseClicked
             ) {
-                this.player_arms.hasItem = true;
-                this.player_arms.flipY = true;
-                this.player_arms.anims.play("grab");
-                this.heldItem?.setPosition(this.player.x, this.player.y - 50);
-                this.mouseClicked = true;
+                this.pickupItem(true);
             } else {
-                this.player_arms.flipY = false;
-                this.player_arms.anims.play("idle");
-
-                //Check to see if player is overlapping with stove.
-                if (
-                    this.input.mousePointer.leftButtonDown() &&
-                    this.player_arms.stoveOverlap &&
-                    this.stove.inStove.length > 0 &&
-                    !this.mouseClicked &&
-                    !this.heldItem
-                ) {
-                    //Put in code here to start cooking of the item.
-                    this.itemGroup?.add(this.stove.makeDish());
-                }
-                //this.stove.anims.play("off");
+                this.player_arms.playAnims(false);
+                //Check to see if player clicked to interact with stove.
+                this.interactWithStove();
             }
-            //Player is holding an item.
         } else {
-            this.player_arms.flipY = true;
-            this.player_arms.anims.play("grab");
-            this.heldItem?.setPosition(this.player.x, this.player.y - 50);
+            //Player is holding an item.
+            this.pickupItem(false);
 
             //If statement that checks if overlapping with stove.
             if (
-                this.input.mousePointer.leftButtonDown() &&
+                leftButtonDown &&
                 this.player_arms.stoveOverlap &&
                 this.heldItem &&
                 !this.mouseClicked
@@ -167,7 +184,7 @@ export default class game_2 extends Phaser.Scene {
                 this.player_arms.hasItem = false;
                 this.mouseClicked = true;
             } else if (
-                this.input.mousePointer.leftButtonDown() &&
+                leftButtonDown &&
                 !this.player_arms.stoveOverlap &&
                 !this.mouseClicked
             ) {
@@ -178,10 +195,6 @@ export default class game_2 extends Phaser.Scene {
             }
         }
         //Reset clicked boolean
-        this.player_arms.overlapping = false;
-        this.player_arms.stoveOverlap = false;
-        if (!this.input.mousePointer.leftButtonDown()) {
-            this.mouseClicked = false;
-        }
+        this.resetClicked();
     }
 }

@@ -87,6 +87,9 @@ export default class PreloadScene extends Phaser.Scene {
             "BL_BR_BU_EG_MI",
             "assets/img/dishes/Blueberry_French_Toast.png"
         ); //bbft
+
+        //Ingredient Crates Preload
+        this.load.spritesheet("crate", "assets/img/ing_crate.png");
     }
 
     create() {
