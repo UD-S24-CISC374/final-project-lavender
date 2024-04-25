@@ -1,9 +1,5 @@
 import Phaser from "phaser";
 
-export type Collidable =
-    | Phaser.Types.Physics.Arcade.GameObjectWithBody
-    | Phaser.Tilemaps.Tile;
-
 interface ArmsProps {
     scene: Phaser.Scene;
     x: number;
