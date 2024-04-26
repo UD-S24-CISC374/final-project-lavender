@@ -7,18 +7,12 @@ export default class PreloadScene extends Phaser.Scene {
 
     preload() {
         //Title Logo, Play Button, and Background Assets
-        this.load.image({
-            key: "title_logo",
-            url: "assets/img/title_assets/schedulsine_logo2.png",
-        });
-        this.load.image({
-            key: "play_bttn",
-            url: "assets/img/title_assets/play_bttn.png",
-        });
-        this.load.image({
-            key: "title_bg",
-            url: "assets/img/title_assets/title_bg.png",
-        });
+        this.load.image(
+            "title_logo",
+            "assets/img/title_assets/schedulsine_logo2.png"
+        );
+        this.load.image("play_bttn", "assets/img/title_assets/play_bttn.png");
+        this.load.image("title_bg", "assets/img/title_assets/title_bg.png");
 
         //Level select preloads
         this.load.image(
@@ -76,6 +70,7 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image("butter", "assets/img/dishes/ingredients/butter.png");
         this.load.image("eggs", "assets/img/dishes/ingredients/egg.png");
         this.load.image("milk", "assets/img/dishes/ingredients/mulk.png");
+
         //Dish preload
         this.load.image("BA", "assets/img/dishes/Baked_Banana.png"); //baked banana
         this.load.image("BR_EG", "assets/img/dishes/Egg_Sandwich.png"); //egg sandwich

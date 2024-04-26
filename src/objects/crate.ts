@@ -1,11 +1,11 @@
 import Phaser from "phaser";
-import { Ingredient } from "./dish_ing";
+//import { Ingredient } from "./dish_ing";
 
 interface CrateProps {
     scene: Phaser.Scene;
     x: number;
     y: number;
-    ingredient: Ingredient;
+    ingredient: string;
 }
 
 export class Crate extends Phaser.Physics.Arcade.Sprite {
@@ -23,10 +23,13 @@ export class Crate extends Phaser.Physics.Arcade.Sprite {
     constructor(config: CrateProps) {
         super(config.scene, config.x, config.y, "crate");
         this.setIngredient(config.ingredient);
+        config.scene.add.existing(this);
+        config.scene.physics.add.existing(this, false);
+        this.setCollideWorldBounds(true);
     }
 
-    setIngredient(ingredient: Ingredient) {
-        const index = Crate.ingredientFrameMap[ingredient.name];
+    setIngredient(ingredient: string) {
+        const index = Crate.ingredientFrameMap[ingredient];
         this.setFrame(index);
     }
 }
