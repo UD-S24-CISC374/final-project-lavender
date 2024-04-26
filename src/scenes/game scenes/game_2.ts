@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import { Player } from "../../objects/player";
 import { Player_Arms } from "../../objects/player_arms";
 import { Ingredient } from "../../objects/dish_ing";
+import { Crate } from "../../objects/crate";
 import { Stove } from "../../objects/stove";
 
 export type Collidable =
@@ -20,6 +21,7 @@ export default class game_2 extends Phaser.Scene {
 
     private stove: Stove;
     private itemGroup?: Phaser.Physics.Arcade.Group;
+    private crateGroup: Phaser.Physics.Arcade.Group;
     private heldItem: Ingredient | null;
 
     create() {
@@ -49,6 +51,29 @@ export default class game_2 extends Phaser.Scene {
             );
         }
 
+        //Create crateGroup
+        this.crateGroup = this.physics.add.group();
+        x = 80;
+        y = 150;
+        this.crateGroup.add(
+            new Crate({ scene: this, x: x, y: y, ingredient: "BA" })
+        );
+        this.crateGroup.add(
+            new Crate({ scene: this, x: x, y: y + 60, ingredient: "BL" })
+        );
+        this.crateGroup.add(
+            new Crate({ scene: this, x: x, y: y + 120, ingredient: "BR" })
+        );
+        this.crateGroup.add(
+            new Crate({ scene: this, x: x, y: y + 180, ingredient: "BU" })
+        );
+        this.crateGroup.add(
+            new Crate({ scene: this, x: x, y: y + 240, ingredient: "EG" })
+        );
+        this.crateGroup.add(
+            new Crate({ scene: this, x: x, y: y + 300, ingredient: "MI" })
+        );
+
         //Creates player input and player object.
         this.cursors = this.input.keyboard;
         this.player = new Player({
@@ -65,6 +90,18 @@ export default class game_2 extends Phaser.Scene {
         });
         this.player_arms.createAnims();
 
+        //Add overlap between player_arms and stove.
+        this.physics.add.overlap(
+            this.player_arms,
+            this.stove,
+            (playerArms) => {
+                (playerArms as Player_Arms).stoveOverlap = true;
+            },
+            (playerArms) => {
+                return !(playerArms as Player_Arms).stoveOverlap;
+            },
+            this
+        );
         //Add overlap between player_arms and game objects.
         this.physics.add.overlap(
             this.player_arms,
@@ -78,16 +115,12 @@ export default class game_2 extends Phaser.Scene {
             },
             this
         );
-        //Add overlap between player_arms and stove.
+        //Add overlap between player_arms and crates.
         this.physics.add.overlap(
             this.player_arms,
-            this.stove,
-            (playerArms) => {
-                (playerArms as Player_Arms).stoveOverlap = true;
-            },
-            (playerArms) => {
-                return !(playerArms as Player_Arms).stoveOverlap;
-            },
+            this.crateGroup,
+            undefined,
+            undefined,
             this
         );
 
