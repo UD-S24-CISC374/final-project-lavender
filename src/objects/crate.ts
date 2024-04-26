@@ -21,7 +21,7 @@ export class Crate extends Phaser.Physics.Arcade.Sprite {
     };
 
     constructor(config: CrateProps) {
-        super(config.scene, config.x, config.y, "crates");
+        super(config.scene, config.x, config.y, "crate");
         this.setIngredient(config.ingredient);
     }
 
