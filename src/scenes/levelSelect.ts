@@ -5,16 +5,6 @@ export default class LevelSelect extends Phaser.Scene {
         super({ key: "LevelSelect" });
     }
 
-    preload() {
-        this.load.image(
-            "tutorial_btn",
-            "assets/img/title_assets/tutorial_btn.png"
-        );
-        this.load.image("day1_btn", "assets/img/title_assets/day1_btn.png");
-        this.load.image("day2_btn", "assets/img/title_assets/day2_btn.png");
-        this.load.image("day3_btn", "assets/img/title_assets/day3_btn.png");
-    }
-
     create() {
         //Background
         const background = this.add.image(
