@@ -9,6 +9,7 @@ import InformationScene2 from "./scenes/informationScene2";
 
 import Game_1 from "./scenes/game scenes/game_1";
 import GameIntro from "./scenes/GameIntro";
+import day1 from "./scenes/game scenes/day1";
 
 //608x480 or 1280x720
 const DEFAULT_WIDTH = 1200;
@@ -34,6 +35,7 @@ export const CONFIG = {
         Game_1,
         GameIntro,
         LevelSelect,
+        day1,
     ],
     physics: {
         default: "arcade",

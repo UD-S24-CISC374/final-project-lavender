@@ -90,7 +90,7 @@ export default class game_1 extends Phaser.Scene {
             .text(
                 screenWidth / 2,
                 textYPosition - 150,
-                "Pick up items by standing on them & by clicking your mouse!",
+                "Pick up items by standing on them & clicking your mouse!",
                 {
                     font: "bold 23px Arial",
                     color: "#ffffff",
@@ -140,7 +140,8 @@ export default class game_1 extends Phaser.Scene {
                 "Continue",
                 {
                     font: "bold 28px Arial",
-                    backgroundColor: "#6495ED", // Blue background
+                    
+                    backgroundColor: "rgba(60, 145, 250, 0.5)",
                     color: "#FFFFFF", // White text
                     align: "center",
                     fixedWidth: 180,
