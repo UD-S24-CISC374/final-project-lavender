@@ -1,6 +1,6 @@
 import Phaser from "phaser";
-import { Player } from "../objects/player";
-import { Player_Arms } from "../objects/player_arms";
+import { Player } from "../../objects/player";
+import { Player_Arms } from "../../objects/player_arms";
 
 export type Collidable =
     | Phaser.Types.Physics.Arcade.GameObjectWithBody
@@ -110,9 +110,9 @@ export default class game_1 extends Phaser.Scene {
             .text(
                 screenWidth / 2,
                 textYPosition - 150,
-                "Try picking up a tomato by clicking your mouse",
+                "Pick up items by standing on them & by clicking your mouse!",
                 {
-                    font: "bold 30px Arial",
+                    font: "bold 23px Arial",
                     color: "#ffffff",
                     align: "center",
                 }
@@ -179,7 +179,7 @@ export default class game_1 extends Phaser.Scene {
 
         // Add a click event listener to the button
         this.continueButton.on("pointerdown", () => {
-            this.scene.start("game_2");
+            this.scene.start("LevelSelect");
         });
 
         //Creates and randomizes tomato position.
@@ -212,10 +212,8 @@ export default class game_1 extends Phaser.Scene {
         this.physics.add.overlap(
             this.player_arms,
             this.itemGroup,
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             (playerArms, item) => {
                 (playerArms as Player_Arms).overlapping = true;
-                //(playerArms as Player_Arms).hasItem = true;
                 this.heldItem = item as Phaser.Physics.Arcade.Sprite;
             },
             (playerArms) => {
@@ -228,40 +226,18 @@ export default class game_1 extends Phaser.Scene {
             //Tile Parameters
             const belowLayer = map.createLayer("Below Player", tileset, 0, 0);
             const aboveLayer = map.createLayer("Above Player", tileset, 0, 0);
-
             //Set collision for tiles with collides key
-            //belowLayer?.setCollisionByProperty({ collides: true });
             aboveLayer?.setCollisionByProperty({ collides: true });
-
             //Set scale & depth of layers
             belowLayer?.setScale(1);
             belowLayer?.setDepth(-2);
             aboveLayer?.setScale(1);
             aboveLayer?.setDepth(-1);
-
             //Set collision
-            //if (belowLayer) {
-            //    this.physics.add.collider(this.player, belowLayer);
-            //}
             if (aboveLayer) {
                 this.physics.add.collider(this.player, aboveLayer);
                 this.physics.add.collider(this.player_arms, aboveLayer);
             }
-
-            //Graphics Debugger
-            //const debugGraphics = this.add.graphics().setAlpha(0.75);
-            //if (aboveLayer) {
-            //    aboveLayer.renderDebug(debugGraphics, {
-            //        tileColor: null, // Color of non-colliding tiles
-            //       collidingTileColor: new Phaser.Display.Color(
-            //            243,
-            //            134,
-            //            48,
-            //            255
-            //        ), // Color of colliding tiles
-            //        faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
-            //    });
-            //}
         }
     }
 
@@ -280,7 +256,7 @@ export default class game_1 extends Phaser.Scene {
             this.tweens.add({
                 targets: [this.textBackground, this.instructions],
                 alpha: { from: 1, to: 0 },
-                duration: 5000,
+                duration: 3000,
                 onComplete: () => {
                     this.textBackground.destroy();
                     this.instructions.destroy();
@@ -327,7 +303,6 @@ export default class game_1 extends Phaser.Scene {
                 this.mouseClicked = true;
             }
         }
-
         //Simple mouseclick check
         if (!this.input.mousePointer.leftButtonDown()) {
             this.mouseClicked = false;
@@ -342,7 +317,7 @@ export default class game_1 extends Phaser.Scene {
         this.tweens.add({
             targets: [this.secondTextBackground, this.secondInstructions],
             alpha: { from: 0, to: 1 },
-            duration: 5000,
+            duration: 3000,
             onComplete: () => {
                 // Delay the call to fade out the text by 6000 milliseconds (6 seconds)
                 this.time.delayedCall(6000, () => {
@@ -356,7 +331,7 @@ export default class game_1 extends Phaser.Scene {
         this.tweens.add({
             targets: [this.secondTextBackground, this.secondInstructions],
             alpha: { from: 1, to: 0 },
-            duration: 5000, // Adjust duration for a slower or faster fade
+            duration: 3000, // Adjust duration for a slower or faster fade
             onComplete: () => {
                 this.secondTextBackground.setVisible(false);
                 this.secondInstructions.setVisible(false);
@@ -371,7 +346,7 @@ export default class game_1 extends Phaser.Scene {
         this.tweens.add({
             targets: [this.thirdTextBackground, this.thirdInstructions],
             alpha: { from: 0, to: 1 },
-            duration: 5000,
+            duration: 3000,
             onComplete: () => {
                 // Show the continue button after the text fades in
                 this.continueButton.setVisible(true);
