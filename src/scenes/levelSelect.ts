@@ -33,7 +33,7 @@ export default class LevelSelect extends Phaser.Scene {
         );
         day1_btn
             .setInteractive()
-            .on("pointerdown", () => this.scene.start("game_2"))
+            .on("pointerdown", () => this.scene.start("day1"))
             .on("pointerover", () => day1_btn.setScale(1.1))
             .on("pointerout", () => day1_btn.setScale(1));
 
