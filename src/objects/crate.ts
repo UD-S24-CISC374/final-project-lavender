@@ -1,5 +1,6 @@
 import Phaser from "phaser";
-//import { Ingredient } from "./dish_ing";
+//import { Player_Arms } from "./player_arms";
+import { Ingredient } from "./dish_ing";
 
 interface CrateProps {
     scene: Phaser.Scene;
@@ -23,6 +24,7 @@ export class Crate extends Phaser.Physics.Arcade.Sprite {
     constructor(config: CrateProps) {
         super(config.scene, config.x, config.y, "crate");
         this.setIngredient(config.ingredient);
+        this.name = config.ingredient;
         config.scene.add.existing(this);
         config.scene.physics.add.existing(this, false);
         this.setCollideWorldBounds(true);
@@ -31,5 +33,48 @@ export class Crate extends Phaser.Physics.Arcade.Sprite {
     setIngredient(ingredient: string) {
         const index = Crate.ingredientFrameMap[ingredient];
         this.setFrame(index);
+    }
+
+    createIngredient(ingredient: string): Ingredient {
+        let item: Ingredient;
+        switch (Crate.ingredientFrameMap[ingredient]) {
+            case 0:
+                item = new Ingredient(
+                    { scene: this.scene, x: this.x + 20, y: this.y },
+                    "banana"
+                ).setScale(0.5);
+                break;
+            case 1:
+                item = new Ingredient(
+                    { scene: this.scene, x: this.x + 20, y: this.y },
+                    "blueberry"
+                ).setScale(0.5);
+                break;
+            case 2:
+                item = new Ingredient(
+                    { scene: this.scene, x: this.x + 20, y: this.y },
+                    "bread"
+                ).setScale(0.5);
+                break;
+            case 3:
+                item = new Ingredient(
+                    { scene: this.scene, x: this.x + 20, y: this.y },
+                    "butter"
+                ).setScale(0.5);
+                break;
+            case 4:
+                item = new Ingredient(
+                    { scene: this.scene, x: this.x + 20, y: this.y },
+                    "eggs"
+                ).setScale(0.5);
+                break;
+            default:
+                item = new Ingredient(
+                    { scene: this.scene, x: this.x + 20, y: this.y },
+                    "milk"
+                ).setScale(0.5);
+                break;
+        }
+        return item;
     }
 }

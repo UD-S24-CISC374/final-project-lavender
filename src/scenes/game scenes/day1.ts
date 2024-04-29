@@ -21,8 +21,17 @@ export default class day1 extends Phaser.Scene {
 
     private stove: Stove;
     private itemGroup?: Phaser.Physics.Arcade.Group;
-    private crateGroup: Phaser.Physics.Arcade.Group;
-    private heldItem: Ingredient | null;
+    private heldItem: Ingredient | null | undefined;
+
+    private crates: Crate[] = [];
+    private cratePositions = [
+        { x: 80, y: 140, ingredient: "BA" },
+        { x: 80, y: 210, ingredient: "BL" },
+        { x: 80, y: 280, ingredient: "BR" },
+        { x: 80, y: 350, ingredient: "BU" },
+        { x: 80, y: 420, ingredient: "EG" },
+        { x: 80, y: 490, ingredient: "MI" },
+    ];
 
     create() {
         //Creates tile and map.
@@ -37,12 +46,24 @@ export default class day1 extends Phaser.Scene {
         });
         this.stove.createAnims();
 
+        //Create crates
+        this.cratePositions.forEach((position) => {
+            this.crates.push(
+                new Crate({
+                    scene: this,
+                    x: position.x,
+                    y: position.y,
+                    ingredient: position.ingredient,
+                })
+            );
+        });
+
         //Create itemgroup
         let x, y;
         const numOfObjects = 10;
         this.itemGroup = this.physics.add.group();
         for (let i = 0; i < numOfObjects; i++) {
-            x = Phaser.Math.RND.between(30, 1170);
+            x = Phaser.Math.RND.between(85, 1170);
             y = Phaser.Math.RND.between(60, 690);
             this.itemGroup.add(
                 new Ingredient({ scene: this, x: x, y: y }, "banana").setScale(
@@ -50,29 +71,6 @@ export default class day1 extends Phaser.Scene {
                 )
             );
         }
-
-        //Create crateGroup
-        this.crateGroup = this.physics.add.group();
-        x = 80;
-        y = 150;
-        this.crateGroup.add(
-            new Crate({ scene: this, x: x, y: y, ingredient: "BA" })
-        );
-        this.crateGroup.add(
-            new Crate({ scene: this, x: x, y: y + 60, ingredient: "BL" })
-        );
-        this.crateGroup.add(
-            new Crate({ scene: this, x: x, y: y + 120, ingredient: "BR" })
-        );
-        this.crateGroup.add(
-            new Crate({ scene: this, x: x, y: y + 180, ingredient: "BU" })
-        );
-        this.crateGroup.add(
-            new Crate({ scene: this, x: x, y: y + 240, ingredient: "EG" })
-        );
-        this.crateGroup.add(
-            new Crate({ scene: this, x: x, y: y + 300, ingredient: "MI" })
-        );
 
         //Creates player input and player object.
         this.cursors = this.input.keyboard;
@@ -116,13 +114,19 @@ export default class day1 extends Phaser.Scene {
             this
         );
         //Add overlap between player_arms and crates.
-        this.physics.add.overlap(
-            this.player_arms,
-            this.crateGroup,
-            undefined,
-            undefined,
-            this
-        );
+        this.crates.forEach((crate) => {
+            this.physics.add.overlap(
+                this.player_arms,
+                crate,
+                (playerArms) => {
+                    (playerArms as Player_Arms).crateOverlap = true;
+                },
+                (playerArms) => {
+                    return !(playerArms as Player_Arms).crateOverlap;
+                },
+                this
+            );
+        });
 
         if (tileset) {
             //Tile Parameters
@@ -147,6 +151,7 @@ export default class day1 extends Phaser.Scene {
     resetClicked() {
         this.player_arms.overlapping = false;
         this.player_arms.stoveOverlap = false;
+        this.player_arms.crateOverlap = false;
         if (!this.input.mousePointer.leftButtonDown()) {
             this.mouseClicked = false;
         }
@@ -172,6 +177,24 @@ export default class day1 extends Phaser.Scene {
             !this.heldItem
         ) {
             this.itemGroup?.add(this.stove.makeDish());
+            //this.mouseClicked = true;
+        }
+    }
+    interactWithCrates() {
+        if (
+            this.input.mousePointer.leftButtonDown() &&
+            this.player_arms.crateOverlap &&
+            !this.player_arms.overlapping &&
+            !this.mouseClicked &&
+            !this.heldItem
+        ) {
+            for (const crate of this.crates) {
+                if (this.physics.overlap(this.player_arms, crate)) {
+                    const ingredient = crate.createIngredient(crate.name);
+                    this.itemGroup?.add(ingredient);
+                    break;
+                }
+            }
         }
     }
 
@@ -196,6 +219,7 @@ export default class day1 extends Phaser.Scene {
                 this.player_arms.playAnims(false);
                 //Check to see if player clicked to interact with stove.
                 this.interactWithStove();
+                this.interactWithCrates();
             }
         } else {
             //Player is holding an item.
