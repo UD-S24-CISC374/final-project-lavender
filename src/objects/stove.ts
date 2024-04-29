@@ -55,13 +55,8 @@ export class Stove extends Phaser.Physics.Arcade.Sprite {
     makeDish() {
         let dish: Dish;
         let match = false;
-        console.log(
-            "Ingredients on stove:",
-            this.inStove.map((item) => item.name)
-        );
 
         for (const recipe of Dish.recipes) {
-            console.log("Checking recipe: ", recipe);
             if (recipe.length === 1) {
                 //Single ingredient recipes.
                 match = this.inStove.some((item) => item.name === recipe[0]);
@@ -73,19 +68,17 @@ export class Stove extends Phaser.Physics.Arcade.Sprite {
                     this.inStove.some((item) => item.name === ingredient)
                 );
             }
-            console.log("Match Found: ", match);
             if (match) {
                 const texture = this.getDishTexture(recipe);
                 dish = new Dish(
                     { scene: this.scene, x: this.x, y: this.y + 20 },
                     texture
-                ).setScale(0.1);
+                ).setScale(0.1); //Dish too big, reduce scale.
                 this.clearStove();
                 return dish;
             }
         }
         //If no matches are found, created failed dish.
-        console.log("No match found");
         dish = new Dish(
             {
                 scene: this.scene,
