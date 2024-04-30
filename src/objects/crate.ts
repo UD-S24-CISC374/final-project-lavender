@@ -21,6 +21,8 @@ export class Crate extends Phaser.Physics.Arcade.Sprite {
         MI: 5,
     };
 
+    crateTouched: boolean;
+
     constructor(config: CrateProps) {
         super(config.scene, config.x, config.y, "crate");
         this.setIngredient(config.ingredient);
@@ -28,6 +30,7 @@ export class Crate extends Phaser.Physics.Arcade.Sprite {
         config.scene.add.existing(this);
         config.scene.physics.add.existing(this, false);
         this.setCollideWorldBounds(true);
+        this.crateTouched = false;
     }
 
     setIngredient(ingredient: string) {
@@ -35,7 +38,10 @@ export class Crate extends Phaser.Physics.Arcade.Sprite {
         this.setFrame(index);
     }
 
-    createIngredient(ingredient: string): Ingredient {
+    createIngredient(
+        group: Phaser.Physics.Arcade.Group | undefined,
+        ingredient: string
+    ): Ingredient {
         let item: Ingredient;
         switch (Crate.ingredientFrameMap[ingredient]) {
             case 0:
@@ -74,6 +80,9 @@ export class Crate extends Phaser.Physics.Arcade.Sprite {
                     "milk"
                 ).setScale(0.5);
                 break;
+        }
+        if (group) {
+            group.add(item);
         }
         return item;
     }

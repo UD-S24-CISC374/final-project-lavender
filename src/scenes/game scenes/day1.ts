@@ -32,6 +32,12 @@ export default class day1 extends Phaser.Scene {
         { x: 80, y: 420, ingredient: "EG" },
         { x: 80, y: 490, ingredient: "MI" },
     ];
+    private ba_crate: Crate;
+    private bl_crate: Crate;
+    private br_crate: Crate;
+    private bu_crate: Crate;
+    private eg_crate: Crate;
+    private mi_crate: Crate;
 
     create() {
         //Creates tile and map.
@@ -57,20 +63,17 @@ export default class day1 extends Phaser.Scene {
                 })
             );
         });
+        this.ba_crate = this.crates[0];
+        this.bl_crate = this.crates[1];
+        this.br_crate = this.crates[2];
+        this.bu_crate = this.crates[3];
+        this.eg_crate = this.crates[4];
+        this.mi_crate = this.crates[5];
 
         //Create itemgroup
-        let x, y;
-        const numOfObjects = 10;
+        //let x, y;
+        //const numOfObjects = 10;
         this.itemGroup = this.physics.add.group();
-        for (let i = 0; i < numOfObjects; i++) {
-            x = Phaser.Math.RND.between(85, 1170);
-            y = Phaser.Math.RND.between(60, 690);
-            this.itemGroup.add(
-                new Ingredient({ scene: this, x: x, y: y }, "banana").setScale(
-                    0.5
-                )
-            );
-        }
 
         //Creates player input and player object.
         this.cursors = this.input.keyboard;
@@ -120,6 +123,7 @@ export default class day1 extends Phaser.Scene {
                 crate,
                 (playerArms) => {
                     (playerArms as Player_Arms).crateOverlap = true;
+                    (crate as Crate).crateTouched = true;
                 },
                 (playerArms) => {
                     return !(playerArms as Player_Arms).crateOverlap;
@@ -177,23 +181,45 @@ export default class day1 extends Phaser.Scene {
             !this.heldItem
         ) {
             this.itemGroup?.add(this.stove.makeDish());
-            //this.mouseClicked = true;
         }
     }
     interactWithCrates() {
         if (
             this.input.mousePointer.leftButtonDown() &&
             this.player_arms.crateOverlap &&
-            !this.player_arms.overlapping &&
             !this.mouseClicked &&
             !this.heldItem
         ) {
-            for (const crate of this.crates) {
-                if (this.physics.overlap(this.player_arms, crate)) {
-                    const ingredient = crate.createIngredient(crate.name);
-                    this.itemGroup?.add(ingredient);
-                    break;
-                }
+            if (this.ba_crate.crateTouched) {
+                this.ba_crate.createIngredient(
+                    this.itemGroup,
+                    this.ba_crate.name
+                );
+            } else if (this.bl_crate.crateTouched) {
+                this.bl_crate.createIngredient(
+                    this.itemGroup,
+                    this.bl_crate.name
+                );
+            } else if (this.br_crate.crateTouched) {
+                this.br_crate.createIngredient(
+                    this.itemGroup,
+                    this.br_crate.name
+                );
+            } else if (this.bu_crate.crateTouched) {
+                this.bu_crate.createIngredient(
+                    this.itemGroup,
+                    this.bu_crate.name
+                );
+            } else if (this.eg_crate.crateTouched) {
+                this.eg_crate.createIngredient(
+                    this.itemGroup,
+                    this.eg_crate.name
+                );
+            } else if (this.mi_crate.crateTouched) {
+                this.mi_crate.createIngredient(
+                    this.itemGroup,
+                    this.mi_crate.name
+                );
             }
         }
     }
@@ -220,6 +246,7 @@ export default class day1 extends Phaser.Scene {
                 //Check to see if player clicked to interact with stove.
                 this.interactWithStove();
                 this.interactWithCrates();
+                this.mouseClicked = true;
             }
         } else {
             //Player is holding an item.
