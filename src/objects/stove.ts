@@ -57,33 +57,37 @@ export class Stove extends Phaser.Physics.Arcade.Sprite {
         let match = false;
 
         for (const recipe of Dish.recipes) {
-            if (recipe.length === 1) {
-                //Single ingredient recipes.
-                match = this.inStove.some((item) => item.name === recipe[0]);
-            } else {
-                //Multi-ingredient recipes.
-                recipe.sort();
-                this.inStove.sort();
-                match = recipe.every((ingredient: string) =>
-                    this.inStove.some((item) => item.name === ingredient)
+            const recipeCounts: { [key: string]: number } = {};
+            recipe.forEach((ingredient) => {
+                recipeCounts[ingredient] = (recipeCounts[ingredient] || 0) + 1;
+            });
+
+            const stoveCounts: { [key: string]: number } = {};
+            this.inStove.forEach((item) => {
+                stoveCounts[item.name] = (stoveCounts[item.name] || 0) + 1;
+            });
+
+            match = Object.keys(recipeCounts).every((ingredient) => {
+                return (
+                    recipeCounts[ingredient] === (stoveCounts[ingredient] || 0)
                 );
-            }
+            });
+
             if (match) {
                 const texture = this.getDishTexture(recipe);
                 dish = new Dish(
                     { scene: this.scene, x: this.x, y: this.y + 20 },
                     texture
-                ).setScale(0.1); //Dish too big, reduce scale.
+                ).setScale(0.1);
                 this.clearStove();
                 return dish;
             }
         }
-        //If no matches are found, created failed dish.
         dish = new Dish(
             {
                 scene: this.scene,
-                x: this.x + Phaser.Math.RND.between(0, 5),
-                y: this.y + 20,
+                x: this.x,
+                y: this.y,
             },
             "BL_BR_BU_EG_MI"
         ).setScale(0.1);
