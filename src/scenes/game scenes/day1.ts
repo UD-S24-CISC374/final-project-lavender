@@ -150,31 +150,44 @@ export default class day1 extends Phaser.Scene {
             }
         }
 
-        // container for the pop-up
+        // creates container for orders, text, image
+
         const popup = this.add.container(10, 10).setDepth(10);
 
-        // background for the text
+        // Create the background for the text (optional, if you want a background color or frame)
         const background = this.add.graphics();
-        background.fillStyle(0xffffff, 0.8); // White, slightly transparent
-        background.fillRoundedRect(0, 0, 220, 100, 16); // size & corners
+        background.fillStyle(0xffffff, 0.8); // White background with some transparency
+        background.fillRoundedRect(0, 0, 220, 100, 16); // Adjust size and corners as needed
         popup.add(background);
 
         // Add image to the container
         const image = this.add.image(10, 10, "BL_BR_BU_EG_MI");
-        image.setOrigin(-0.5, -0.5); // Top-left corner
-        image.setScale(0.2); // Scale
+        image.setOrigin(0, 0); // Top-left corner
+        image.setScale(0.2); // Scale of image
         popup.add(image);
 
         // Add text to the container
-        const text = this.add.text(image.width + 15, 40, "BLUEBERRY FRENCH TOAST", {
+        const text = this.add.text(image.width + 15, 40, "Blueberry French Toast", {
             font: "18px Arial",
             color: "#000000",
         });
         popup.add(text);
 
-        // Positioning the container 
-        popup.x = 10; // left margin
-        popup.y = 10; // top margin
+        // Positioning the container (if you need to adjust positions)
+        popup.x = 10; // Margin from the left
+        popup.y = 10; // Margin from the top
+        
+
+        /**
+        function showPopup() {
+            popup.setVisible(true);
+        }
+
+        // Function to hide the popup
+        function hidePopup() {
+            popup.setVisible(false);
+        }
+        */
     }
 
     //Helper functions
