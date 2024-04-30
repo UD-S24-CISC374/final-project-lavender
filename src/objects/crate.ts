@@ -42,6 +42,7 @@ export class Crate extends Phaser.Physics.Arcade.Sprite {
         group: Phaser.Physics.Arcade.Group | undefined,
         ingredient: string
     ): Ingredient {
+        console.log("Creating ingredient: ", ingredient);
         let item: Ingredient;
         switch (Crate.ingredientFrameMap[ingredient]) {
             case 0:

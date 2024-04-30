@@ -187,10 +187,23 @@ export default class day1 extends Phaser.Scene {
         if (
             this.input.mousePointer.leftButtonDown() &&
             this.player_arms.crateOverlap &&
-            !this.mouseClicked &&
-            !this.heldItem
+            !this.mouseClicked //&&
+            //!this.heldItem
         ) {
-            if (this.ba_crate.crateTouched) {
+            let touchedCrate: Crate | undefined;
+            this.crates.forEach((crate) => {
+                if (crate.crateTouched) {
+                    touchedCrate = crate;
+                    crate.crateTouched = false;
+                }
+            });
+            if (touchedCrate) {
+                touchedCrate.createIngredient(
+                    this.itemGroup,
+                    touchedCrate.name
+                );
+            }
+            /* if (this.ba_crate.crateTouched) {
                 this.ba_crate.createIngredient(
                     this.itemGroup,
                     this.ba_crate.name
@@ -220,7 +233,7 @@ export default class day1 extends Phaser.Scene {
                     this.itemGroup,
                     this.mi_crate.name
                 );
-            }
+            } */
         }
     }
 
@@ -280,5 +293,9 @@ export default class day1 extends Phaser.Scene {
         }
         //Reset clicked boolean
         this.resetClicked();
+        this.crates.forEach((crate) => {
+            crate.crateTouched = false;
+        });
+        this.player_arms.crateOverlap = false;
     }
 }
