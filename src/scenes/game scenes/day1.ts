@@ -4,6 +4,7 @@ import { Player_Arms } from "../../objects/player_arms";
 import { Ingredient } from "../../objects/dish_ing";
 import { Crate } from "../../objects/crate";
 import { Stove } from "../../objects/stove";
+import { Timer } from "../../objects/timer";
 
 export type Collidable =
     | Phaser.Types.Physics.Arcade.GameObjectWithBody
@@ -18,6 +19,7 @@ export default class day1 extends Phaser.Scene {
     private player: Player;
     private player_arms: Player_Arms;
     private cursors: Phaser.Input.Keyboard.KeyboardPlugin | null;
+    private timer: Timer;
 
     private stove: Stove;
     private itemGroup?: Phaser.Physics.Arcade.Group;
@@ -177,10 +179,10 @@ export default class day1 extends Phaser.Scene {
 
         // group everything together at bottom right
         const popup = this.add.container(x, y, [bubbleGraphics, image, text]);
-        popup.setSize(240, 100); // interactive area 
+        popup.setSize(240, 100); // interactive area
 
         // visibility
-        popup.setVisible(true); 
+        popup.setVisible(true);
 
         /**
         function showPopup() {
@@ -192,6 +194,16 @@ export default class day1 extends Phaser.Scene {
             popup.setVisible(false);
         }
         */
+
+        //Timer
+        //Note: Should always be created last, so that it is overlaid over everything.
+        this.timer = new Timer(
+            { scene: this, x: 600, y: 112, duration: 120 },
+            () => {
+                console.log("Timer completed!");
+                //Probably gonna put the result screen code here.
+            }
+        );
     }
 
     //Helper functions

@@ -17,9 +17,9 @@ export class Timer extends Phaser.GameObjects.Text {
 
     constructor(config: TimerProps, onComplete: () => void) {
         super(config.scene, config.x, config.y, "", {
-            fontSize: 55,
+            fontSize: 60,
             color: "#ffffff",
-            fontFamily: "Segoe UI",
+            fontFamily: "Noto Sans",
         });
         this.countdownDuration = config.duration;
         this.onComplete = onComplete;
