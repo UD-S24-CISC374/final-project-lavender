@@ -152,31 +152,35 @@ export default class day1 extends Phaser.Scene {
 
         // creates container for orders, text, image
 
-        const popup = this.add.container(10, 10).setDepth(10);
+        // Create background for the text
+        const bubbleGraphics = this.add.graphics();
+        bubbleGraphics.fillStyle(0xffffff, 0.8); // white w transpareny
+        bubbleGraphics.fillRoundedRect(0, 0, 240, 100, 10); // x, y, width, height, radius
+        bubbleGraphics.lineStyle(2, 0x000000, 1); // line width, color, alpha
+        bubbleGraphics.strokeRoundedRect(0, 0, 240, 100, 10);
 
-        // Create the background for the text (optional, if you want a background color or frame)
-        const background = this.add.graphics();
-        background.fillStyle(0xffffff, 0.8); // White background with some transparency
-        background.fillRoundedRect(0, 0, 220, 100, 16); // Adjust size and corners as needed
-        popup.add(background);
+        // image
+        const image = this.add.image(10, 50, "BL_BR_BU_EG_MI");
+        image.setOrigin(0, 0.5); // align left
+        image.setScale(0.2); // scale of image
 
-        // Add image to the container
-        const image = this.add.image(10, 10, "BL_BR_BU_EG_MI");
-        image.setOrigin(0, 0); // Top-left corner
-        image.setScale(0.2); // Scale of image
-        popup.add(image);
-
-        // Add text to the container
-        const text = this.add.text(image.width + 15, 40, "Blueberry French Toast", {
+        // Add text next to the image
+        const text = this.add.text(150, 50, "Blueberry French Toast", {
             font: "18px Arial",
             color: "#000000",
         });
-        popup.add(text);
+        text.setOrigin(0.5, 0.5); // centers text vertically
 
-        // Positioning the container (if you need to adjust positions)
-        popup.x = 10; // Margin from the left
-        popup.y = 10; // Margin from the top
-        
+        // Calculate the x and y position for the container - bottom right
+        const x = this.cameras.main.width - 240 - 10; // 240 is the width of the bubble, 10 is a margin
+        const y = this.cameras.main.height - 100 - 10; // 100 is the height of the bubble, 10 is a margin
+
+        // group everything together at bottom right
+        const popup = this.add.container(x, y, [bubbleGraphics, image, text]);
+        popup.setSize(240, 100); // interactive area 
+
+        // visibility
+        popup.setVisible(true); 
 
         /**
         function showPopup() {
