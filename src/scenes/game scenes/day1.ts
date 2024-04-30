@@ -166,7 +166,7 @@ export default class day1 extends Phaser.Scene {
         popup.add(image);
 
         // Add text to the container
-        const text = this.add.text(image.width + 15, 40, "BL_BR_BU_EG_MI", {
+        const text = this.add.text(image.width + 15, 40, "BLUEBERRY FRENCH TOAST", {
             font: "18px Arial",
             color: "#000000",
         });
