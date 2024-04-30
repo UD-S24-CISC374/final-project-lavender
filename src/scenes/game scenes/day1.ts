@@ -149,6 +149,32 @@ export default class day1 extends Phaser.Scene {
                 this.physics.add.collider(this.player_arms, aboveLayer);
             }
         }
+
+        // container for the pop-up
+        const popup = this.add.container(10, 10).setDepth(10);
+
+        // background for the text
+        const background = this.add.graphics();
+        background.fillStyle(0xffffff, 0.8); // White, slightly transparent
+        background.fillRoundedRect(0, 0, 220, 100, 16); // size & corners
+        popup.add(background);
+
+        // Add image to the container
+        const image = this.add.image(10, 10, "BL_BR_BU_EG_MI");
+        image.setOrigin(-0.5, -0.5); // Top-left corner
+        image.setScale(0.2); // Scale
+        popup.add(image);
+
+        // Add text to the container
+        const text = this.add.text(image.width + 15, 40, "BL_BR_BU_EG_MI", {
+            font: "18px Arial",
+            color: "#000000",
+        });
+        popup.add(text);
+
+        // Positioning the container 
+        popup.x = 10; // left margin
+        popup.y = 10; // top margin
     }
 
     //Helper functions
