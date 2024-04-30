@@ -162,18 +162,18 @@ export default class day1 extends Phaser.Scene {
         // image
         const image = this.add.image(10, 50, "BL_BR_BU_EG_MI");
         image.setOrigin(0, 0.5); // align left
-        image.setScale(0.2); // scale of image
+        image.setScale(0.16); // scale of image
 
         // Add text next to the image
-        const text = this.add.text(150, 50, "Blueberry French Toast", {
-            font: "18px Arial",
+        const text = this.add.text(170, 50, "Blueberry\nFrench\nToast", {
+            font: "22px Arial",
             color: "#000000",
         });
         text.setOrigin(0.5, 0.5); // centers text vertically
 
         // Calculate the x and y position for the container - bottom right
-        const x = this.cameras.main.width - 240 - 10; // 240 is the width of the bubble, 10 is a margin
-        const y = this.cameras.main.height - 100 - 10; // 100 is the height of the bubble, 10 is a margin
+        const x = this.cameras.main.width - 250 - 10; // 240 = width of bubble, 10 = margin
+        const y = this.cameras.main.height - 100 - 10; // 100 = height of bubble, 10 = margin
 
         // group everything together at bottom right
         const popup = this.add.container(x, y, [bubbleGraphics, image, text]);
