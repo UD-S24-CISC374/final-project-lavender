@@ -203,37 +203,6 @@ export default class day1 extends Phaser.Scene {
                     touchedCrate.name
                 );
             }
-            /* if (this.ba_crate.crateTouched) {
-                this.ba_crate.createIngredient(
-                    this.itemGroup,
-                    this.ba_crate.name
-                );
-            } else if (this.bl_crate.crateTouched) {
-                this.bl_crate.createIngredient(
-                    this.itemGroup,
-                    this.bl_crate.name
-                );
-            } else if (this.br_crate.crateTouched) {
-                this.br_crate.createIngredient(
-                    this.itemGroup,
-                    this.br_crate.name
-                );
-            } else if (this.bu_crate.crateTouched) {
-                this.bu_crate.createIngredient(
-                    this.itemGroup,
-                    this.bu_crate.name
-                );
-            } else if (this.eg_crate.crateTouched) {
-                this.eg_crate.createIngredient(
-                    this.itemGroup,
-                    this.eg_crate.name
-                );
-            } else if (this.mi_crate.crateTouched) {
-                this.mi_crate.createIngredient(
-                    this.itemGroup,
-                    this.mi_crate.name
-                );
-            } */
         }
     }
 
