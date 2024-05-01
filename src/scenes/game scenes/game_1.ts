@@ -140,7 +140,7 @@ export default class game_1 extends Phaser.Scene {
                 "Continue",
                 {
                     font: "bold 28px Arial",
-                    
+
                     backgroundColor: "rgba(60, 145, 250, 0.5)",
                     color: "#FFFFFF", // White text
                     align: "center",

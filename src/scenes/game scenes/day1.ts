@@ -92,6 +92,8 @@ export default class day1 extends Phaser.Scene {
             y: this.player.y,
         });
         this.player_arms.createAnims();
+        this.player.setScale(1.5);
+        this.player_arms.setScale(1.5);
 
         //Add overlap between player_arms and stove.
         this.physics.add.overlap(
@@ -198,7 +200,7 @@ export default class day1 extends Phaser.Scene {
         //Timer
         //Note: Should always be created last, so that it is overlaid over everything.
         this.timer = new Timer(
-            { scene: this, x: 600, y: 112, duration: 120 },
+            { scene: this, x: 552, y: 112, duration: 120 },
             () => {
                 console.log("Timer completed!");
                 //Probably gonna put the result screen code here.
