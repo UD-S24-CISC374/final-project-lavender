@@ -1,3 +1,4 @@
+/* eslint-disable no-prototype-builtins */
 import Phaser from "phaser";
 import { Dish } from "./dish";
 import { Ingredient } from "./dish_ing";
@@ -43,9 +44,13 @@ export class Stove extends Phaser.Physics.Arcade.Sprite {
 
     insertItem(item: Ingredient) {
         if (this.itemCount >= 5) {
-            this.inStove[0].destroy();
+            if (this.inStove[0]) {
+                this.inStove[0].destroy();
+            }
+            //this.inStove[0].destroy();
             this.inStove.shift();
             this.inStove.push(item);
+            this.itemCount = 5;
         } else {
             this.inStove.push(item);
             this.itemCount++;
@@ -67,14 +72,39 @@ export class Stove extends Phaser.Physics.Arcade.Sprite {
                 stoveCounts[item.name] = (stoveCounts[item.name] || 0) + 1;
             });
 
-            match = Object.keys(recipeCounts).every((ingredient) => {
-                return (
-                    recipeCounts[ingredient] === (stoveCounts[ingredient] || 0)
-                );
-            });
+            console.log("Recipe Counts: ", recipeCounts);
+            console.log("Stove Counts: ", stoveCounts);
+
+            let isRecipeMatch = true;
+            for (const ingredient in recipeCounts) {
+                if (recipeCounts.hasOwnProperty(ingredient)) {
+                    if (
+                        recipeCounts[ingredient] !==
+                        (stoveCounts[ingredient] || 0)
+                    ) {
+                        isRecipeMatch = false;
+                        break;
+                    }
+                }
+            }
+            if (isRecipeMatch) {
+                for (const ingredient in stoveCounts) {
+                    if (
+                        stoveCounts.hasOwnProperty(ingredient) &&
+                        !recipeCounts.hasOwnProperty(ingredient)
+                    ) {
+                        isRecipeMatch = false;
+                        break;
+                    }
+                }
+            }
+
+            match = isRecipeMatch;
+            console.log("Match: ", match);
 
             if (match) {
                 const texture = this.getDishTexture(recipe);
+                console.log("Creating Dish: %s", texture);
                 dish = new Dish(
                     { scene: this.scene, x: this.x, y: this.y + 20 },
                     texture
@@ -99,6 +129,7 @@ export class Stove extends Phaser.Physics.Arcade.Sprite {
         for (const ing of this.inStove) {
             ing.destroy();
         }
+        this.itemCount = 0;
         this.inStove = [];
     }
 

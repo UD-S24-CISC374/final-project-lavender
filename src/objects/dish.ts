@@ -14,8 +14,8 @@ export class Dish extends Phaser.Physics.Arcade.Sprite {
     recipe: Array<string>;
     static recipes = [
         ["BA"],
-        ["BR, EG"],
-        ["BA", "BL", "EG"],
+        ["BR", "EG"],
+        ["BA", "BL", "MI"],
         ["BA", "BR", "BU", "EG"],
         ["BL", "BR", "BU", "EG", "MI"],
     ];
