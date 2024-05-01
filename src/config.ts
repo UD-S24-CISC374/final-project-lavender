@@ -12,8 +12,8 @@ import GameIntro from "./scenes/GameIntro";
 import day1 from "./scenes/game scenes/day1";
 
 //608x480 or 1280x720
-const DEFAULT_WIDTH = 1200;
-const DEFAULT_HEIGHT = 720;
+const DEFAULT_WIDTH = 1104;
+const DEFAULT_HEIGHT = 624;
 
 export const CONFIG = {
     title: "Schedulsine",

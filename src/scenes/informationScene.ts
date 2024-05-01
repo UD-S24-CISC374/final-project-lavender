@@ -7,7 +7,7 @@ export default class informationScene extends Phaser.Scene {
 
     create() {
         //Screen for topic information
-        this.add.image(640,280, "kitchen1");
+        this.add.image(640, 280, "kitchen1");
         //Add text information
         this.add.text(100, 100, "What is I/O Scheduling?", {
             font: "bold 60px Arial",
@@ -36,7 +36,7 @@ export default class informationScene extends Phaser.Scene {
         });
 
         let nextButton = this.add
-            .text(1050, 625, "Next", {
+            .text(950, 550, "Next", {
                 font: "50px Arial",
                 color: "#ffffff",
                 backgroundColor: "rgba(255, 255, 255, 0.4)",
