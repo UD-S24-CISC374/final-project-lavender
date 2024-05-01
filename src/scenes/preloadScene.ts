@@ -93,6 +93,9 @@ export default class PreloadScene extends Phaser.Scene {
             frameWidth: 48,
             frameHeight: 48,
         });
+
+        //Order Ticket
+        this.load.image("order ticket", "assets/img/order_ticker.png");
     }
 
     create() {
