@@ -159,14 +159,14 @@ export default class day1 extends Phaser.Scene {
         // Create background for the text
         const bubbleGraphics = this.add.graphics();
         bubbleGraphics.fillStyle(0xffffff, 0.8); // white w transpareny
-        bubbleGraphics.fillRoundedRect(0, 0, 240, 100, 10); // x, y, width, height, radius
+        bubbleGraphics.fillRoundedRect(0, 0, 220, 180, 10); // x, y, width, height, radius
         bubbleGraphics.lineStyle(2, 0x000000, 1); // line width, color, alpha
-        bubbleGraphics.strokeRoundedRect(0, 0, 240, 100, 10);
+        bubbleGraphics.strokeRoundedRect(0, 0, 220, 180, 10);
 
         // image
-        const image = this.add.image(10, 50, "BL_BR_BU_EG_MI");
+        const image = this.add.image(10, 30, "BL_BR_BU_EG_MI");
         image.setOrigin(0, 0.5); // align left
-        image.setScale(0.16); // scale of image
+        image.setScale(0.14); // scale of image
 
         // Add text next to the image
         const text = this.add.text(170, 50, "Blueberry\nFrench\nToast", {
@@ -175,13 +175,25 @@ export default class day1 extends Phaser.Scene {
         });
         text.setOrigin(0.5, 0.5); // centers text vertically
 
+        // Adds bullet points below the main text
+        const bulletPoints = this.add.text(
+            20,
+            110,
+            "• Blueberries\n• Bread       • Butter\n• Eggs         • Milk",
+            {
+                font: "16px Arial",
+                color: "#000000",
+            }
+        );
+        bulletPoints.setOrigin(0, 0); // Align text to the left
+
         // Calculate the x and y position for the container - bottom right
-        const x = this.cameras.main.width - 250 - 10; // 240 = width of bubble, 10 = margin
-        const y = this.cameras.main.height - 100 - 10; // 100 = height of bubble, 10 = margin
+        const x = this.cameras.main.width - 220 - 10; // 240 = width of bubble, 10 = margin
+        const y = this.cameras.main.height - 180 - 10; // 100 = height of bubble, 10 = margin
 
         // group everything together at bottom right
-        const popup = this.add.container(x, y, [bubbleGraphics, image, text]);
-        popup.setSize(240, 100); // interactive area
+        const popup = this.add.container(x, y, [bubbleGraphics, image, text, bulletPoints]);
+        popup.setSize(240, 180); // interactive area
 
         // visibility
         popup.setVisible(true);
