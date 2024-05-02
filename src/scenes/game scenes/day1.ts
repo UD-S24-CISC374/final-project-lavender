@@ -22,6 +22,7 @@ export default class day1 extends Phaser.Scene {
     private itemGroup?: Phaser.Physics.Arcade.Group;
     private ordersGroup?: Phaser.Physics.Arcade.Group;
     private heldItem: Ingredient | null | undefined;
+    private popup: Phaser.GameObjects.Container;
 
     private crates: Crate[] = [];
     private cratePositions = [
@@ -137,18 +138,6 @@ export default class day1 extends Phaser.Scene {
                 this
             );
         });
-        //Add overlap between player_arms and order group.
-        this.physics.add.overlap(
-            this.player_arms,
-            this.ordersGroup,
-            (playerArms) => {
-                (playerArms as Player_Arms).ordersOverlap = true;
-            },
-            (playerArms) => {
-                return !(playerArms as Player_Arms).ordersOverlap;
-            },
-            this
-        );
 
         //Creates tile and map.
         const map = this.make.tilemap({ key: "map_d" });
@@ -181,27 +170,26 @@ export default class day1 extends Phaser.Scene {
             }
         }
 
-        // Creates container for orders, text, image
-        // Create background for the text
+        //Container stuff
+        this.popup = this.add.container(0, 0);
+        this.popup.setVisible(false);
+        //Create order information elements.
         const bubbleGraphics = this.add.graphics();
         bubbleGraphics.fillStyle(0xffffff, 0.8); // white w transpareny
         bubbleGraphics.fillRoundedRect(0, 0, 220, 180, 10); // x, y, width, height, radius
         bubbleGraphics.lineStyle(2, 0x000000, 1); // line width, color, alpha
         bubbleGraphics.strokeRoundedRect(0, 0, 220, 180, 10);
-
-        // image
+        //Dish Image
         const image = this.add.image(10, 55, "BL_BR_BU_EG_MI");
         image.setOrigin(0, 0.5); // align left
         image.setScale(0.14); // scale of image
-
-        // Add text next to the image
+        //Add text next to the image
         const text = this.add.text(160, 55, "Blueberry\nFrench\nToast", {
             font: "22px Arial",
             color: "#000000",
         });
         text.setOrigin(0.5, 0.5); // centers text
-
-        // Adds bullet points below the main text
+        //Adds bullet points below the main text
         const bulletPoints = this.add.text(
             20,
             110,
@@ -211,35 +199,35 @@ export default class day1 extends Phaser.Scene {
                 color: "#000000",
             }
         );
-        bulletPoints.setOrigin(0, 0); // Align text to the left
+        bulletPoints.setOrigin(0, 0); //Align text to the left
         bulletPoints.setLineSpacing(5);
+        this.popup.add([bubbleGraphics, image, text, bulletPoints]);
 
-        // Calculate the x and y position for the container - bottom right
-        const x = this.cameras.main.width - 220 - 10; // 240 = width of bubble, 10 = margin
-        const y = this.cameras.main.height - 180 - 10; // 100 = height of bubble, 10 = margin
+        //Add overlap between player_arms and order group.
+        this.physics.add.overlap(
+            this.player_arms,
+            this.ordersGroup,
+            this.showOrderInfo,
+            (playerArms) => {
+                if (this.ordersGroup) {
+                    const overlappingOrders = this.ordersGroup
+                        .getChildren()
+                        .some((order) => {
+                            return this.physics.overlap(
+                                playerArms as Player_Arms,
+                                order
+                            );
+                        });
 
-        // group everything together at bottom right
-        const popup = this.add.container(x, y, [
-            bubbleGraphics,
-            image,
-            text,
-            bulletPoints,
-        ]);
-        popup.setSize(240, 180); // interactive area
-
-        // visibility
-        popup.setVisible(true);
-
-        /**
-        function showPopup() {
-            popup.setVisible(true);
-        }
-
-        // Function to hide the popup
-        function hidePopup() {
-            popup.setVisible(false);
-        }
-        */
+                    // Hide the order information container if not overlapping with any orders
+                    if (!overlappingOrders) {
+                        console.log("Hiding order!");
+                        this.popup.setVisible(false);
+                    }
+                }
+            },
+            this
+        );
 
         //Timer
         //Note: Should always be created last, so that it is overlaid over everything.
@@ -306,10 +294,13 @@ export default class day1 extends Phaser.Scene {
             }
         }
     }
-    interactWithOrder() {
-        if (this.player_arms.ordersOverlap) {
-            //
-        }
+    //Show order popup. Hide order popup.
+    showOrderInfo() {
+        console.log("Showing order!");
+        this.popup.setVisible(true);
+        const x = this.cameras.main.width - 220 - 10; // 240 = width of bubble, 10 = margin
+        const y = this.cameras.main.height - 180 - 10; // 100 = height of bubble, 10 = margin
+        this.popup.setPosition(x, y);
     }
 
     update() {
