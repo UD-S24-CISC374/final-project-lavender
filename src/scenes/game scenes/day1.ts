@@ -42,10 +42,6 @@ export default class day1 extends Phaser.Scene {
     private mi_crate: Crate;
 
     create() {
-        //Creates tile and map.
-        const map = this.make.tilemap({ key: "map_1" });
-        const tileset = map.addTilesetImage("Room_Builder_48x48", "tiles");
-
         //Creates stove object.
         this.stove = new Stove({
             scene: this,
@@ -92,8 +88,6 @@ export default class day1 extends Phaser.Scene {
             y: this.player.y,
         });
         this.player_arms.createAnims();
-        this.player.setScale(1.5);
-        this.player_arms.setScale(1.5);
 
         //Add overlap between player_arms and stove.
         this.physics.add.overlap(
@@ -136,21 +130,34 @@ export default class day1 extends Phaser.Scene {
             );
         });
 
-        if (tileset) {
+        //Creates tile and map.
+        const map = this.make.tilemap({ key: "map_d" });
+        const tileset = map.addTilesetImage("Room_Builder_48x48", "tiles");
+        const tileset_2 = map.addTilesetImage("Interiors_48x48", "i_tiles");
+
+        if (tileset && tileset_2) {
             //Tile Parameters
-            const belowLayer = map.createLayer("Below Player", tileset, 0, 0);
-            const aboveLayer = map.createLayer("Above Player", tileset, 0, 0);
+            const floorLayer = map.createLayer("Floor", tileset, 0, 0);
+            const obj1Layer = map.createLayer("Objects_Below", tileset_2, 0, 0);
+            const wallLayer = map.createLayer("Walls", tileset, 0, 0);
             //Set collision for tiles with collides key
-            aboveLayer?.setCollisionByProperty({ collides: true });
+            obj1Layer?.setCollisionByProperty({ collides: true });
+            wallLayer?.setCollisionByProperty({ collides: true });
             //Set scale & depth of layers
-            belowLayer?.setScale(1);
-            belowLayer?.setDepth(-2);
-            aboveLayer?.setScale(1);
-            aboveLayer?.setDepth(-1);
+            floorLayer?.setScale(1);
+            floorLayer?.setDepth(-20);
+            obj1Layer?.setScale(1);
+            obj1Layer?.setDepth(-19);
+            wallLayer?.setScale(1);
+            wallLayer?.setDepth(-18);
             //Set collision
-            if (aboveLayer) {
-                this.physics.add.collider(this.player, aboveLayer);
-                this.physics.add.collider(this.player_arms, aboveLayer);
+            if (obj1Layer) {
+                this.physics.add.collider(this.player, obj1Layer);
+                this.physics.add.collider(this.player_arms, obj1Layer);
+            }
+            if (wallLayer) {
+                this.physics.add.collider(this.player, wallLayer);
+                this.physics.add.collider(this.player_arms, wallLayer);
             }
         }
 
