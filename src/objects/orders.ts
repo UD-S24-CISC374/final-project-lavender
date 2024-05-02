@@ -1,11 +1,12 @@
 import Phaser from "phaser";
-import { Dish } from "./dish";
+//import { Dish } from "./dish";
 import { Ingredient } from "./dish_ing";
 
 interface OrdersProps {
     scene: Phaser.Scene;
     x: number;
     y: number;
+    num_order: number;
 }
 
 export class Orders extends Phaser.Physics.Arcade.Image {
@@ -15,15 +16,30 @@ export class Orders extends Phaser.Physics.Arcade.Image {
     // - dish: Dish;
     // - parts: Array<Ingredient>;
 
-    price: number;
-    num_order: number;
+    name: string;
+    price: string;
     parts: Array<Ingredient>;
-    dish: Dish;
+    dish_texture: string;
+    dish_name: string;
 
     constructor(config: OrdersProps) {
-        super(config.scene, config.x, config.y, "order ticket");
+        super(config.scene, config.x, config.y, "order");
+        this.name = "Order #" + config.num_order;
+        this.price = this.generateRandPrice(1, 100);
+
         config.scene.add.existing(this);
         config.scene.physics.add.existing(this, false);
         this.setCollideWorldBounds(true);
+
+        //const extendAmt = 30;
+        this.setSize(this.width + 30, this.height);
+    }
+
+    generateRandPrice(min: number, max: number): string {
+        const dollar = Math.floor(Math.random() * (max - min + 1));
+        const cents = Math.floor(Math.random() * 100);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const price = dollar + cents / 100;
+        return "$${price.toFixed(2)}";
     }
 }

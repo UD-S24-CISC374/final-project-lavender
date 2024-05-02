@@ -119,7 +119,7 @@ export class Stove extends Phaser.Physics.Arcade.Sprite {
                 x: this.x,
                 y: this.y,
             },
-            "BL_BR_BU_EG_MI"
+            "failed_dish"
         ).setScale(0.1);
         this.clearStove();
         return dish;

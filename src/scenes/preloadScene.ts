@@ -92,6 +92,7 @@ export default class PreloadScene extends Phaser.Scene {
             "BL_BR_BU_EG_MI",
             "assets/img/dishes/Blueberry_French_Toast.png"
         ); //bbft
+        this.load.image("failed_dish", "assets/img/dishes/Flowery_Mess.png"); //failed dish
 
         //Ingredient Crates Preload
         this.load.spritesheet("crate", "assets/img/ing_crate.png", {
@@ -100,7 +101,7 @@ export default class PreloadScene extends Phaser.Scene {
         });
 
         //Order Ticket
-        this.load.image("order ticket", "assets/img/order_ticker.png");
+        this.load.image("order", "assets/img/order_ticket.png");
     }
 
     create() {

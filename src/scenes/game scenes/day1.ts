@@ -5,10 +5,7 @@ import { Ingredient } from "../../objects/dish_ing";
 import { Crate } from "../../objects/crate";
 import { Stove } from "../../objects/stove";
 import { Timer } from "../../objects/timer";
-
-export type Collidable =
-    | Phaser.Types.Physics.Arcade.GameObjectWithBody
-    | Phaser.Tilemaps.Tile;
+import { Orders } from "../../objects/orders";
 
 export default class day1 extends Phaser.Scene {
     constructor() {
@@ -23,6 +20,7 @@ export default class day1 extends Phaser.Scene {
 
     private stove: Stove;
     private itemGroup?: Phaser.Physics.Arcade.Group;
+    private ordersGroup?: Phaser.Physics.Arcade.Group;
     private heldItem: Ingredient | null | undefined;
 
     private crates: Crate[] = [];
@@ -50,6 +48,18 @@ export default class day1 extends Phaser.Scene {
         });
         this.stove.createAnims();
 
+        //Create initial orders objects.
+        this.ordersGroup = this.physics.add.group();
+        this.ordersGroup.add(
+            new Orders({ scene: this, x: 792, y: 144, num_order: 1 })
+        );
+        this.ordersGroup.add(
+            new Orders({ scene: this, x: 792, y: 240, num_order: 2 })
+        );
+        this.ordersGroup.add(
+            new Orders({ scene: this, x: 792, y: 336, num_order: 3 })
+        );
+
         //Create crates
         this.cratePositions.forEach((position) => {
             this.crates.push(
@@ -69,8 +79,6 @@ export default class day1 extends Phaser.Scene {
         this.mi_crate = this.crates[5];
 
         //Create itemgroup
-        //let x, y;
-        //const numOfObjects = 10;
         this.itemGroup = this.physics.add.group();
 
         //Creates player input and player object.
@@ -161,8 +169,7 @@ export default class day1 extends Phaser.Scene {
             }
         }
 
-        // creates container for orders, text, image
-
+        // Creates container for orders, text, image
         // Create background for the text
         const bubbleGraphics = this.add.graphics();
         bubbleGraphics.fillStyle(0xffffff, 0.8); // white w transpareny
@@ -181,7 +188,6 @@ export default class day1 extends Phaser.Scene {
             color: "#000000",
         });
         text.setOrigin(0.5, 0.5); // centers text
-        
 
         // Adds bullet points below the main text
         const bulletPoints = this.add.text(
@@ -201,7 +207,12 @@ export default class day1 extends Phaser.Scene {
         const y = this.cameras.main.height - 180 - 10; // 100 = height of bubble, 10 = margin
 
         // group everything together at bottom right
-        const popup = this.add.container(x, y, [bubbleGraphics, image, text, bulletPoints]);
+        const popup = this.add.container(x, y, [
+            bubbleGraphics,
+            image,
+            text,
+            bulletPoints,
+        ]);
         popup.setSize(240, 180); // interactive area
 
         // visibility
