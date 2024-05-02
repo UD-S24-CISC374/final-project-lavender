@@ -194,32 +194,33 @@ export default class day1 extends Phaser.Scene {
         //Create order information elements.
         const bubbleGraphics = this.add.graphics();
         bubbleGraphics.fillStyle(0xffffff, 0.8); // white w transpareny
-        bubbleGraphics.fillRoundedRect(0, 0, 220, 180, 10); // x, y, width, height, radius
-        bubbleGraphics.lineStyle(2, 0x000000, 1); // line width, color, alpha
-        bubbleGraphics.strokeRoundedRect(0, 0, 220, 180, 10);
+        bubbleGraphics.fillRoundedRect(0, 0, 165, 135, 10); // x, y, width, height, radius
+        bubbleGraphics.lineStyle(2, 0x9dc183, 1); // line width, color, alpha
+        bubbleGraphics.strokeRoundedRect(0, 0, 165, 135, 10);
         //Dish Image
-        const image = this.add.image(10, 55, "BL_BR_BU_EG_MI");
+        const image = this.add.image(7.5, 41, "BL_BR_BU_EG_MI");
         image.setOrigin(0, 0.5); // align left
-        image.setScale(0.14); // scale of image
+        image.setScale(0.12); // scale of image
         //Add text next to the image
-        const text = this.add.text(160, 55, "Blueberry\nFrench\nToast", {
-            font: "22px Arial",
-            color: "#000000",
+        const text = this.add.text(125, 45, "Blueberry\nFrench\nToast", {
+            font: "bold 16px Bangers",
+            color: "#355E3B",
         });
         text.setOrigin(0.5, 0.5); // centers text
         //Adds bullet points below the main text
         const bulletPoints = this.add.text(
-            20,
-            110,
+            15,
+            80,
             "• Blueberries\n• Bread       • Butter\n• Eggs         • Milk",
             {
-                font: "17px Arial",
-                color: "#000000",
+                font: "14px Bangers",
+                color: "#355E3B",
             }
         );
         bulletPoints.setOrigin(0, 0); //Align text to the left
-        bulletPoints.setLineSpacing(5);
+        bulletPoints.setLineSpacing(2.5);
         this.popup.add([bubbleGraphics, image, text, bulletPoints]);
+        this.popup.setSize(165, 135);
 
         //Timer
         //Note: Should always be created last, so that it is overlaid over everything.
@@ -304,9 +305,10 @@ export default class day1 extends Phaser.Scene {
     //Show order popup. Hide order popup.
     showOrderInfo() {
         console.log("Showing order!");
+        //this.popup[]
         this.popup.setVisible(true);
-        const x = this.cameras.main.width - 220 - 10; // 240 = width of bubble, 10 = margin
-        const y = this.cameras.main.height - 180 - 10; // 100 = height of bubble, 10 = margin
+        const x = this.cameras.main.width - 165 - 7.5; // 240 = width of bubble, 10 = margin
+        const y = this.cameras.main.height - 135 - 7.5; // 100 = height of bubble, 10 = margin
         this.popup.setPosition(x, y);
     }
 
@@ -315,7 +317,6 @@ export default class day1 extends Phaser.Scene {
         this.player.setVelocity(0);
         this.player_arms.setVelocity(0);
         this.player.movePlayer(this.player_arms);
-
         if (this.player_arms.ordersOverlap) {
             this.interactWithOrders();
         } else {
