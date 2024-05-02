@@ -20,10 +20,10 @@ export default class day1 extends Phaser.Scene {
 
     private stove: Stove;
     private itemGroup?: Phaser.Physics.Arcade.Group;
-    private ordersGroup?: Phaser.Physics.Arcade.Group;
     private heldItem: Ingredient | null | undefined;
     private popup: Phaser.GameObjects.Container;
 
+    private orderses: Orders[] = [];
     private crates: Crate[] = [];
     private cratePositions = [
         { x: 80, y: 140, ingredient: "BA" },
@@ -50,16 +50,19 @@ export default class day1 extends Phaser.Scene {
         this.stove.createAnims();
 
         //Create initial orders objects.
-        this.ordersGroup = this.physics.add.group();
-        this.ordersGroup.add(
-            new Orders({ scene: this, x: 792, y: 144, num_order: 1 })
-        );
-        this.ordersGroup.add(
-            new Orders({ scene: this, x: 792, y: 240, num_order: 2 })
-        );
-        this.ordersGroup.add(
-            new Orders({ scene: this, x: 792, y: 336, num_order: 3 })
-        );
+        let x = 792;
+        let y = 144;
+        for (let i = 0; i < 3; i++) {
+            this.orderses.push(
+                new Orders({
+                    scene: this,
+                    x: x,
+                    y: y,
+                    num_order: i,
+                })
+            );
+            y += 96;
+        }
 
         //Create crates
         this.cratePositions.forEach((position) => {
@@ -138,6 +141,21 @@ export default class day1 extends Phaser.Scene {
                 this
             );
         });
+        //Add overlap between player_arms and order group.
+        this.orderses.forEach((orders) => {
+            this.physics.add.overlap(
+                this.player_arms,
+                orders,
+                (playerArms) => {
+                    (playerArms as Player_Arms).ordersOverlap = true;
+                    (orders as Orders).ordersTouched = true;
+                },
+                (playerArms) => {
+                    return !(playerArms as Player_Arms).ordersOverlap;
+                },
+                this
+            );
+        });
 
         //Creates tile and map.
         const map = this.make.tilemap({ key: "map_d" });
@@ -203,32 +221,6 @@ export default class day1 extends Phaser.Scene {
         bulletPoints.setLineSpacing(5);
         this.popup.add([bubbleGraphics, image, text, bulletPoints]);
 
-        //Add overlap between player_arms and order group.
-        this.physics.add.overlap(
-            this.player_arms,
-            this.ordersGroup,
-            this.showOrderInfo,
-            (playerArms) => {
-                if (this.ordersGroup) {
-                    const overlappingOrders = this.ordersGroup
-                        .getChildren()
-                        .some((order) => {
-                            return this.physics.overlap(
-                                playerArms as Player_Arms,
-                                order
-                            );
-                        });
-
-                    // Hide the order information container if not overlapping with any orders
-                    if (!overlappingOrders) {
-                        console.log("Hiding order!");
-                        this.popup.setVisible(false);
-                    }
-                }
-            },
-            this
-        );
-
         //Timer
         //Note: Should always be created last, so that it is overlaid over everything.
         this.timer = new Timer(
@@ -276,8 +268,7 @@ export default class day1 extends Phaser.Scene {
         if (
             this.input.mousePointer.leftButtonDown() &&
             this.player_arms.crateOverlap &&
-            !this.mouseClicked //&&
-            //!this.heldItem
+            !this.mouseClicked
         ) {
             let touchedCrate: Crate | undefined;
             this.crates.forEach((crate) => {
@@ -292,6 +283,22 @@ export default class day1 extends Phaser.Scene {
                     touchedCrate.name
                 );
             }
+        }
+    }
+    interactWithOrders() {
+        if (this.player_arms.ordersOverlap) {
+            let touchedOrder: Orders | undefined;
+            this.orderses.forEach((orders) => {
+                if (orders.ordersTouched) {
+                    touchedOrder = orders;
+                    orders.ordersTouched = false;
+                }
+            });
+            if (touchedOrder) {
+                this.showOrderInfo();
+            }
+        } else {
+            this.popup.setVisible(false);
         }
     }
     //Show order popup. Hide order popup.
@@ -309,9 +316,14 @@ export default class day1 extends Phaser.Scene {
         this.player_arms.setVelocity(0);
         this.player.movePlayer(this.player_arms);
 
+        if (this.player_arms.ordersOverlap) {
+            this.interactWithOrders();
+        } else {
+            this.popup.setVisible(false);
+        }
+
         //Left mouse button is down
         const leftButtonDown = this.input.mousePointer.leftButtonDown();
-
         //Player is not holding an item.
         if (!this.player_arms.hasItem) {
             if (
@@ -363,5 +375,9 @@ export default class day1 extends Phaser.Scene {
             crate.crateTouched = false;
         });
         this.player_arms.crateOverlap = false;
+        this.orderses.forEach((orders) => {
+            orders.ordersTouched = false;
+        });
+        this.player_arms.ordersOverlap = false;
     }
 }

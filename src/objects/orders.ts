@@ -21,11 +21,13 @@ export class Orders extends Phaser.Physics.Arcade.Image {
     parts: Array<Ingredient>;
     dish_texture: string;
     dish_name: string;
+    ordersTouched: boolean;
 
     constructor(config: OrdersProps) {
         super(config.scene, config.x, config.y, "order");
         this.name = "Order #" + config.num_order;
         this.price = this.generateRandPrice(1, 100);
+        this.ordersTouched = false;
 
         config.scene.add.existing(this);
         config.scene.physics.add.existing(this, false);
