@@ -160,7 +160,7 @@ export default class day1 extends Phaser.Scene {
         const bubbleGraphics = this.add.graphics();
         bubbleGraphics.fillStyle(0xffffff, 0.8); // white w transpareny
         bubbleGraphics.fillRoundedRect(0, 0, 220, 180, 10); // x, y, width, height, radius
-        bubbleGraphics.lineStyle(2, 0x000000, 1); // line width, color, alpha
+        bubbleGraphics.lineStyle(2, 0x9DC183, 1); // line width, color, alpha
         bubbleGraphics.strokeRoundedRect(0, 0, 220, 180, 10);
 
         // image
@@ -169,8 +169,8 @@ export default class day1 extends Phaser.Scene {
         image.setScale(0.14); // scale of image
 
         // Add text next to the image
-        const text = this.add.text(160, 55, "Blueberry\nFrench\nToast", {
-            font: "22px Arial",
+        const text = this.add.text(160, 60, "Blueberry\nFrench\nToast", {
+            font: "20px Arial",
             color: "#000000",
         });
         text.setOrigin(0.5, 0.5); // centers text
