@@ -137,6 +137,18 @@ export default class day1 extends Phaser.Scene {
                 this
             );
         });
+        //Add overlap between player_arms and order group.
+        this.physics.add.overlap(
+            this.player_arms,
+            this.ordersGroup,
+            (playerArms) => {
+                (playerArms as Player_Arms).ordersOverlap = true;
+            },
+            (playerArms) => {
+                return !(playerArms as Player_Arms).ordersOverlap;
+            },
+            this
+        );
 
         //Creates tile and map.
         const map = this.make.tilemap({ key: "map_d" });
@@ -292,6 +304,11 @@ export default class day1 extends Phaser.Scene {
                     touchedCrate.name
                 );
             }
+        }
+    }
+    interactWithOrder() {
+        if (this.player_arms.ordersOverlap) {
+            //
         }
     }
 

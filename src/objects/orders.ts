@@ -31,7 +31,7 @@ export class Orders extends Phaser.Physics.Arcade.Image {
         config.scene.physics.add.existing(this, false);
         this.setCollideWorldBounds(true);
 
-        //const extendAmt = 30;
+        //Changes bounds of object.
         this.setSize(this.width + 30, this.height);
     }
 
