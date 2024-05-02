@@ -209,6 +209,7 @@ export default class day1 extends Phaser.Scene {
             popup.setVisible(true);
         }
 
+
         // Function to hide the popup
         function hidePopup() {
             popup.setVisible(false);

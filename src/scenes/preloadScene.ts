@@ -36,7 +36,12 @@ export default class PreloadScene extends Phaser.Scene {
             "tiles",
             "assets/tilemaps/tilesets/Room_Builder_48x48.png"
         );
+        this.load.image(
+            "i_tiles",
+            "assets/tilemaps/tilesets/Interiors_48x48.png"
+        );
         this.load.tilemapTiledJSON("map_1", "assets/tilemaps/map_one.json");
+        this.load.tilemapTiledJSON("map_d", "assets/tilemaps/map_d.json");
 
         //Character Spritesheet
         this.load.spritesheet(
@@ -87,6 +92,7 @@ export default class PreloadScene extends Phaser.Scene {
             "BL_BR_BU_EG_MI",
             "assets/img/dishes/Blueberry_French_Toast.png"
         ); //bbft
+        this.load.image("failed_dish", "assets/img/dishes/Flowery_Mess.png"); //failed dish
 
         //Ingredient Crates Preload
         this.load.spritesheet("crate", "assets/img/ing_crate.png", {
@@ -95,7 +101,7 @@ export default class PreloadScene extends Phaser.Scene {
         });
 
         //Order Ticket
-        this.load.image("order ticket", "assets/img/order_ticker.png");
+        this.load.image("order", "assets/img/order_ticket.png");
     }
 
     create() {
