@@ -164,16 +164,17 @@ export default class day1 extends Phaser.Scene {
         bubbleGraphics.strokeRoundedRect(0, 0, 220, 180, 10);
 
         // image
-        const image = this.add.image(10, 30, "BL_BR_BU_EG_MI");
+        const image = this.add.image(10, 55, "BL_BR_BU_EG_MI");
         image.setOrigin(0, 0.5); // align left
         image.setScale(0.14); // scale of image
 
         // Add text next to the image
-        const text = this.add.text(170, 50, "Blueberry\nFrench\nToast", {
+        const text = this.add.text(160, 55, "Blueberry\nFrench\nToast", {
             font: "22px Arial",
             color: "#000000",
         });
-        text.setOrigin(0.5, 0.5); // centers text vertically
+        text.setOrigin(0.5, 0.5); // centers text
+        
 
         // Adds bullet points below the main text
         const bulletPoints = this.add.text(
@@ -181,11 +182,12 @@ export default class day1 extends Phaser.Scene {
             110,
             "• Blueberries\n• Bread       • Butter\n• Eggs         • Milk",
             {
-                font: "16px Arial",
+                font: "17px Arial",
                 color: "#000000",
             }
         );
         bulletPoints.setOrigin(0, 0); // Align text to the left
+        bulletPoints.setLineSpacing(5);
 
         // Calculate the x and y position for the container - bottom right
         const x = this.cameras.main.width - 220 - 10; // 240 = width of bubble, 10 = margin
