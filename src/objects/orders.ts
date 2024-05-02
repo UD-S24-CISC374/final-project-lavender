@@ -26,6 +26,7 @@ export class Orders extends Phaser.Physics.Arcade.Image {
     constructor(config: OrdersProps) {
         super(config.scene, config.x, config.y, "order");
         this.name = "Order #" + config.num_order;
+        this.generateRandDish();
         this.price = this.generateRandPrice(1, 100);
         this.ordersTouched = false;
 
@@ -43,5 +44,29 @@ export class Orders extends Phaser.Physics.Arcade.Image {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const price = dollar + cents / 100;
         return "$${price.toFixed(2)}";
+    }
+
+    generateRandDish() {
+        let textArrar: Array<string>;
+        let randNum = Math.floor(Math.random() * (5 - 0)) + 0;
+        textArrar = [
+            "BA",
+            "BR_EG",
+            "BA_BL_MI",
+            "BA_BR_BU_EG",
+            "BL_BR_BU_EG_MI",
+        ];
+        this.dish_texture = textArrar[randNum];
+        if (randNum == 0) {
+            this.dish_name = "Banana";
+        } else if (randNum == 1) {
+            this.dish_name = "Egg Sandwich";
+        } else if (randNum == 2) {
+            this.dish_name = "Fruit Smoothie";
+        } else if (randNum == 3) {
+            this.dish_name = "Banana Bread";
+        } else if (randNum == 4) {
+            this.dish_name = "Blueberry French Toast";
+        }
     }
 }

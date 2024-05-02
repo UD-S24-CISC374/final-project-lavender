@@ -5,10 +5,7 @@ import { Ingredient } from "../../objects/dish_ing";
 import { Crate } from "../../objects/crate";
 import { Stove } from "../../objects/stove";
 import { Timer } from "../../objects/timer";
-
-export type Collidable =
-    | Phaser.Types.Physics.Arcade.GameObjectWithBody
-    | Phaser.Tilemaps.Tile;
+import { Orders } from "../../objects/orders";
 
 export default class day1 extends Phaser.Scene {
     constructor() {
@@ -24,7 +21,9 @@ export default class day1 extends Phaser.Scene {
     private stove: Stove;
     private itemGroup?: Phaser.Physics.Arcade.Group;
     private heldItem: Ingredient | null | undefined;
+    private popup: Phaser.GameObjects.Container;
 
+    private orderses: Orders[] = [];
     private crates: Crate[] = [];
     private cratePositions = [
         { x: 80, y: 140, ingredient: "BA" },
@@ -42,10 +41,6 @@ export default class day1 extends Phaser.Scene {
     private mi_crate: Crate;
 
     create() {
-        //Creates tile and map.
-        const map = this.make.tilemap({ key: "map_1" });
-        const tileset = map.addTilesetImage("Room_Builder_48x48", "tiles");
-
         //Creates stove object.
         this.stove = new Stove({
             scene: this,
@@ -53,6 +48,21 @@ export default class day1 extends Phaser.Scene {
             y: this.cameras.main.displayHeight / 2 + 20,
         });
         this.stove.createAnims();
+
+        //Create initial orders objects.
+        let x = 792;
+        let y = 144;
+        for (let i = 0; i < 3; i++) {
+            this.orderses.push(
+                new Orders({
+                    scene: this,
+                    x: x,
+                    y: y,
+                    num_order: i,
+                })
+            );
+            y += 96;
+        }
 
         //Create crates
         this.cratePositions.forEach((position) => {
@@ -73,8 +83,6 @@ export default class day1 extends Phaser.Scene {
         this.mi_crate = this.crates[5];
 
         //Create itemgroup
-        //let x, y;
-        //const numOfObjects = 10;
         this.itemGroup = this.physics.add.group();
 
         //Creates player input and player object.
@@ -92,8 +100,6 @@ export default class day1 extends Phaser.Scene {
             y: this.player.y,
         });
         this.player_arms.createAnims();
-        this.player.setScale(1.5);
-        this.player_arms.setScale(1.5);
 
         //Add overlap between player_arms and stove.
         this.physics.add.overlap(
@@ -135,47 +141,73 @@ export default class day1 extends Phaser.Scene {
                 this
             );
         });
+        //Add overlap between player_arms and order group.
+        this.orderses.forEach((orders) => {
+            this.physics.add.overlap(
+                this.player_arms,
+                orders,
+                (playerArms) => {
+                    (playerArms as Player_Arms).ordersOverlap = true;
+                    (orders as Orders).ordersTouched = true;
+                },
+                (playerArms) => {
+                    return !(playerArms as Player_Arms).ordersOverlap;
+                },
+                this
+            );
+        });
 
-        if (tileset) {
+        //Creates tile and map.
+        const map = this.make.tilemap({ key: "map_d" });
+        const tileset = map.addTilesetImage("Room_Builder_48x48", "tiles");
+        const tileset_2 = map.addTilesetImage("Interiors_48x48", "i_tiles");
+
+        if (tileset && tileset_2) {
             //Tile Parameters
-            const belowLayer = map.createLayer("Below Player", tileset, 0, 0);
-            const aboveLayer = map.createLayer("Above Player", tileset, 0, 0);
+            const floorLayer = map.createLayer("Floor", tileset, 0, 0);
+            const obj1Layer = map.createLayer("Objects_Below", tileset_2, 0, 0);
+            const wallLayer = map.createLayer("Walls", tileset, 0, 0);
             //Set collision for tiles with collides key
-            aboveLayer?.setCollisionByProperty({ collides: true });
+            obj1Layer?.setCollisionByProperty({ collides: true });
+            wallLayer?.setCollisionByProperty({ collides: true });
             //Set scale & depth of layers
-            belowLayer?.setScale(1);
-            belowLayer?.setDepth(-2);
-            aboveLayer?.setScale(1);
-            aboveLayer?.setDepth(-1);
+            floorLayer?.setScale(1);
+            floorLayer?.setDepth(-20);
+            obj1Layer?.setScale(1);
+            obj1Layer?.setDepth(-19);
+            wallLayer?.setScale(1);
+            wallLayer?.setDepth(-18);
             //Set collision
-            if (aboveLayer) {
-                this.physics.add.collider(this.player, aboveLayer);
-                this.physics.add.collider(this.player_arms, aboveLayer);
+            if (obj1Layer) {
+                this.physics.add.collider(this.player, obj1Layer);
+                this.physics.add.collider(this.player_arms, obj1Layer);
+            }
+            if (wallLayer) {
+                this.physics.add.collider(this.player, wallLayer);
+                this.physics.add.collider(this.player_arms, wallLayer);
             }
         }
 
-        // creates container for orders, text, image
-
-        // Create background for the text
+        //Container stuff
+        this.popup = this.add.container(0, 0);
+        this.popup.setVisible(false);
+        //Create order information elements.
         const bubbleGraphics = this.add.graphics();
         bubbleGraphics.fillStyle(0xffffff, 0.8); // white w transpareny
         bubbleGraphics.fillRoundedRect(0, 0, 165, 135, 10); // x, y, width, height, radius
         bubbleGraphics.lineStyle(2, 0x9dc183, 1); // line width, color, alpha
         bubbleGraphics.strokeRoundedRect(0, 0, 165, 135, 10);
-
-        // image
+        //Dish Image
         const image = this.add.image(7.5, 41, "BL_BR_BU_EG_MI");
         image.setOrigin(0, 0.5); // align left
         image.setScale(0.12); // scale of image
-
-        // Add text next to the image
+        //Add text next to the image
         const text = this.add.text(125, 45, "Blueberry\nFrench\nToast", {
             font: "bold 16px Bangers",
             color: "#355E3B",
         });
         text.setOrigin(0.5, 0.5); // centers text
-
-        // Adds bullet points below the main text
+        //Adds bullet points below the main text
         const bulletPoints = this.add.text(
             15,
             80,
@@ -185,36 +217,10 @@ export default class day1 extends Phaser.Scene {
                 color: "#355E3B",
             }
         );
-        bulletPoints.setOrigin(0, 0); // Align text to the left
+        bulletPoints.setOrigin(0, 0); //Align text to the left
         bulletPoints.setLineSpacing(2.5);
-
-        // Calculate the x and y position for the container - bottom right
-        const x = this.cameras.main.width - 165 - 7.5; // 240 = width of bubble, 10 = margin
-        const y = this.cameras.main.height - 135 - 7.5; // 100 = height of bubble, 10 = margin
-
-        // group everything together at bottom right
-        const popup = this.add.container(x, y, [
-            bubbleGraphics,
-            image,
-            text,
-            bulletPoints,
-        ]);
-        popup.setSize(165, 135); // interactive area
-
-        // visibility
-        popup.setVisible(true);
-
-        /**
-        function showPopup() {
-            popup.setVisible(true);
-        }
-
-
-        // Function to hide the popup
-        function hidePopup() {
-            popup.setVisible(false);
-        }
-        */
+        this.popup.add([bubbleGraphics, image, text, bulletPoints]);
+        this.popup.setSize(165, 135);
 
         //Timer
         //Note: Should always be created last, so that it is overlaid over everything.
@@ -263,8 +269,7 @@ export default class day1 extends Phaser.Scene {
         if (
             this.input.mousePointer.leftButtonDown() &&
             this.player_arms.crateOverlap &&
-            !this.mouseClicked //&&
-            //!this.heldItem
+            !this.mouseClicked
         ) {
             let touchedCrate: Crate | undefined;
             this.crates.forEach((crate) => {
@@ -281,16 +286,45 @@ export default class day1 extends Phaser.Scene {
             }
         }
     }
+    interactWithOrders() {
+        if (this.player_arms.ordersOverlap) {
+            let touchedOrder: Orders | undefined;
+            this.orderses.forEach((orders) => {
+                if (orders.ordersTouched) {
+                    touchedOrder = orders;
+                    orders.ordersTouched = false;
+                }
+            });
+            if (touchedOrder) {
+                this.showOrderInfo();
+            }
+        } else {
+            this.popup.setVisible(false);
+        }
+    }
+    //Show order popup. Hide order popup.
+    showOrderInfo() {
+        console.log("Showing order!");
+        //this.popup[]
+        this.popup.setVisible(true);
+        const x = this.cameras.main.width - 165 - 7.5; // 240 = width of bubble, 10 = margin
+        const y = this.cameras.main.height - 135 - 7.5; // 100 = height of bubble, 10 = margin
+        this.popup.setPosition(x, y);
+    }
 
     update() {
         //Movement
         this.player.setVelocity(0);
         this.player_arms.setVelocity(0);
         this.player.movePlayer(this.player_arms);
+        if (this.player_arms.ordersOverlap) {
+            this.interactWithOrders();
+        } else {
+            this.popup.setVisible(false);
+        }
 
         //Left mouse button is down
         const leftButtonDown = this.input.mousePointer.leftButtonDown();
-
         //Player is not holding an item.
         if (!this.player_arms.hasItem) {
             if (
@@ -342,5 +376,9 @@ export default class day1 extends Phaser.Scene {
             crate.crateTouched = false;
         });
         this.player_arms.crateOverlap = false;
+        this.orderses.forEach((orders) => {
+            orders.ordersTouched = false;
+        });
+        this.player_arms.ordersOverlap = false;
     }
 }
