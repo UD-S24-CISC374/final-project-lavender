@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 //import { Dish } from "./dish";
-import { Ingredient } from "./dish_ing";
+//import { Ingredient } from "./dish_ing";
 
 interface OrdersProps {
     scene: Phaser.Scene;
@@ -18,7 +18,7 @@ export class Orders extends Phaser.Physics.Arcade.Image {
 
     name: string;
     price: string;
-    parts: Array<Ingredient>;
+    parts: string;
     dish_texture: string;
     dish_name: string;
     ordersTouched: boolean;
@@ -58,15 +58,21 @@ export class Orders extends Phaser.Physics.Arcade.Image {
         ];
         this.dish_texture = textArrar[randNum];
         if (randNum == 0) {
-            this.dish_name = "Banana";
+            this.dish_name = "Baked Banana";
+            this.parts = "• Banana";
         } else if (randNum == 1) {
             this.dish_name = "Egg Sandwich";
+            this.parts = "• Egg\n• Bread";
         } else if (randNum == 2) {
             this.dish_name = "Fruit Smoothie";
+            this.parts = "• Banana       • Bread\n• Milk";
         } else if (randNum == 3) {
             this.dish_name = "Banana Bread";
+            this.parts = "• Banana       • Bread\n• Butter       • Egg";
         } else if (randNum == 4) {
             this.dish_name = "Blueberry French Toast";
+            this.parts =
+                "• Blueberries\n• Bread       • Butter\n• Eggs         • Milk";
         }
     }
 }
