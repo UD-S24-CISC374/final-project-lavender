@@ -12,6 +12,10 @@ export default class day1 extends Phaser.Scene {
         super({ key: "day1" });
     }
 
+    private dishes_made: number;
+    private dishes_failed: number;
+    private money_made: number;
+
     private mouseClicked: boolean;
     private player: Player;
     private player_arms: Player_Arms;
@@ -22,6 +26,7 @@ export default class day1 extends Phaser.Scene {
     private itemGroup?: Phaser.Physics.Arcade.Group;
     private heldItem: Ingredient | null | undefined;
     private popup: Phaser.GameObjects.Container;
+    private end_popup: Phaser.GameObjects.Container;
 
     private orderses: Orders[] = [];
     private crates: Crate[] = [];
@@ -228,7 +233,10 @@ export default class day1 extends Phaser.Scene {
             { scene: this, x: 552, y: 112, duration: 120 },
             () => {
                 console.log("Timer completed!");
-                //Probably gonna put the result screen code here.
+                this.end_popup = this.add.container(
+                    this.cameras.main.displayWidth * 0.5,
+                    this.cameras.main.displayHeight * 0.5
+                );
             }
         );
     }
@@ -297,6 +305,24 @@ export default class day1 extends Phaser.Scene {
             });
             if (touchedOrder) {
                 this.showOrderInfo(touchedOrder);
+                console.log("Order dish name: ", touchedOrder.dish_texture);
+                if (this.heldItem) {
+                    console.log("Held item name: ", this.heldItem.name);
+                }
+
+                if (
+                    this.input.mousePointer.leftButtonDown() &&
+                    this.heldItem &&
+                    !this.mouseClicked
+                ) {
+                    if (this.heldItem.name === touchedOrder.dish_texture) {
+                        touchedOrder.destroy();
+                        this.heldItem.destroy();
+                        this.heldItem = null;
+                        this.player_arms.hasItem = false;
+                        this.mouseClicked = true;
+                    }
+                }
             }
         } else {
             this.popup.setVisible(false);

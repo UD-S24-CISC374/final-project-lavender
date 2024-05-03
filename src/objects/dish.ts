@@ -26,13 +26,13 @@ export class Dish extends Phaser.Physics.Arcade.Sprite {
         if (this.name == "BAK") {
             this.recipe = Dish.recipes[0];
         } else if (this.name == "BAN") {
-            this.recipe = Dish.recipes[4];
-        } else if (this.name == "BLU") {
-            this.recipe = Dish.recipes[5];
-        } else if (this.name == "EGG") {
-            this.recipe = Dish.recipes[2];
-        } else {
             this.recipe = Dish.recipes[3];
+        } else if (this.name == "BLU") {
+            this.recipe = Dish.recipes[4];
+        } else if (this.name == "EGG") {
+            this.recipe = Dish.recipes[1];
+        } else {
+            this.recipe = Dish.recipes[2];
         }
         config.scene.add.existing(this);
         config.scene.physics.add.existing(this, false);
