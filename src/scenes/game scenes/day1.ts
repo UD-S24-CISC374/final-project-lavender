@@ -296,20 +296,27 @@ export default class day1 extends Phaser.Scene {
                 }
             });
             if (touchedOrder) {
-                this.showOrderInfo();
+                this.showOrderInfo(touchedOrder);
             }
         } else {
             this.popup.setVisible(false);
         }
     }
     //Show order popup. Hide order popup.
-    showOrderInfo() {
+    showOrderInfo(order: Orders) {
         console.log("Showing order!");
-        //this.popup[]
-        this.popup.setVisible(true);
+        //Update dish texture.
+        (this.popup.getAt(1) as Phaser.Physics.Arcade.Image).setTexture(
+            order.dish_texture
+        );
+        //Update dish name.
+        const text = this.popup.getAt(2) as Phaser.GameObjects.Text;
+        text.setText(order.dish_name.replace(/ /g, "\n"));
+
         const x = this.cameras.main.width - 165 - 7.5; // 240 = width of bubble, 10 = margin
         const y = this.cameras.main.height - 135 - 7.5; // 100 = height of bubble, 10 = margin
         this.popup.setPosition(x, y);
+        this.popup.setVisible(true);
     }
 
     update() {
@@ -317,6 +324,8 @@ export default class day1 extends Phaser.Scene {
         this.player.setVelocity(0);
         this.player_arms.setVelocity(0);
         this.player.movePlayer(this.player_arms);
+
+        //Check if overlapping with an order.
         if (this.player_arms.ordersOverlap) {
             this.interactWithOrders();
         } else {
