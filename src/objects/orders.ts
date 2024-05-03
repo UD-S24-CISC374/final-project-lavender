@@ -43,7 +43,7 @@ export class Orders extends Phaser.Physics.Arcade.Image {
         const cents = Math.floor(Math.random() * 100);
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const price = dollar + cents / 100;
-        return "$${price.toFixed(2)}";
+        return "$" + price.toFixed(2);
     }
 
     generateRandDish() {
