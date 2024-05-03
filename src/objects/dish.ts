@@ -22,17 +22,17 @@ export class Dish extends Phaser.Physics.Arcade.Sprite {
 
     constructor(config: DishProps, texture: string) {
         super(config.scene, config.x, config.y, texture);
-        this.name = texture.slice(0, 2).toUpperCase();
-        if (this.name == "BAK") {
+        this.name = texture;
+        if (this.name == "BA") {
             this.recipe = Dish.recipes[0];
-        } else if (this.name == "BAN") {
-            this.recipe = Dish.recipes[4];
-        } else if (this.name == "BLU") {
-            this.recipe = Dish.recipes[5];
-        } else if (this.name == "EGG") {
-            this.recipe = Dish.recipes[2];
-        } else {
+        } else if (this.name == "BA_BR_BU_EG") {
             this.recipe = Dish.recipes[3];
+        } else if (this.name == "BL_BR_BU_EG_MI") {
+            this.recipe = Dish.recipes[4];
+        } else if (this.name == "BR_EG") {
+            this.recipe = Dish.recipes[1];
+        } else if (this.name == "BA_BL_MI") {
+            this.recipe = Dish.recipes[2];
         }
         config.scene.add.existing(this);
         config.scene.physics.add.existing(this, false);

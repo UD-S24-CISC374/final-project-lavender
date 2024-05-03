@@ -65,7 +65,7 @@ export class Orders extends Phaser.Physics.Arcade.Image {
             this.parts = "• Egg\n• Bread";
         } else if (randNum == 2) {
             this.dish_name = "Fruit Smoothie";
-            this.parts = "• Banana       • Bread\n• Milk";
+            this.parts = "• Banana       • Milk\n• Blueberry";
         } else if (randNum == 3) {
             this.dish_name = "Banana Bread";
             this.parts = "• Banana       • Bread\n• Butter       • Egg";
