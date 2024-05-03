@@ -75,4 +75,42 @@ export class Orders extends Phaser.Physics.Arcade.Image {
                 "• Blueberries\n• Bread       • Butter\n• Eggs         • Milk";
         }
     }
+
+    static initializePopup(scene: Phaser.Scene): Phaser.GameObjects.Container {
+        //Container stuff
+        let popup: Phaser.GameObjects.Container;
+        popup = scene.add.container(0, 0);
+        popup.setVisible(false);
+        //Create order information elements.
+        const bubbleGraphics = scene.add.graphics();
+        bubbleGraphics.fillStyle(0xffffff, 0.8); // white w transpareny
+        bubbleGraphics.fillRoundedRect(0, 0, 165, 135, 10); // x, y, width, height, radius
+        bubbleGraphics.lineStyle(2, 0x9dc183, 1); // line width, color, alpha
+        bubbleGraphics.strokeRoundedRect(0, 0, 165, 135, 10);
+        //Dish Image
+        const image = scene.add.image(7.5, 41, "BL_BR_BU_EG_MI");
+        image.setOrigin(0, 0.5); // align left
+        image.setScale(0.12); // scale of image
+        //Add text next to the image
+        const text = scene.add.text(125, 45, "Blueberry\nFrench\nToast", {
+            font: "bold 16px Bangers",
+            color: "#355E3B",
+        });
+        text.setOrigin(0.5, 0.5); // centers text
+        //Adds bullet points below the main text
+        const bulletPoints = scene.add.text(
+            15,
+            80,
+            "• Blueberries\n• Bread       • Butter\n• Eggs         • Milk",
+            {
+                font: "14px Bangers",
+                color: "#355E3B",
+            }
+        );
+        bulletPoints.setOrigin(0, 0); //Align text to the left
+        bulletPoints.setLineSpacing(2.5);
+        popup.add([bubbleGraphics, image, text, bulletPoints]);
+        popup.setSize(165, 135);
+        return popup;
+    }
 }
