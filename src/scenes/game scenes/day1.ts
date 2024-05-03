@@ -9,7 +9,7 @@ import { Orders } from "../../objects/orders";
 
 export default class day1 extends Phaser.Scene {
     constructor() {
-        super({ key: "day1" });
+        super({ key: "Day_1" });
     }
 
     private dishes_made: number;
@@ -26,7 +26,6 @@ export default class day1 extends Phaser.Scene {
     private itemGroup?: Phaser.Physics.Arcade.Group;
     private heldItem: Ingredient | null | undefined;
     private popup: Phaser.GameObjects.Container;
-    private end_popup: Phaser.GameObjects.Container;
 
     private orderses: Orders[] = [];
     private crates: Crate[] = [];
@@ -193,62 +192,36 @@ export default class day1 extends Phaser.Scene {
             }
         }
 
-        //Container stuff
-        this.popup = this.add.container(0, 0);
-        this.popup.setVisible(false);
-        //Create order information elements.
-        const bubbleGraphics = this.add.graphics();
-        bubbleGraphics.fillStyle(0xffffff, 0.8); // white w transpareny
-        bubbleGraphics.fillRoundedRect(0, 0, 165, 135, 10); // x, y, width, height, radius
-        bubbleGraphics.lineStyle(2, 0x9dc183, 1); // line width, color, alpha
-        bubbleGraphics.strokeRoundedRect(0, 0, 165, 135, 10);
-        //Dish Image
-        const image = this.add.image(7.5, 41, "BL_BR_BU_EG_MI");
-        image.setOrigin(0, 0.5); // align left
-        image.setScale(0.12); // scale of image
-        //Add text next to the image
-        const text = this.add.text(125, 45, "Blueberry\nFrench\nToast", {
-            font: "bold 16px Bangers",
-            color: "#355E3B",
-        });
-        text.setOrigin(0.5, 0.5); // centers text
-        //Adds bullet points below the main text
-        const bulletPoints = this.add.text(
-            15,
-            80,
-            "• Blueberries\n• Bread       • Butter\n• Eggs         • Milk",
-            {
-                font: "14px Bangers",
-                color: "#355E3B",
-            }
-        );
-        bulletPoints.setOrigin(0, 0); //Align text to the left
-        bulletPoints.setLineSpacing(2.5);
-        this.popup.add([bubbleGraphics, image, text, bulletPoints]);
-        this.popup.setSize(165, 135);
+        //Initialize Popup (in orders.ts)
+        this.popup = Orders.initializePopup(this);
 
         //Timer
         //Note: Should always be created last, so that it is overlaid over everything.
         this.timer = new Timer(
-            { scene: this, x: 552, y: 112, duration: 120 },
+            { scene: this, x: 552, y: 112, duration: 30 },
             () => {
                 console.log("Timer completed!");
-                this.end_popup = this.add.container(
-                    this.cameras.main.displayWidth * 0.5,
-                    this.cameras.main.displayHeight * 0.5
-                );
+                this.scene.start("EndScore");
             }
         );
     }
 
     //Helper functions
-    resetClicked() {
+    resetAll() {
         this.player_arms.overlapping = false;
         this.player_arms.stoveOverlap = false;
         this.player_arms.crateOverlap = false;
         if (!this.input.mousePointer.leftButtonDown()) {
             this.mouseClicked = false;
         }
+        this.crates.forEach((crate) => {
+            crate.crateTouched = false;
+        });
+        this.player_arms.crateOverlap = false;
+        this.orderses.forEach((orders) => {
+            orders.ordersTouched = false;
+        });
+        this.player_arms.ordersOverlap = false;
     }
     pickupItem(pickingUp: boolean) {
         if (pickingUp) {
@@ -408,15 +381,7 @@ export default class day1 extends Phaser.Scene {
                 this.mouseClicked = true;
             }
         }
-        //Reset clicked boolean
-        this.resetClicked();
-        this.crates.forEach((crate) => {
-            crate.crateTouched = false;
-        });
-        this.player_arms.crateOverlap = false;
-        this.orderses.forEach((orders) => {
-            orders.ordersTouched = false;
-        });
-        this.player_arms.ordersOverlap = false;
+        //Reset booleans
+        this.resetAll();
     }
 }
