@@ -284,7 +284,10 @@ export default class day1 extends Phaser.Scene {
         );
         //Update dish name.
         const text = this.popup.getAt(2) as Phaser.GameObjects.Text;
-        text.setText(order.dish_name.replace(/ /g, "\n"));
+        let replacedText = order.dish_name.replace(/ /g, "\n");
+        replacedText = order.name + "\n" + replacedText;
+        //order.dish_name = order.name + "\n" + order.dish_name;
+        text.setText(replacedText);
         //Update recipes.
         const bpoints = this.popup.getAt(3) as Phaser.GameObjects.Text;
         bpoints.setText(order.parts);

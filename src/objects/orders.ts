@@ -25,7 +25,7 @@ export class Orders extends Phaser.Physics.Arcade.Image {
 
     constructor(config: OrdersProps) {
         super(config.scene, config.x, config.y, "order");
-        this.name = "Order #" + config.num_order;
+        this.name = "Order #" + (config.num_order + 1);
         this.generateRandDish();
         this.price = this.generateRandPrice(1, 100);
         this.ordersTouched = false;

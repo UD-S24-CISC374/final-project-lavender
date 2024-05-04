@@ -26,7 +26,6 @@ export class Timer extends Phaser.GameObjects.Text {
         this.onComplete = onComplete;
         this.setOrigin(0.5);
         this.startCountdown();
-        //this.setFont("bold 16px Bangers");
         config.scene.add.existing(this);
     }
 
