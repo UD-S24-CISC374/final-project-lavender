@@ -14,7 +14,7 @@ export default class GameIntro extends Phaser.Scene {
     create() {
         this.cameras.main.setBackgroundColor("#add8e6");
         this.createDialogBox();
-        this.createNextButton();
+        this.createNextButton(); 
     }
 
     private createDialogBox(): void {
