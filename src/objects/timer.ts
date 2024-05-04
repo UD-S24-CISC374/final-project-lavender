@@ -19,12 +19,14 @@ export class Timer extends Phaser.GameObjects.Text {
         super(config.scene, config.x, config.y, "", {
             fontSize: 60,
             color: "#ffffff",
-            fontFamily: "Noto Sans",
+            fontFamily: "Bangers",
+            fontStyle: "bold",
         });
         this.countdownDuration = config.duration;
         this.onComplete = onComplete;
         this.setOrigin(0.5);
         this.startCountdown();
+        //this.setFont("bold 16px Bangers");
         config.scene.add.existing(this);
     }
 
