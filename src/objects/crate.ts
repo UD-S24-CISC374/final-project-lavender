@@ -1,5 +1,4 @@
 import Phaser from "phaser";
-//import { Player_Arms } from "./player_arms";
 import { Ingredient } from "./dish_ing";
 
 interface CrateProps {

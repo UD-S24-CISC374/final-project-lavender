@@ -12,15 +12,14 @@ export default class day1 extends Phaser.Scene {
         super({ key: "Day_1" });
     }
 
-    private dishes_made: number;
-    private dishes_failed: number;
-    private money_made: number;
+    //private dishes_made: number;
+    //private dishes_failed: number;
+    //private money_made: number;
 
     private mouseClicked: boolean;
     private player: Player;
     private player_arms: Player_Arms;
     private cursors: Phaser.Input.Keyboard.KeyboardPlugin | null;
-    private timer: Timer;
 
     private stove: Stove;
     private itemGroup?: Phaser.Physics.Arcade.Group;
@@ -37,12 +36,6 @@ export default class day1 extends Phaser.Scene {
         { x: 80, y: 420, ingredient: "EG" },
         { x: 80, y: 490, ingredient: "MI" },
     ];
-    private ba_crate: Crate;
-    private bl_crate: Crate;
-    private br_crate: Crate;
-    private bu_crate: Crate;
-    private eg_crate: Crate;
-    private mi_crate: Crate;
 
     create() {
         //Creates stove object.
@@ -79,12 +72,6 @@ export default class day1 extends Phaser.Scene {
                 })
             );
         });
-        this.ba_crate = this.crates[0];
-        this.bl_crate = this.crates[1];
-        this.br_crate = this.crates[2];
-        this.bu_crate = this.crates[3];
-        this.eg_crate = this.crates[4];
-        this.mi_crate = this.crates[5];
 
         //Create itemgroup
         this.itemGroup = this.physics.add.group();
@@ -197,13 +184,9 @@ export default class day1 extends Phaser.Scene {
 
         //Timer
         //Note: Should always be created last, so that it is overlaid over everything.
-        this.timer = new Timer(
-            { scene: this, x: 552, y: 112, duration: 30 },
-            () => {
-                console.log("Timer completed!");
-                this.scene.start("EndScore");
-            }
-        );
+        new Timer({ scene: this, x: 552, y: 112, duration: 30 }, () => {
+            this.scene.start("EndScore");
+        });
     }
 
     //Helper functions
@@ -278,10 +261,6 @@ export default class day1 extends Phaser.Scene {
             });
             if (touchedOrder) {
                 this.showOrderInfo(touchedOrder);
-                console.log("Order dish name: ", touchedOrder.dish_texture);
-                if (this.heldItem) {
-                    console.log("Held item name: ", this.heldItem.name);
-                }
 
                 if (
                     this.input.mousePointer.leftButtonDown() &&
@@ -303,7 +282,6 @@ export default class day1 extends Phaser.Scene {
     }
     //Show order popup. Hide order popup.
     showOrderInfo(order: Orders) {
-        console.log("Showing order!");
         //Update dish texture.
         (this.popup.getAt(1) as Phaser.Physics.Arcade.Image).setTexture(
             order.dish_texture
