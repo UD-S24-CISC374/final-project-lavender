@@ -10,7 +10,7 @@ export default class informationScene2 extends Phaser.Scene {
         this.add.image(500, 300, "kitchen2");
         //Add text information
         this.add.text(100, 100, "Some Algorithms", {
-            font: "bold 60px Arial",
+            font: "bold 60px Bangers",
             color: "#000000",
             backgroundColor: "rgba(255, 255, 255, 0.5)",
         });
@@ -20,24 +20,24 @@ export default class informationScene2 extends Phaser.Scene {
         const paragraph4 =
             "Shortest Seek Time First (SSTF) - Chooses request closest to current head position.";
         const paragraph5 =
-            "SCAN (Elevator) - Starts from one end of disk and moves toward the other. Services Requests along the way, then reverses direction";
+            "SCAN (Elevator) - Starts from one end of disk and moves toward the other & services requests along the way, then reverses direction";
 
         this.add.text(100, 210, paragraph3, {
-            font: "30px Arial",
+            font: "30px Bangers",
             color: "#000000",
             backgroundColor: "rgba(255, 255, 255, 0.5)",
             wordWrap: { width: 800 },
         });
 
         this.add.text(100, 330, paragraph4, {
-            font: "30px Arial",
+            font: "30px Bangers",
             color: "#000000",
             backgroundColor: "rgba(255, 255, 255, 0.5)",
             wordWrap: { width: 800 },
         });
 
         this.add.text(100, 450, paragraph5, {
-            font: "30px Arial",
+            font: "30px Bangers",
             color: "#000000",
             backgroundColor: "rgba(255, 255, 255, 0.5)",
             wordWrap: { width: 800 },
@@ -45,7 +45,7 @@ export default class informationScene2 extends Phaser.Scene {
 
         let nextButton2 = this.add
             .text(950, 550, "Next", {
-                font: "50px Arial",
+                font: "40px Bangers",
                 color: "#ffffff",
                 backgroundColor: "rgba(255, 255, 255, 0.4)",
             })
@@ -53,7 +53,7 @@ export default class informationScene2 extends Phaser.Scene {
 
         let backButton = this.add
             .text(100, 550, "Back", {
-                font: "50px Arial",
+                font: "40px Bangers",
                 color: "#ffffff",
                 backgroundColor: "rgba(255, 255, 255, 0.4)",
             })
@@ -68,6 +68,24 @@ export default class informationScene2 extends Phaser.Scene {
         backButton.on("pointerdown", () => {
             // switch to previous scene
             this.scene.start("informationScene");
+        });
+
+        // set cursor on hover
+        backButton.on("pointerover", () => {
+            this.game.canvas.style.cursor = `url('assets/img/title_assets/arrow.png'), pointer`;
+        });
+
+        backButton.on("pointerout", () => {
+            this.game.canvas.style.cursor = "default";
+        });
+
+        // set cursor on hover
+        nextButton2.on("pointerover", () => {
+            this.game.canvas.style.cursor = `url('assets/img/title_assets/arrow.png'), pointer`;
+        });
+
+        nextButton2.on("pointerout", () => {
+            this.game.canvas.style.cursor = "default";
         });
     }
 }

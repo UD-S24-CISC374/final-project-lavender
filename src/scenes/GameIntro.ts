@@ -2,7 +2,7 @@ import Phaser from "phaser";
 
 export default class GameIntro extends Phaser.Scene {
     private content =
-        "Chef, thank goodness you're here, where have you been?! We've been swamped with orders and we have six reservations coming in the next hour. Sam called out so it's just you and me today, but we got this!";
+        "Chef, thank goodness you're here, where have you been?! We've been swamped with orders and we have six reservations coming in the next hour. This week's recipes have been doing pretty great! The blueberry french toast is super popular! Anyway, ready to go?";
     private dialogText?: Phaser.GameObjects.Text;
     private index = 0;
     private timerEvent?: Phaser.Time.TimerEvent;
@@ -79,10 +79,11 @@ export default class GameIntro extends Phaser.Scene {
 
         this.add
             .text(nextButton.x, nextButton.y, "Next", {
-                font: "50px Arial",
+                font: "40px Arial",
                 color: "#ffffff",
                 backgroundColor: "rgba(255, 255, 255, 0.4)",
             })
             .setOrigin(0.5);
+            
     }
 }

@@ -169,7 +169,7 @@ export default class day1 extends Phaser.Scene {
         image.setScale(0.12); // scale of image
 
         // Add text next to the image
-        const text = this.add.text(125, 45, "Blueberry\nFrench\nToast", {
+        const text = this.add.text(125, 45, "1) Blueberry\nFrench\nToast", {
             font: "bold 16px Bangers",
             color: "#355E3B",
         });

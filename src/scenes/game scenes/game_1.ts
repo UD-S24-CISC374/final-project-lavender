@@ -92,7 +92,7 @@ export default class game_1 extends Phaser.Scene {
                 textYPosition - 150,
                 "Pick up items by standing on them & clicking your mouse!",
                 {
-                    font: "bold 23px Arial",
+                    font: "bold 23px Bangers",
                     color: "#ffffff",
                     align: "center",
                 }
@@ -123,7 +123,7 @@ export default class game_1 extends Phaser.Scene {
                 textYPositionThird,
                 "Great work!",
                 {
-                    font: "bold 40px Arial",
+                    font: "bold 40px Bangers",
                     color: "#ffffff",
                     align: "center",
                 }
@@ -139,7 +139,7 @@ export default class game_1 extends Phaser.Scene {
                 this.cameras.main.height - 90,
                 "Continue",
                 {
-                    font: "bold 28px Arial",
+                    font: "bold 28px Bangers",
 
                     backgroundColor: "rgba(60, 145, 250, 0.5)",
                     color: "#FFFFFF", // White text
