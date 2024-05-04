@@ -13,6 +13,7 @@ export default class informationScene extends Phaser.Scene {
             font: "bold 60px Bangers",
             color: "#000000",
             backgroundColor: "rgba(255, 255, 255, 0.5)",
+            
         });
 
         const paragraph =
@@ -35,15 +36,54 @@ export default class informationScene extends Phaser.Scene {
             wordWrap: { width: 900 },
         });
 
+        // Button dimensions and position
+        const buttonX = 950;
+        const buttonY = 550;
+        const buttonWidth = 100;
+        const buttonHeight = 50;
+        const cornerRadius = 25;
+
+        // Graphics object for the button
+        const buttonGraphics = this.add.graphics();
+        buttonGraphics.fillStyle(0xadd8e6, 0.8); // Blue fill
+        buttonGraphics.fillRoundedRect(
+            buttonX,
+            buttonY,
+            buttonWidth,
+            buttonHeight,
+            cornerRadius
+        );
+        buttonGraphics.lineStyle(2, 0xffffff, 1); // White outline
+        buttonGraphics.strokeRoundedRect(
+            buttonX,
+            buttonY,
+            buttonWidth,
+            buttonHeight,
+            cornerRadius
+        );
+
+        const hitArea = new Phaser.Geom.Rectangle(
+            buttonX,
+            buttonY,
+            buttonWidth,
+            buttonHeight
+        );
+        buttonGraphics.setInteractive(hitArea, Phaser.Geom.Rectangle.Contains);
+
         let nextButton = this.add
-            .text(950, 550, "Next", {
-                font: "40px Bangers",
-                color: "#ffffff",
-                backgroundColor: "rgba(255, 255, 255, 0.4)",
-            })
+            .text(
+                buttonX + buttonWidth / 2,
+                buttonY + buttonHeight / 2,
+                "Next",
+                {
+                    font: "40px Bangers",
+                    color: "#ffffff",
+                }
+            )
+            .setOrigin(0.5, 0.5)
             .setInteractive();
 
-        // set cursor on hover
+        // Cursor style on hover
         nextButton.on("pointerover", () => {
             this.game.canvas.style.cursor = `url('assets/img/title_assets/arrow.png'), pointer`;
         });
@@ -52,9 +92,8 @@ export default class informationScene extends Phaser.Scene {
             this.game.canvas.style.cursor = "default";
         });
 
-        //Button clck event
+        // Button click event to switch scenes
         nextButton.on("pointerdown", () => {
-            // switch to next scene
             this.scene.start("informationScene2");
         });
     }

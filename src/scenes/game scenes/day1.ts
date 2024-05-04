@@ -128,45 +128,6 @@ export default class day1 extends Phaser.Scene {
                 this
             );
         });
-<<<<<<< HEAD
-
-        if (tileset) {
-            //Tile Parameters
-            const belowLayer = map.createLayer("Below Player", tileset, 0, 0);
-            const aboveLayer = map.createLayer("Above Player", tileset, 0, 0);
-            //Set collision for tiles with collides key
-            aboveLayer?.setCollisionByProperty({ collides: true });
-            //Set scale & depth of layers
-            belowLayer?.setScale(1);
-            belowLayer?.setDepth(-2);
-            aboveLayer?.setScale(1);
-            aboveLayer?.setDepth(-1);
-            //Set collision
-            if (aboveLayer) {
-                this.physics.add.collider(this.player, aboveLayer);
-                this.physics.add.collider(this.player_arms, aboveLayer);
-            }
-        }
-
-        // creates container for orders, text, image
-
-        // Create background for the text
-        const bubbleGraphics = this.add.graphics();
-        bubbleGraphics.fillStyle(0xffffff, 0.8); // white w transpareny
-        bubbleGraphics.fillRoundedRect(0, 0, 165, 135, 10); // x, y, width, height, radius
-        bubbleGraphics.lineStyle(2, 0x9dc183, 1); // line width, color, alpha
-        bubbleGraphics.strokeRoundedRect(0, 0, 165, 135, 10);
-
-        // image
-        const image = this.add.image(7.5, 41, "BL_BR_BU_EG_MI");
-        image.setOrigin(0, 0.5); // align left
-        image.setScale(0.12); // scale of image
-
-        // Add text next to the image
-        const text = this.add.text(125, 45, "1) Blueberry\nFrench\nToast", {
-            font: "bold 16px Bangers",
-            color: "#355E3B",
-=======
         //Add overlap between player_arms and order group.
         this.orderses.forEach((orders) => {
             this.physics.add.overlap(
@@ -181,7 +142,6 @@ export default class day1 extends Phaser.Scene {
                 },
                 this
             );
->>>>>>> 485e5fc94b8ca17df84f79615148483ac0072a7e
         });
 
         //Creates tile and map.
@@ -219,7 +179,7 @@ export default class day1 extends Phaser.Scene {
         this.popup = Orders.initializePopup(this);
 
         //Timer. Note: Should always be created last, so that it is overlaid over everything.
-        new Timer({ scene: this, x: 552, y: 112, duration: 30 }, () => {
+        new Timer({ scene: this, x: 552, y: 112, duration: 180 }, () => {
             this.scene.start("EndScore");
         });
     }
