@@ -45,7 +45,6 @@ export default class day1 extends Phaser.Scene {
             y: this.cameras.main.displayHeight / 2 + 20,
         });
         this.stove.createAnims();
-
         //Create initial orders objects.
         let x = 792;
         let y = 144;
@@ -60,7 +59,6 @@ export default class day1 extends Phaser.Scene {
             );
             y += 96;
         }
-
         //Create crates
         this.cratePositions.forEach((position) => {
             this.crates.push(
@@ -72,10 +70,8 @@ export default class day1 extends Phaser.Scene {
                 })
             );
         });
-
         //Create itemgroup
         this.itemGroup = this.physics.add.group();
-
         //Creates player input and player object.
         this.cursors = this.input.keyboard;
         this.player = new Player({
@@ -84,12 +80,12 @@ export default class day1 extends Phaser.Scene {
             y: this.cameras.main.displayHeight / 2,
             cursors: this.cursors,
         });
-        this.player.createAnims();
         this.player_arms = new Player_Arms({
             scene: this,
             x: this.player.x,
             y: this.player.y,
         });
+        this.player.createAnims();
         this.player_arms.createAnims();
 
         //Add overlap between player_arms and stove.
@@ -182,8 +178,7 @@ export default class day1 extends Phaser.Scene {
         //Initialize Popup (in orders.ts)
         this.popup = Orders.initializePopup(this);
 
-        //Timer
-        //Note: Should always be created last, so that it is overlaid over everything.
+        //Timer. Note: Should always be created last, so that it is overlaid over everything.
         new Timer({ scene: this, x: 552, y: 112, duration: 30 }, () => {
             this.scene.start("EndScore");
         });
