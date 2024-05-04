@@ -6,9 +6,9 @@ export type Collidable =
     | Phaser.Types.Physics.Arcade.GameObjectWithBody
     | Phaser.Tilemaps.Tile;
 
-export default class game_1 extends Phaser.Scene {
+export default class Tutorial extends Phaser.Scene {
     constructor() {
-        super({ key: "game_1" });
+        super({ key: "Tutorial" });
     }
 
     private mouseClicked: boolean;

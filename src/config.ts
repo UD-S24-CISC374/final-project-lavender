@@ -1,15 +1,17 @@
 import Phaser from "phaser";
 
-import TitleScene from "./scenes/titleScene";
 import PreloadScene from "./scenes/preloadScene";
+import TitleScene from "./scenes/titleScene";
 import LevelSelect from "./scenes/levelSelect";
 
 import InformationScene from "./scenes/informationScene";
 import InformationScene2 from "./scenes/informationScene2";
-
-import Game_1 from "./scenes/game scenes/game_1";
 import GameIntro from "./scenes/GameIntro";
-import day1 from "./scenes/game scenes/day1";
+import Tutorial from "./scenes/game scenes/tutorial";
+
+import Day_1 from "./scenes/game scenes/day1";
+
+import EndScore from "./scenes/endScore";
 
 //608x480 or 1280x720
 const DEFAULT_WIDTH = 1104;
@@ -30,12 +32,13 @@ export const CONFIG = {
     scene: [
         PreloadScene,
         TitleScene,
+        LevelSelect,
         InformationScene,
         InformationScene2,
-        Game_1,
         GameIntro,
-        LevelSelect,
-        day1,
+        Tutorial,
+        Day_1,
+        EndScore,
     ],
     physics: {
         default: "arcade",
