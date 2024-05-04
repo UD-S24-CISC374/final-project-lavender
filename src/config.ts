@@ -7,7 +7,7 @@ import LevelSelect from "./scenes/levelSelect";
 import InformationScene from "./scenes/informationScene";
 import InformationScene2 from "./scenes/informationScene2";
 import GameIntro from "./scenes/GameIntro";
-import Game_1 from "./scenes/game scenes/game_1";
+import Tutorial from "./scenes/game scenes/tutorial";
 
 import Day_1 from "./scenes/game scenes/day1";
 
@@ -36,7 +36,7 @@ export const CONFIG = {
         InformationScene,
         InformationScene2,
         GameIntro,
-        Game_1,
+        Tutorial,
         Day_1,
         EndScore,
     ],
