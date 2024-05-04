@@ -14,7 +14,7 @@ export default class GameIntro extends Phaser.Scene {
     create() {
         this.cameras.main.setBackgroundColor("#add8e6");
         this.createDialogBox();
-        this.createNextButton(); 
+        this.createNextButton();
     }
 
     private createDialogBox(): void {
@@ -75,7 +75,7 @@ export default class GameIntro extends Phaser.Scene {
             50
         );
         nextButton.setInteractive({ useHandCursor: true });
-        nextButton.on("pointerdown", () => this.scene.start("game_1"));
+        nextButton.on("pointerdown", () => this.scene.start("Tutorial"));
 
         this.add
             .text(nextButton.x, nextButton.y, "Next", {
