@@ -14,6 +14,10 @@ export default class LevelSelect extends Phaser.Scene {
         );
         background.setFlipX(true);
 
+        // Load sounds
+
+        const clickSound = this.sound.add('levelSound');
+
         //Add buttons
         const tutorial_btn = this.add.image(
             this.cameras.main.width * (1 / 4),
@@ -22,7 +26,10 @@ export default class LevelSelect extends Phaser.Scene {
         );
         tutorial_btn
             .setInteractive()
-            .on("pointerdown", () => this.scene.start("informationScene"))
+            .on("pointerdown", () => {
+                clickSound.play(); // sound on button click
+                this.scene.start("informationScene");
+            })
             .on("pointerover", () => tutorial_btn.setScale(1.1))
             .on("pointerout", () => tutorial_btn.setScale(1));
 
@@ -33,9 +40,13 @@ export default class LevelSelect extends Phaser.Scene {
         );
         day1_btn
             .setInteractive()
-            .on("pointerdown", () => this.scene.start("Day_1"))
+            .on("pointerdown", () => {
+                clickSound.play(); 
+                this.scene.start("Day_1");
+            })
             .on("pointerover", () => day1_btn.setScale(1.1))
             .on("pointerout", () => day1_btn.setScale(1));
+
 
         const day2_btn = this.add.image(
             this.cameras.main.width * (1 / 4),
@@ -44,6 +55,9 @@ export default class LevelSelect extends Phaser.Scene {
         );
         day2_btn
             .setInteractive()
+            .on("pointerdown", () => {
+                clickSound.play(); 
+            })
             .on("pointerover", () => day2_btn.setScale(1.1))
             .on("pointerout", () => day2_btn.setScale(1));
 
@@ -53,8 +67,12 @@ export default class LevelSelect extends Phaser.Scene {
             "day3_btn"
         );
         day3_btn
-            .setInteractive()
-            .on("pointerover", () => day3_btn.setScale(1.1))
-            .on("pointerout", () => day3_btn.setScale(1));
-    }
+        .setInteractive()
+        .on("pointerdown", () => {
+            clickSound.play();
+        })
+        .on("pointerover", () => day3_btn.setScale(1.1))
+        .on("pointerout", () => day3_btn.setScale(1));
 }
+    }
+

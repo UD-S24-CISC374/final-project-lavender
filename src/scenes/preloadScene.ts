@@ -31,7 +31,7 @@ export default class PreloadScene extends Phaser.Scene {
         //Sounds
         this.load.audio("backgroundMusic", "assets/sounds/overcookedSound.mp3");
         this.load.audio("buttonSound", "assets/sounds/buttonSound.mp3");
-        this.load.audio("entrySound", "assets/sounds/entrySound.mp3");
+        this.load.audio("levelSound", "assets/sounds/levelSound.mp3");
         this.load.audio("happySound", "assets/sounds/happySound.mp3");
         this.load.audio("orderUp", "assets/sounds/orderUp.mp3");
 
