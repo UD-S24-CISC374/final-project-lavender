@@ -25,7 +25,7 @@ export class Orders extends Phaser.Physics.Arcade.Image {
 
     constructor(config: OrdersProps) {
         super(config.scene, config.x, config.y, "order");
-        this.name = "Order #" + config.num_order;
+        this.name = "Order #" + (config.num_order + 1);
         this.generateRandDish();
         this.price = this.generateRandPrice(1, 100);
         this.ordersTouched = false;
@@ -112,5 +112,30 @@ export class Orders extends Phaser.Physics.Arcade.Image {
         popup.add([bubbleGraphics, image, text, bulletPoints]);
         popup.setSize(165, 135);
         return popup;
+    }
+
+    static showOrderInfo(
+        scene: Phaser.Scene,
+        container: Phaser.GameObjects.Container,
+        order: Orders
+    ) {
+        //Update dish texture.
+        (container.getAt(1) as Phaser.Physics.Arcade.Image).setTexture(
+            order.dish_texture
+        );
+        //Update dish name.
+        const text = container.getAt(2) as Phaser.GameObjects.Text;
+        let replacedText = order.dish_name.replace(/ /g, "\n");
+        replacedText = order.name + "\n" + replacedText;
+        //order.dish_name = order.name + "\n" + order.dish_name;
+        text.setText(replacedText);
+        //Update recipes.
+        const bpoints = container.getAt(3) as Phaser.GameObjects.Text;
+        bpoints.setText(order.parts);
+
+        const x = scene.cameras.main.width - 165 - 7.5; // 240 = width of bubble, 10 = margin
+        const y = scene.cameras.main.height - 135 - 7.5; // 100 = height of bubble, 10 = margin
+        container.setPosition(x, y);
+        container.setVisible(true);
     }
 }

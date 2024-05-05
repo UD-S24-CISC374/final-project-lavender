@@ -1,4 +1,6 @@
 import Phaser from "phaser";
+import Result, { RESULT_DEFAULT } from "../../objects/results";
+
 import { Player } from "../../objects/player";
 import { Player_Arms } from "../../objects/player_arms";
 import { Ingredient } from "../../objects/dish_ing";
@@ -7,25 +9,17 @@ import { Stove } from "../../objects/stove";
 import { Timer } from "../../objects/timer";
 import { Orders } from "../../objects/orders";
 
+//FIFO (First Come, First Serve)
 export default class day1 extends Phaser.Scene {
-    constructor() {
-        super({ key: "Day_1" });
-    }
-
-    //private dishes_made: number;
-    //private dishes_failed: number;
-    //private money_made: number;
-
+    private result: Result;
     private mouseClicked: boolean;
     private player: Player;
     private player_arms: Player_Arms;
     private cursors: Phaser.Input.Keyboard.KeyboardPlugin | null;
-
     private stove: Stove;
     private itemGroup?: Phaser.Physics.Arcade.Group;
     private heldItem: Ingredient | null | undefined;
     private popup: Phaser.GameObjects.Container;
-
     private orderses: Orders[] = [];
     private crates: Crate[] = [];
     private cratePositions = [
@@ -37,7 +31,17 @@ export default class day1 extends Phaser.Scene {
         { x: 80, y: 490, ingredient: "MI" },
     ];
 
+    constructor() {
+        super({ key: "Day_1" });
+        this.result = RESULT_DEFAULT;
+    }
+
+    init(data: Result) {
+        this.result = data;
+    }
+
     create() {
+        this.result = RESULT_DEFAULT;
         //Creates stove object.
         this.stove = new Stove({
             scene: this,
@@ -148,7 +152,6 @@ export default class day1 extends Phaser.Scene {
         const map = this.make.tilemap({ key: "map_d" });
         const tileset = map.addTilesetImage("Room_Builder_48x48", "tiles");
         const tileset_2 = map.addTilesetImage("Interiors_48x48", "i_tiles");
-
         if (tileset && tileset_2) {
             //Tile Parameters
             const floorLayer = map.createLayer("Floor", tileset, 0, 0);
@@ -177,10 +180,14 @@ export default class day1 extends Phaser.Scene {
 
         //Initialize Popup (in orders.ts)
         this.popup = Orders.initializePopup(this);
-
         //Timer. Note: Should always be created last, so that it is overlaid over everything.
+<<<<<<< HEAD
         new Timer({ scene: this, x: 552, y: 112, duration: 180 }, () => {
             this.scene.start("EndScore");
+=======
+        new Timer({ scene: this, x: 552, y: 112, duration: 30 }, () => {
+            this.scene.start("EndScore", this.result);
+>>>>>>> 3a37039c098e6a5e32b6d2e88d690246ea7d686c
         });
     }
 
@@ -222,6 +229,7 @@ export default class day1 extends Phaser.Scene {
             !this.heldItem
         ) {
             this.itemGroup?.add(this.stove.makeDish());
+            this.result.dishes_made++;
         }
     }
     interactWithCrates() {
@@ -255,11 +263,13 @@ export default class day1 extends Phaser.Scene {
                 }
             });
             if (touchedOrder) {
-                this.showOrderInfo(touchedOrder);
+                Orders.showOrderInfo(this, this.popup, touchedOrder);
 
                 if (
                     this.input.mousePointer.leftButtonDown() &&
                     this.heldItem &&
+                    typeof this.heldItem.name === "string" && // Check if name is a string
+                    typeof touchedOrder.dish_texture === "string" && // Check if dish_texture
                     !this.mouseClicked
                 ) {
                     if (this.heldItem.name === touchedOrder.dish_texture) {
@@ -268,30 +278,13 @@ export default class day1 extends Phaser.Scene {
                         this.heldItem = null;
                         this.player_arms.hasItem = false;
                         this.mouseClicked = true;
+                        this.result.money_made += 0.25;
                     }
                 }
             }
         } else {
             this.popup.setVisible(false);
         }
-    }
-    //Show order popup. Hide order popup.
-    showOrderInfo(order: Orders) {
-        //Update dish texture.
-        (this.popup.getAt(1) as Phaser.Physics.Arcade.Image).setTexture(
-            order.dish_texture
-        );
-        //Update dish name.
-        const text = this.popup.getAt(2) as Phaser.GameObjects.Text;
-        text.setText(order.dish_name.replace(/ /g, "\n"));
-        //Update recipes.
-        const bpoints = this.popup.getAt(3) as Phaser.GameObjects.Text;
-        bpoints.setText(order.parts);
-
-        const x = this.cameras.main.width - 165 - 7.5; // 240 = width of bubble, 10 = margin
-        const y = this.cameras.main.height - 135 - 7.5; // 100 = height of bubble, 10 = margin
-        this.popup.setPosition(x, y);
-        this.popup.setVisible(true);
     }
 
     update() {

@@ -42,6 +42,8 @@ export default class informationScene2 extends Phaser.Scene {
             backgroundColor: "rgba(255, 255, 255, 0.5)",
             wordWrap: { width: 800 },
         });
+        
+        
 
         let nextButton2 = this.add
             .text(950, 550, "Next", {
