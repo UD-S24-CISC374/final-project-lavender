@@ -181,13 +181,8 @@ export default class day1 extends Phaser.Scene {
         //Initialize Popup (in orders.ts)
         this.popup = Orders.initializePopup(this);
         //Timer. Note: Should always be created last, so that it is overlaid over everything.
-<<<<<<< HEAD
-        new Timer({ scene: this, x: 552, y: 112, duration: 180 }, () => {
-            this.scene.start("EndScore");
-=======
-        new Timer({ scene: this, x: 552, y: 112, duration: 30 }, () => {
+        new Timer({ scene: this, x: 552, y: 112, duration: 90 }, () => {
             this.scene.start("EndScore", this.result);
->>>>>>> 3a37039c098e6a5e32b6d2e88d690246ea7d686c
         });
     }
 
