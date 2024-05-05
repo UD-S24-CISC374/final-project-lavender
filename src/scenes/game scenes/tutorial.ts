@@ -62,7 +62,7 @@ export default class Tutorial extends Phaser.Scene {
                 textYPosition,
                 "Try pressing WASD to move around", // Text to display
                 {
-                    font: "bold 40px Arial",
+                    font: "bold 40px Bangers",
                     color: "#ffffff",
                     align: "center",
                 }
@@ -77,7 +77,7 @@ export default class Tutorial extends Phaser.Scene {
         this.secondTextBackground = this.add
             .rectangle(
                 screenWidth / 2,
-                textYPosition - 150, // Positioned slightly above the first text
+                textYPosition, // Positioned slightly above the first text
                 textBoxWidth,
                 textBoxHeight,
                 0x6495ed,
@@ -89,8 +89,8 @@ export default class Tutorial extends Phaser.Scene {
         this.secondInstructions = this.add
             .text(
                 screenWidth / 2,
-                textYPosition - 150,
-                "Pick up items by standing on them & clicking your mouse!",
+                textYPosition,
+                "Pick up items by standing on them & clicking your mouse!\nYou can a",
                 {
                     font: "bold 23px Bangers",
                     color: "#ffffff",
@@ -103,7 +103,7 @@ export default class Tutorial extends Phaser.Scene {
 
         const textYPositionThird = this.cameras.main.height / 2; // Adjust position based on layout
 
-        // Creates third text background
+        // third text background
         this.thirdTextBackground = this.add
             .rectangle(
                 this.cameras.main.width / 2,
@@ -116,7 +116,7 @@ export default class Tutorial extends Phaser.Scene {
             .setDepth(100)
             .setVisible(false);
 
-        // Creates third text instruction
+        // third text instruction
         this.thirdInstructions = this.add
             .text(
                 this.cameras.main.width / 2,
