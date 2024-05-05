@@ -189,22 +189,22 @@ export default class day1 extends Phaser.Scene {
 
         const textBoxWidth = 590; // Width of the text box
         const textBoxHeight = 150; // Height of the text box
-        const startX = (this.cameras.main.width - textBoxWidth) / 2; 
+        const startX = (this.cameras.main.width - textBoxWidth) / 2;
         const startY = this.cameras.main.height - textBoxHeight - 10; // 10 pixels from the bottom
 
         // Create a graphics object for the text background
         const graphics = this.add.graphics();
-        graphics.fillStyle(0xffffff, 0.7); 
+        graphics.fillStyle(0xffffff, 0.7);
         graphics.fillRoundedRect(
             startX,
             startY,
             textBoxWidth,
             textBoxHeight,
             15
-        ); // Rounded 
+        ); // Rounded
 
         // Add text on top of the graphics object
-        const text = this.add
+        this.add
             .text(
                 startX + textBoxWidth / 2,
                 startY + textBoxHeight / 2,
@@ -311,10 +311,7 @@ export default class day1 extends Phaser.Scene {
         } else {
             this.popup.setVisible(false);
         }
-
-    
     }
-
 
     update() {
         //Movement
