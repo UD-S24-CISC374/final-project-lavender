@@ -6,47 +6,33 @@ export default class informationScene2 extends Phaser.Scene {
     }
 
     create() {
-        //Screen for topic information
+        // Screen for topic information
         this.add.image(500, 300, "kitchen2");
-        //Add text information
-        this.add.text(100, 100, "Some Algorithms", {
-            font: "bold 60px Bangers",
-            color: "#000000",
-            backgroundColor: "rgba(255, 255, 255, 0.5)",
+
+        // Add text information
+        this.add.text(100, 100, "Algorithms You Will See In Your Kitchen", {
+            font: "bold 48px Bangers",
+            color: "#002976",
+            backgroundColor: "rgba(225, 235, 254, 0.6)",
         });
 
-        const paragraph3 =
-            "First-Come, First-Served (FCFS) - Processes I/O requests in order they arrive.";
-        const paragraph4 =
-            "Shortest Seek Time First (SSTF) - Chooses request closest to current head position.";
-        const paragraph5 =
-            "SCAN (Elevator) - Starts from one end of disk and moves toward the other & services requests along the way, then reverses direction";
+        // Combined paragraph content
+        const combinedParagraph =
+            "First-Come, First-Served (FCFS) - Processes I/O requests in order they arrive :)\n" +
+            "Priority Scheduling - Most important process must be done first!\n" +
+            "Shortest Job First (SJF) - Waiting process with the smallest execution time goes first!";
 
-        this.add.text(100, 210, paragraph3, {
-            font: "30px Bangers",
-            color: "#000000",
-            backgroundColor: "rgba(255, 255, 255, 0.5)",
-            wordWrap: { width: 800 },
+        // Add combined text
+        this.add.text(100, 210, combinedParagraph, {
+            font: "35px Bangers",
+            color: "#002976",
+            backgroundColor: "rgba(225, 235, 254, 0.6)",
+            wordWrap: { width: 900 },
         });
 
-        this.add.text(100, 330, paragraph4, {
-            font: "30px Bangers",
-            color: "#000000",
-            backgroundColor: "rgba(255, 255, 255, 0.5)",
-            wordWrap: { width: 800 },
-        });
-
-        this.add.text(100, 450, paragraph5, {
-            font: "30px Bangers",
-            color: "#000000",
-            backgroundColor: "rgba(255, 255, 255, 0.5)",
-            wordWrap: { width: 800 },
-        });
-        
-        
-
+        // Next and back buttons with interactive handlers
         let nextButton2 = this.add
-            .text(950, 550, "Next", {
+            .text(950, 550, "Home", {
                 font: "40px Bangers",
                 color: "#ffffff",
                 backgroundColor: "rgba(255, 255, 255, 0.4)",
@@ -61,33 +47,28 @@ export default class informationScene2 extends Phaser.Scene {
             })
             .setInteractive();
 
-        //Button click event
-        nextButton2.on("pointerdown", () => {
-            // switch to next scene
-            this.scene.start("GameIntro");
-        });
+        // Button click events
+        nextButton2.on("pointerdown", () => this.scene.start("LevelSelect"));
+        backButton.on("pointerdown", () =>
+            this.scene.start("informationScene")
+        );
 
-        backButton.on("pointerdown", () => {
-            // switch to previous scene
-            this.scene.start("informationScene");
-        });
-
-        // set cursor on hover
-        backButton.on("pointerover", () => {
-            this.game.canvas.style.cursor = `url('assets/img/title_assets/arrow.png'), pointer`;
-        });
-
-        backButton.on("pointerout", () => {
-            this.game.canvas.style.cursor = "default";
-        });
-
-        // set cursor on hover
-        nextButton2.on("pointerover", () => {
-            this.game.canvas.style.cursor = `url('assets/img/title_assets/arrow.png'), pointer`;
-        });
-
-        nextButton2.on("pointerout", () => {
-            this.game.canvas.style.cursor = "default";
-        });
+        // Cursor change on hover
+        backButton.on(
+            "pointerover",
+            () => (this.game.canvas.style.cursor = "pointer")
+        );
+        backButton.on(
+            "pointerout",
+            () => (this.game.canvas.style.cursor = "default")
+        );
+        nextButton2.on(
+            "pointerover",
+            () => (this.game.canvas.style.cursor = "pointer")
+        );
+        nextButton2.on(
+            "pointerout",
+            () => (this.game.canvas.style.cursor = "default")
+        );
     }
 }
