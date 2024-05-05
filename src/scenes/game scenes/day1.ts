@@ -187,21 +187,21 @@ export default class day1 extends Phaser.Scene {
             this.scene.start("EndScore", this.result);
         });
 
-        const textBoxWidth = 670; // Width of the text box
+        const textBoxWidth = 590; // Width of the text box
         const textBoxHeight = 150; // Height of the text box
-        const startX = (this.cameras.main.width - textBoxWidth) / 1; 
+        const startX = (this.cameras.main.width - textBoxWidth) / 2; 
         const startY = this.cameras.main.height - textBoxHeight - 10; // 10 pixels from the bottom
 
         // Create a graphics object for the text background
         const graphics = this.add.graphics();
-        graphics.fillStyle(0xffffff, 0.8); // Fill color blue
+        graphics.fillStyle(0xffffff, 0.7); 
         graphics.fillRoundedRect(
             startX,
             startY,
             textBoxWidth,
             textBoxHeight,
             15
-        ); // Rounded rectangle for text background
+        ); // Rounded 
 
         // Add text on top of the graphics object
         const text = this.add
@@ -210,7 +210,7 @@ export default class day1 extends Phaser.Scene {
                 startY + textBoxHeight / 2,
                 "First Come First Serve: Make sure to look at Order #1 and complete\nthat first for optimal execution! Go in order from the first order to the last\n1. Walk up to the reciepts in the top left\n2. Walk up to your ingredients, tap for the one you want\n3. Carry it to the pot, and add however many ingredients you need to the pot\n4. Stand over the pot and click to get your final order\n5. Bring it to the reciept!",
                 {
-                    font: "bold 18px Bangers",
+                    font: "17px Bangers",
                     color: "#000000",
                 }
             )
