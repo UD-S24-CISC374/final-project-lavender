@@ -10,6 +10,8 @@ import GameIntro from "./scenes/GameIntro";
 import Tutorial from "./scenes/game scenes/tutorial";
 
 import Day_1 from "./scenes/game scenes/day1";
+import Day_2 from "./scenes/game scenes/day2";
+import Day_3 from "./scenes/game scenes/day3";
 
 import EndScore from "./scenes/endScore";
 
@@ -38,6 +40,8 @@ export const CONFIG = {
         GameIntro,
         Tutorial,
         Day_1,
+        Day_2,
+        Day_3,
         EndScore,
     ],
     physics: {

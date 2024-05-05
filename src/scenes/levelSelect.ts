@@ -30,8 +30,16 @@ export default class LevelSelect extends Phaser.Scene {
                 clickSound.play(); // sound on button click
                 this.scene.start("informationScene");
             })
-            .on("pointerover", () => tutorial_btn.setScale(1.1))
-            .on("pointerout", () => tutorial_btn.setScale(1));
+            .on(
+                "pointerover",
+                () => tutorial_btn.setScale(1.1),
+                (this.game.canvas.style.cursor = "pointer")
+            )
+            .on(
+                "pointerout",
+                () => tutorial_btn.setScale(1),
+                (this.game.canvas.style.cursor = "default")
+            );
 
         const day1_btn = this.add.image(
             this.cameras.main.width * (3 / 4),
@@ -41,11 +49,19 @@ export default class LevelSelect extends Phaser.Scene {
         day1_btn
             .setInteractive()
             .on("pointerdown", () => {
-                clickSound.play(); 
+                clickSound.play();
                 this.scene.start("Day_1");
             })
-            .on("pointerover", () => day1_btn.setScale(1.1))
-            .on("pointerout", () => day1_btn.setScale(1));
+            .on(
+                "pointerover",
+                () => day1_btn.setScale(1.1),
+                (this.game.canvas.style.cursor = "default")
+            )
+            .on(
+                "pointerout",
+                () => day1_btn.setScale(1),
+                (this.game.canvas.style.cursor = "default")
+            );
 
 
         const day2_btn = this.add.image(
@@ -56,10 +72,19 @@ export default class LevelSelect extends Phaser.Scene {
         day2_btn
             .setInteractive()
             .on("pointerdown", () => {
-                clickSound.play(); 
+                clickSound.play();
+                this.scene.start("Day_2");
             })
-            .on("pointerover", () => day2_btn.setScale(1.1))
-            .on("pointerout", () => day2_btn.setScale(1));
+            .on(
+                "pointerover",
+                () => day2_btn.setScale(1.1),
+                (this.game.canvas.style.cursor = "default")
+            )
+            .on(
+                "pointerout",
+                () => day2_btn.setScale(1),
+                (this.game.canvas.style.cursor = "default")
+            );
 
         const day3_btn = this.add.image(
             this.cameras.main.width * (3 / 4),
@@ -67,12 +92,21 @@ export default class LevelSelect extends Phaser.Scene {
             "day3_btn"
         );
         day3_btn
-        .setInteractive()
-        .on("pointerdown", () => {
-            clickSound.play();
-        })
-        .on("pointerover", () => day3_btn.setScale(1.1))
-        .on("pointerout", () => day3_btn.setScale(1));
+            .setInteractive()
+            .on("pointerdown", () => {
+                clickSound.play();
+                this.scene.start("Day_3");
+            })
+            .on(
+                "pointerover",
+                () => day3_btn.setScale(1.1),
+                (this.game.canvas.style.cursor = "default")
+            )
+            .on(
+                "pointerout",
+                () => day3_btn.setScale(1),
+                (this.game.canvas.style.cursor = "default")
+            );
+        
 }
     }
-

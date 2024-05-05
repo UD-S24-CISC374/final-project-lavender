@@ -31,7 +31,15 @@ export default class TitleScene extends Phaser.Scene {
         play_btn
             .setInteractive()
             .on("pointerdown", () => this.scene.start("LevelSelect"))
-            .on("pointerover", () => play_btn.setScale(1.1))
-            .on("pointerout", () => play_btn.setScale(1));
+            .on("pointerover", () => {
+                play_btn.setScale(1.1);
+                this.game.canvas.style.cursor =
+                    'url("assets/img/title_assets/arrow.png"), pointer'; // Set custom cursor
+            })
+            .on("pointerout", () => {
+                play_btn.setScale(1);
+                this.game.canvas.style.cursor = "default"; // Reset to default cursor
+            });
+            
     }
 }
