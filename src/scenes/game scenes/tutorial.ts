@@ -50,7 +50,7 @@ export default class Tutorial extends Phaser.Scene {
                 textYPosition,
                 textBoxWidth, // Width of the rectangle
                 textBoxHeight, // Height of the rectangle
-                0x6495ed, // Color of the rectangle (black)
+                0x6495ed, // Color of the rectangle
                 0.5 // Transparency of the rectangle
             )
             .setDepth(100); //set in front of objects
@@ -77,8 +77,8 @@ export default class Tutorial extends Phaser.Scene {
         this.secondTextBackground = this.add
             .rectangle(
                 screenWidth / 2,
-                textYPosition, // Positioned slightly above the first text
-                textBoxWidth,
+                textYPosition,
+                textBoxWidth * 1.2,
                 textBoxHeight,
                 0x6495ed,
                 0.5
@@ -90,9 +90,9 @@ export default class Tutorial extends Phaser.Scene {
             .text(
                 screenWidth / 2,
                 textYPosition,
-                "Pick up items by standing on them & clicking your mouse!\nYou can a",
+                "Pick up and drop items by standing on them & \nclicking your mouse anywhere on the screen",
                 {
-                    font: "bold 23px Bangers",
+                    font: "bold 30px Bangers",
                     color: "#ffffff",
                     align: "center",
                 }
@@ -301,7 +301,7 @@ export default class Tutorial extends Phaser.Scene {
             duration: 3000,
             onComplete: () => {
                 // Delay the call to fade out the text by 6000 milliseconds (6 seconds)
-                this.time.delayedCall(6000, () => {
+                this.time.delayedCall(9000, () => {
                     this.fadeOutSecondText();
                 });
             },
