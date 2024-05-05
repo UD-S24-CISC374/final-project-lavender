@@ -75,7 +75,7 @@ export default class GameIntro extends Phaser.Scene {
             50
         );
         nextButton.setInteractive({ useHandCursor: true });
-        nextButton.on("pointerdown", () => this.scene.start("Tutorial"));
+        nextButton.on("pointerdown", () => this.scene.start("Day_1"));
 
         this.add
             .text(nextButton.x, nextButton.y, "Next", {

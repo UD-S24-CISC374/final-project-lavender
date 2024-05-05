@@ -7,13 +7,13 @@ export default class informationScene2 extends Phaser.Scene {
 
     create() {
         // Screen for topic information
-        this.add.image(500, 300, "kitchen2");
+        this.add.image(500, 300, "kitchen1");
 
         // Add text information
         this.add.text(100, 100, "Algorithms You Will See In Your Kitchen", {
-            font: "bold 48px Bangers",
-            color: "#002976",
-            backgroundColor: "rgba(225, 235, 254, 0.6)",
+            font: "bold 50px Bangers",
+            color: "#000000",
+            backgroundColor: "rgba(255, 255, 255, 0.5)",
         });
 
         // Combined paragraph content
@@ -25,14 +25,14 @@ export default class informationScene2 extends Phaser.Scene {
         // Add combined text
         this.add.text(100, 210, combinedParagraph, {
             font: "35px Bangers",
-            color: "#002976",
-            backgroundColor: "rgba(225, 235, 254, 0.6)",
+            color: "#000000",
+            backgroundColor: "rgba(255, 255, 255, 0.5)",
             wordWrap: { width: 900 },
         });
 
         // Next and back buttons with interactive handlers
         let nextButton2 = this.add
-            .text(950, 550, "Home", {
+            .text(950, 550, "Tutorial", {
                 font: "40px Bangers",
                 color: "#ffffff",
                 backgroundColor: "rgba(255, 255, 255, 0.4)",
@@ -48,7 +48,7 @@ export default class informationScene2 extends Phaser.Scene {
             .setInteractive();
 
         // Button click events
-        nextButton2.on("pointerdown", () => this.scene.start("LevelSelect"));
+        nextButton2.on("pointerdown", () => this.scene.start("Tutorial"));
         backButton.on("pointerdown", () =>
             this.scene.start("informationScene")
         );

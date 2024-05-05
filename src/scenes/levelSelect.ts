@@ -50,7 +50,7 @@ export default class LevelSelect extends Phaser.Scene {
             .setInteractive()
             .on("pointerdown", () => {
                 clickSound.play();
-                this.scene.start("Day_1");
+                this.scene.start("GameIntro");
             })
             .on(
                 "pointerover",
