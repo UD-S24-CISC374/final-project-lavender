@@ -9,7 +9,7 @@ import { Stove } from "../../objects/stove";
 import { Timer } from "../../objects/timer";
 import { Orders } from "../../objects/orders";
 
-//Elevator
+//Price Priority
 export default class day3 extends Phaser.Scene {
     private result: Result;
     private mouseClicked: boolean;

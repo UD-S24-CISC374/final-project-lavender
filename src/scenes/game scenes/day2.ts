@@ -9,6 +9,7 @@ import { Stove } from "../../objects/stove";
 import { Timer } from "../../objects/timer";
 import { Orders } from "../../objects/orders";
 
+//SJN (Shortest job next)
 export default class day2 extends Phaser.Scene {
     private result: Result;
     private mouseClicked: boolean;
