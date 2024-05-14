@@ -9,17 +9,26 @@ import { Stove } from "../../objects/stove";
 import { Timer } from "../../objects/timer";
 import { Orders } from "../../objects/orders";
 
-//SJN (Shortest job next)
-export default class day2 extends Phaser.Scene {
+//SJN (Shortest Job Next)
+export default class day1 extends Phaser.Scene {
+    //Variable that holds the score.
     private result: Result;
+
+    //Variables concerning input or the player.
     private mouseClicked: boolean;
     private player: Player;
     private player_arms: Player_Arms;
     private cursors: Phaser.Input.Keyboard.KeyboardPlugin | null;
+
+    //Variables concerning popups, and informationals.
+    private popup: Phaser.GameObjects.Container;
+    private infoTextBackground: Phaser.GameObjects.Graphics;
+    private infoText: Phaser.GameObjects.Text;
+
+    //Variables concerning other game objects.
     private stove: Stove;
     private itemGroup?: Phaser.Physics.Arcade.Group;
     private heldItem: Ingredient | null | undefined;
-    private popup: Phaser.GameObjects.Container;
     private orderses: Orders[] = [];
     private crates: Crate[] = [];
     private cratePositions = [
@@ -32,7 +41,7 @@ export default class day2 extends Phaser.Scene {
     ];
 
     constructor() {
-        super({ key: "Day_2" });
+        super({ key: "Day_1" });
         this.result = RESULT_DEFAULT;
     }
 
@@ -41,6 +50,7 @@ export default class day2 extends Phaser.Scene {
     }
 
     create() {
+        //Sets result score.
         this.result = RESULT_DEFAULT;
         //Creates stove object.
         this.stove = new Stove({
@@ -181,9 +191,38 @@ export default class day2 extends Phaser.Scene {
         //Initialize Popup (in orders.ts)
         this.popup = Orders.initializePopup(this);
         //Timer. Note: Should always be created last, so that it is overlaid over everything.
-        new Timer({ scene: this, x: 552, y: 112, duration: 90 }, () => {
+        new Timer({ scene: this, x: 552, y: 112, duration: 150 }, () => {
             this.scene.start("EndScore", this.result);
         });
+
+        const textBoxWidth = 590; // Width of the text box
+        const textBoxHeight = 150; // Height of the text box
+        const startX = (this.cameras.main.width - textBoxWidth) / 2;
+        const startY = this.cameras.main.height - textBoxHeight - 10; // 10 pixels from the bottom
+
+        // Create a graphics object for the text background
+        const graphics = this.add.graphics();
+        graphics.fillStyle(0xffffff, 0.7);
+        graphics.fillRoundedRect(
+            startX,
+            startY,
+            textBoxWidth,
+            textBoxHeight,
+            15
+        ); // Rounded
+
+        // Add text on top of the graphics object
+        this.add
+            .text(
+                startX + textBoxWidth / 2,
+                startY + textBoxHeight / 2,
+                "First Come First Serve: Make sure to look at Order #1 and complete\nthat first for optimal execution! Go in order from the first order to the last\n1. Walk up to the reciepts in the top left\n2. Walk up to your ingredients, tap for the one you want\n3. Carry it to the pot, and add however many ingredients you need to the pot\n4. Stand over the pot and click to get your final order\n5. Bring it to the reciept!",
+                {
+                    font: "17px Bangers",
+                    color: "#000000",
+                }
+            )
+            .setOrigin(0.5, 0.5); // Center text in the box
     }
 
     //Helper functions
