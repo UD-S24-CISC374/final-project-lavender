@@ -139,8 +139,8 @@ export class Orders extends Phaser.Physics.Arcade.Image {
         container.setVisible(true);
     }
 
-    static orderAlgo(strategy: number) {
-        //Strat. number determines which algorithm is being used.
-        //0 = FIFO, 1 = SJN, 2 = Priority (money)
-    }
+    //static orderAlgo(strategy: number) {
+    //    //Strat. number determines which algorithm is being used.
+    //    //0 = FIFO, 1 = SJN, 2 = Priority (money)
+    //}
 }
