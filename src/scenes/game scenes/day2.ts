@@ -58,7 +58,7 @@ export default class day1 extends Phaser.Scene {
         });
         this.stove.createAnims();
         //Create initial orders objects.
-        let x = 792;
+        let x = 980;
         let y = 144;
         for (let i = 0; i < 3; i++) {
             this.orderses.push(
@@ -198,7 +198,7 @@ export default class day1 extends Phaser.Scene {
         //Initialize Popup (in orders.ts)
         this.popup = Orders.initializePopup(this);
         //Timer. Note: Should always be created last, so that it is overlaid over everything.
-        new Timer({ scene: this, x: 552, y: 112, duration: 150 }, () => {
+        new Timer({ scene: this, x: 300, y: 60, duration: 150 }, () => {
             this.scene.start("EndScore", this.result);
         });
     }
