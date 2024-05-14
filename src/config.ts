@@ -8,6 +8,7 @@ import InformationScene from "./scenes/informationScene";
 import InformationScene2 from "./scenes/informationScene2";
 import GameIntro from "./scenes/GameIntro";
 import Tutorial from "./scenes/game scenes/tutorial";
+import Tutorial2 from "./scenes/game scenes/tutorial2";
 
 import Day_1 from "./scenes/game scenes/day1";
 import Day_2 from "./scenes/game scenes/day2";
@@ -39,6 +40,7 @@ export const CONFIG = {
         InformationScene2,
         GameIntro,
         Tutorial,
+        Tutorial2,
         Day_1,
         Day_2,
         Day_3,
