@@ -9,26 +9,33 @@ import { Stove } from "../../objects/stove";
 import { Timer } from "../../objects/timer";
 import { Orders } from "../../objects/orders";
 
-//SJN (Shortest job next)
-export default class day2 extends Phaser.Scene {
+//SJN (Shortest Job Next)
+export default class day1 extends Phaser.Scene {
+    //Variable that holds the score.
     private result: Result;
+
+    //Variables concerning input or the player.
     private mouseClicked: boolean;
     private player: Player;
     private player_arms: Player_Arms;
     private cursors: Phaser.Input.Keyboard.KeyboardPlugin | null;
+
+    //Variables concerning popups, and informationals.
+    private popup: Phaser.GameObjects.Container;
+
+    //Variables concerning other game objects.
     private stove: Stove;
     private itemGroup?: Phaser.Physics.Arcade.Group;
     private heldItem: Ingredient | null | undefined;
-    private popup: Phaser.GameObjects.Container;
     private orderses: Orders[] = [];
     private crates: Crate[] = [];
     private cratePositions = [
-        { x: 80, y: 140, ingredient: "BA" },
-        { x: 80, y: 210, ingredient: "BL" },
-        { x: 80, y: 280, ingredient: "BR" },
-        { x: 80, y: 350, ingredient: "BU" },
-        { x: 80, y: 420, ingredient: "EG" },
-        { x: 80, y: 490, ingredient: "MI" },
+        { x: 144, y: 140, ingredient: "BA" },
+        { x: 144, y: 210, ingredient: "BL" },
+        { x: 144, y: 280, ingredient: "BR" },
+        { x: 144, y: 350, ingredient: "BU" },
+        { x: 144, y: 420, ingredient: "EG" },
+        { x: 144, y: 490, ingredient: "MI" },
     ];
 
     constructor() {
@@ -41,6 +48,7 @@ export default class day2 extends Phaser.Scene {
     }
 
     create() {
+        //Sets result score.
         this.result = RESULT_DEFAULT;
         //Creates stove object.
         this.stove = new Stove({
@@ -71,7 +79,7 @@ export default class day2 extends Phaser.Scene {
                     x: position.x,
                     y: position.y,
                     ingredient: position.ingredient,
-                })
+                }).setScale(1.2)
             );
         });
         //Create itemgroup
@@ -149,39 +157,48 @@ export default class day2 extends Phaser.Scene {
         });
 
         //Creates tile and map.
-        const map = this.make.tilemap({ key: "map_d" });
+        const map = this.make.tilemap({ key: "map_revamp" });
         const tileset = map.addTilesetImage("Room_Builder_48x48", "tiles");
-        const tileset_2 = map.addTilesetImage("Interiors_48x48", "i_tiles");
+        const tileset_2 = map.addTilesetImage("Generic_48x48", "g_tiles");
         if (tileset && tileset_2) {
             //Tile Parameters
-            const floorLayer = map.createLayer("Floor", tileset, 0, 0);
-            const obj1Layer = map.createLayer("Objects_Below", tileset_2, 0, 0);
-            const wallLayer = map.createLayer("Walls", tileset, 0, 0);
+            const fwLayer = map.createLayer("Floor & Walls", tileset, 0, 0);
+            const bdLayer = map.createLayer("Border", tileset, 0, 0);
+            const hlLayer = map.createLayer("Holes", tileset_2, 0, 0);
+            const tbLayer = map.createLayer("Table", tileset_2, 0, 0);
             //Set collision for tiles with collides key
-            obj1Layer?.setCollisionByProperty({ collides: true });
-            wallLayer?.setCollisionByProperty({ collides: true });
+            fwLayer?.setCollisionByProperty({ collides: true });
+            bdLayer?.setCollisionByProperty({ collides: true });
+            hlLayer?.setCollisionByProperty({ collides: true });
+            tbLayer?.setCollisionByProperty({ collides: true });
             //Set scale & depth of layers
-            floorLayer?.setScale(1);
-            floorLayer?.setDepth(-20);
-            obj1Layer?.setScale(1);
-            obj1Layer?.setDepth(-19);
-            wallLayer?.setScale(1);
-            wallLayer?.setDepth(-18);
+            fwLayer?.setScale(1);
+            fwLayer?.setDepth(-20);
+            bdLayer?.setScale(1);
+            bdLayer?.setDepth(-19);
+            hlLayer?.setScale(1);
+            hlLayer?.setDepth(-18);
+            tbLayer?.setScale(1);
+            tbLayer?.setDepth(-17);
             //Set collision
-            if (obj1Layer) {
-                this.physics.add.collider(this.player, obj1Layer);
-                this.physics.add.collider(this.player_arms, obj1Layer);
+            if (fwLayer) {
+                this.physics.add.collider(this.player, fwLayer);
+                this.physics.add.collider(this.player_arms, fwLayer);
             }
-            if (wallLayer) {
-                this.physics.add.collider(this.player, wallLayer);
-                this.physics.add.collider(this.player_arms, wallLayer);
+            if (bdLayer) {
+                this.physics.add.collider(this.player, bdLayer);
+                this.physics.add.collider(this.player_arms, bdLayer);
+            }
+            if (tbLayer) {
+                this.physics.add.collider(this.player, tbLayer);
+                this.physics.add.collider(this.player_arms, tbLayer);
             }
         }
 
         //Initialize Popup (in orders.ts)
         this.popup = Orders.initializePopup(this);
         //Timer. Note: Should always be created last, so that it is overlaid over everything.
-        new Timer({ scene: this, x: 552, y: 112, duration: 90 }, () => {
+        new Timer({ scene: this, x: 552, y: 112, duration: 150 }, () => {
             this.scene.start("EndScore", this.result);
         });
     }
