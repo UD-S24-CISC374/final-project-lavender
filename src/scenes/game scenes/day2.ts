@@ -22,8 +22,6 @@ export default class day1 extends Phaser.Scene {
 
     //Variables concerning popups, and informationals.
     private popup: Phaser.GameObjects.Container;
-    private infoTextBackground: Phaser.GameObjects.Graphics;
-    private infoText: Phaser.GameObjects.Text;
 
     //Variables concerning other game objects.
     private stove: Stove;
@@ -32,16 +30,16 @@ export default class day1 extends Phaser.Scene {
     private orderses: Orders[] = [];
     private crates: Crate[] = [];
     private cratePositions = [
-        { x: 80, y: 140, ingredient: "BA" },
-        { x: 80, y: 210, ingredient: "BL" },
-        { x: 80, y: 280, ingredient: "BR" },
-        { x: 80, y: 350, ingredient: "BU" },
-        { x: 80, y: 420, ingredient: "EG" },
-        { x: 80, y: 490, ingredient: "MI" },
+        { x: 144, y: 140, ingredient: "BA" },
+        { x: 144, y: 210, ingredient: "BL" },
+        { x: 144, y: 280, ingredient: "BR" },
+        { x: 144, y: 350, ingredient: "BU" },
+        { x: 144, y: 420, ingredient: "EG" },
+        { x: 144, y: 490, ingredient: "MI" },
     ];
 
     constructor() {
-        super({ key: "Day_1" });
+        super({ key: "Day_2" });
         this.result = RESULT_DEFAULT;
     }
 
@@ -81,7 +79,7 @@ export default class day1 extends Phaser.Scene {
                     x: position.x,
                     y: position.y,
                     ingredient: position.ingredient,
-                })
+                }).setScale(1.2)
             );
         });
         //Create itemgroup
@@ -159,32 +157,41 @@ export default class day1 extends Phaser.Scene {
         });
 
         //Creates tile and map.
-        const map = this.make.tilemap({ key: "map_d" });
+        const map = this.make.tilemap({ key: "map_revamp" });
         const tileset = map.addTilesetImage("Room_Builder_48x48", "tiles");
-        const tileset_2 = map.addTilesetImage("Interiors_48x48", "i_tiles");
+        const tileset_2 = map.addTilesetImage("Generic_48x48", "g_tiles");
         if (tileset && tileset_2) {
             //Tile Parameters
-            const floorLayer = map.createLayer("Floor", tileset, 0, 0);
-            const obj1Layer = map.createLayer("Objects_Below", tileset_2, 0, 0);
-            const wallLayer = map.createLayer("Walls", tileset, 0, 0);
+            const fwLayer = map.createLayer("Floor & Walls", tileset, 0, 0);
+            const bdLayer = map.createLayer("Border", tileset, 0, 0);
+            const hlLayer = map.createLayer("Holes", tileset_2, 0, 0);
+            const tbLayer = map.createLayer("Table", tileset_2, 0, 0);
             //Set collision for tiles with collides key
-            obj1Layer?.setCollisionByProperty({ collides: true });
-            wallLayer?.setCollisionByProperty({ collides: true });
+            fwLayer?.setCollisionByProperty({ collides: true });
+            bdLayer?.setCollisionByProperty({ collides: true });
+            hlLayer?.setCollisionByProperty({ collides: true });
+            tbLayer?.setCollisionByProperty({ collides: true });
             //Set scale & depth of layers
-            floorLayer?.setScale(1);
-            floorLayer?.setDepth(-20);
-            obj1Layer?.setScale(1);
-            obj1Layer?.setDepth(-19);
-            wallLayer?.setScale(1);
-            wallLayer?.setDepth(-18);
+            fwLayer?.setScale(1);
+            fwLayer?.setDepth(-20);
+            bdLayer?.setScale(1);
+            bdLayer?.setDepth(-19);
+            hlLayer?.setScale(1);
+            hlLayer?.setDepth(-18);
+            tbLayer?.setScale(1);
+            tbLayer?.setDepth(-17);
             //Set collision
-            if (obj1Layer) {
-                this.physics.add.collider(this.player, obj1Layer);
-                this.physics.add.collider(this.player_arms, obj1Layer);
+            if (fwLayer) {
+                this.physics.add.collider(this.player, fwLayer);
+                this.physics.add.collider(this.player_arms, fwLayer);
             }
-            if (wallLayer) {
-                this.physics.add.collider(this.player, wallLayer);
-                this.physics.add.collider(this.player_arms, wallLayer);
+            if (bdLayer) {
+                this.physics.add.collider(this.player, bdLayer);
+                this.physics.add.collider(this.player_arms, bdLayer);
+            }
+            if (tbLayer) {
+                this.physics.add.collider(this.player, tbLayer);
+                this.physics.add.collider(this.player_arms, tbLayer);
             }
         }
 
@@ -194,35 +201,6 @@ export default class day1 extends Phaser.Scene {
         new Timer({ scene: this, x: 552, y: 112, duration: 150 }, () => {
             this.scene.start("EndScore", this.result);
         });
-
-        const textBoxWidth = 590; // Width of the text box
-        const textBoxHeight = 150; // Height of the text box
-        const startX = (this.cameras.main.width - textBoxWidth) / 2;
-        const startY = this.cameras.main.height - textBoxHeight - 10; // 10 pixels from the bottom
-
-        // Create a graphics object for the text background
-        const graphics = this.add.graphics();
-        graphics.fillStyle(0xffffff, 0.7);
-        graphics.fillRoundedRect(
-            startX,
-            startY,
-            textBoxWidth,
-            textBoxHeight,
-            15
-        ); // Rounded
-
-        // Add text on top of the graphics object
-        this.add
-            .text(
-                startX + textBoxWidth / 2,
-                startY + textBoxHeight / 2,
-                "First Come First Serve: Make sure to look at Order #1 and complete\nthat first for optimal execution! Go in order from the first order to the last\n1. Walk up to the reciepts in the top left\n2. Walk up to your ingredients, tap for the one you want\n3. Carry it to the pot, and add however many ingredients you need to the pot\n4. Stand over the pot and click to get your final order\n5. Bring it to the reciept!",
-                {
-                    font: "17px Bangers",
-                    color: "#000000",
-                }
-            )
-            .setOrigin(0.5, 0.5); // Center text in the box
     }
 
     //Helper functions
