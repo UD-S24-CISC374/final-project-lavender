@@ -11,17 +11,24 @@ import { Orders } from "../../objects/orders";
 
 //FIFO (First Come, First Serve)
 export default class day1 extends Phaser.Scene {
+    //Variable that holds the score.
     private result: Result;
+
+    //Variables concerning input or the player.
     private mouseClicked: boolean;
     private player: Player;
     private player_arms: Player_Arms;
     private cursors: Phaser.Input.Keyboard.KeyboardPlugin | null;
-    private stove: Stove;
-    private itemGroup?: Phaser.Physics.Arcade.Group;
-    private heldItem: Ingredient | null | undefined;
+
+    //Variables concerning popups, and informationals.
     private popup: Phaser.GameObjects.Container;
     private infoTextBackground: Phaser.GameObjects.Graphics;
     private infoText: Phaser.GameObjects.Text;
+
+    //Variables concerning other game objects.
+    private stove: Stove;
+    private itemGroup?: Phaser.Physics.Arcade.Group;
+    private heldItem: Ingredient | null | undefined;
     private orderses: Orders[] = [];
     private crates: Crate[] = [];
     private cratePositions = [
@@ -43,6 +50,7 @@ export default class day1 extends Phaser.Scene {
     }
 
     create() {
+        //Sets result score.
         this.result = RESULT_DEFAULT;
         //Creates stove object.
         this.stove = new Stove({
