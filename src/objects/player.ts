@@ -41,7 +41,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     movePlayer(arms: Player_Arms) {
-        const speed = 230;
+        const speed = 300;
         const diagonalSpeed = speed / Math.sqrt(2);
 
         let W_Down = this.cursors?.addKey(
