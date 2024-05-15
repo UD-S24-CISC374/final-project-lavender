@@ -9,7 +9,7 @@ Lavender
 # Developers
 
 -   Joshua Taing (jsmtaing@udel.edu)
--   Joanna Crisomia (email)
+-   Joanna Crisomia (joancris@udel.edu)
 
 # Blurb
 
