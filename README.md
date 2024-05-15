@@ -25,7 +25,7 @@ Use the mouse and the LMB to navigate through the menus. Once in-game, use WASD 
 
 # Gameplay Video
 
-TEXT GOES HERE
+[Gameplay Video](https://youtu.be/DDN5fMMAL7g)
 
 # Educational Game Design Document
 
