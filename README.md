@@ -21,7 +21,7 @@ Use the mouse and the LMB to navigate through the menus. Once in-game, use WASD 
 
 # Screenshot
 
-<img src="./docs/large.png" width="800">
+![Screenshot of gameplay.](/docs/large.png)
 
 # Gameplay Video
 
