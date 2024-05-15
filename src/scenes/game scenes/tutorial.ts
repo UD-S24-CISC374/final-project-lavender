@@ -160,7 +160,7 @@ export default class Tutorial extends Phaser.Scene {
 
         // Add a click event listener to the button
         this.continueButton.on("pointerdown", () => {
-            this.scene.start("LevelSelect");
+            this.scene.start("Tutorial2");
         });
 
         //Creates and randomizes tomato position.
