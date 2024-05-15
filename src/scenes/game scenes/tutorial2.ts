@@ -25,6 +25,7 @@ export default class Tutorial2 extends Phaser.Scene {
     private popup: Phaser.GameObjects.Container;
     private infoTextBackground: Phaser.GameObjects.Graphics;
     private infoText: Phaser.GameObjects.Text;
+    private continueButton: Phaser.GameObjects.Text;
 
     //Variables concerning other game objects.
     private stove: Stove;
@@ -192,13 +193,11 @@ export default class Tutorial2 extends Phaser.Scene {
         //Initialize Popup (in orders.ts)
         this.popup = Orders.initializePopup(this);
 
-
-        const textBoxWidth = 500; 
-        const textBoxHeight = 130; 
+        const textBoxWidth = 500;
+        const textBoxHeight = 130;
         const startX = (this.cameras.main.width - textBoxWidth) / 2;
-        const startY = this.cameras.main.height - textBoxHeight - 10; 
+        const startY = this.cameras.main.height - textBoxHeight - 10;
 
-       
         const graphics = this.add.graphics();
         graphics.fillStyle(0xffffff, 0.7);
         graphics.fillRoundedRect(
@@ -207,9 +206,8 @@ export default class Tutorial2 extends Phaser.Scene {
             textBoxWidth,
             textBoxHeight,
             15
-        ); 
+        );
 
-        
         this.add
             .text(
                 startX + textBoxWidth / 2,
@@ -220,7 +218,71 @@ export default class Tutorial2 extends Phaser.Scene {
                     color: "#000000",
                 }
             )
-            .setOrigin(0.5, 0.5); 
+            .setOrigin(0.5, 0.5);
+
+        // Button dimensions and position
+        const buttonX = 950;
+        const buttonY = 550;
+        const buttonWidth = 150;
+        const buttonHeight = 54;
+        const cornerRadius = 25;
+
+        // Graphics object for the button
+        const buttonGraphics = this.add.graphics();
+        buttonGraphics.fillStyle(0xadd8e6, 0.8);
+        buttonGraphics.fillRoundedRect(
+            buttonX,
+            buttonY,
+            buttonWidth,
+            buttonHeight,
+            cornerRadius
+        );
+        buttonGraphics.lineStyle(2, 0xffffff, 1);
+        buttonGraphics.strokeRoundedRect(
+            buttonX,
+            buttonY,
+            buttonWidth,
+            buttonHeight,
+            cornerRadius
+        );
+
+        const hitArea = new Phaser.Geom.Rectangle(
+            buttonX,
+            buttonY,
+            buttonWidth,
+            buttonHeight
+        );
+        buttonGraphics.setInteractive(hitArea, Phaser.Geom.Rectangle.Contains);
+
+        // text over the button
+        this.continueButton = this.add
+            .text(
+                buttonX + buttonWidth / 2,
+                buttonY + buttonHeight / 2,
+                "Continue",
+                {
+                    font: "35px Bangers",
+                    color: "#FFFFFF",
+                    align: "center",
+                    fixedWidth: buttonWidth,
+                    fixedHeight: buttonHeight,
+                    padding: {
+                        top: 10,
+                        bottom: 10,
+                        left: 10,
+                        right: 10,
+                    },
+                }
+            )
+            .setOrigin(0.5, 0.5)
+            .setDepth(101)
+            .setInteractive({ useHandCursor: true })
+            .setVisible(true);
+
+        // Add a click event listener to the button
+        this.continueButton.on("pointerdown", () => {
+            this.scene.start("LevelSelect");
+        });
     }
 
     //Helper functions
