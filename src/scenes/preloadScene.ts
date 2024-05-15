@@ -93,7 +93,7 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image("tomato", "assets/img/Tomato.png");
         this.load.image("kitchen1", "assets/img/cartoon-kitchen.jpg");
         this.load.image("kitchen2", "assets/img/restaurant_oven.jpg");
-      
+
         //Dish preload
         this.load.image("BA", "assets/img/dishes/Baked_Banana.png"); //baked banana
         this.load.image("BR_EG", "assets/img/dishes/Egg_Sandwich.png"); //egg sandwich
@@ -113,6 +113,12 @@ export default class PreloadScene extends Phaser.Scene {
 
         //Order Ticket
         this.load.image("order", "assets/img/order_ticket.png");
+
+        //Conveyor
+        this.load.spritesheet("conveyor", "assets/img/conveyor_input.png", {
+            frameWidth: 240,
+            frameHeight: 96,
+        });
     }
 
     create() {

@@ -8,6 +8,7 @@ import { Crate } from "../../objects/crate";
 import { Stove } from "../../objects/stove";
 import { Timer } from "../../objects/timer";
 import { Orders } from "../../objects/orders";
+import { Conveyor } from "../../objects/conveyor";
 
 //SJN (Shortest Job Next)
 export default class day1 extends Phaser.Scene {
@@ -25,6 +26,7 @@ export default class day1 extends Phaser.Scene {
 
     //Variables concerning other game objects.
     private stove: Stove;
+    private conveyor: Conveyor;
     private itemGroup?: Phaser.Physics.Arcade.Group;
     private heldItem: Ingredient | null | undefined;
     private orderses: Orders[] = [];
@@ -50,6 +52,13 @@ export default class day1 extends Phaser.Scene {
     create() {
         //Sets result score.
         this.result = RESULT_DEFAULT;
+        //Creates conveyor object
+        this.conveyor = new Conveyor({
+            scene: this,
+            x: this.cameras.main.displayWidth / 2,
+            y: 96,
+        });
+        this.conveyor.createAnims();
         //Creates stove object.
         this.stove = new Stove({
             scene: this,
@@ -360,6 +369,7 @@ export default class day1 extends Phaser.Scene {
             }
         }
         //Reset booleans
+        this.conveyor.anims.play("run", true);
         this.resetAll();
     }
 }
