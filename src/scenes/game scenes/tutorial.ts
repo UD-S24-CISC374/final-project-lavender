@@ -189,7 +189,7 @@ export default class Tutorial extends Phaser.Scene {
             .setOrigin(0.5, 0.5)
             .setDepth(101)
             .setInteractive({ useHandCursor: true })
-            .setVisible(false);
+            .setVisible(true);
 
         // Add a click event listener to the button
         this.continueButton.on("pointerdown", () => {

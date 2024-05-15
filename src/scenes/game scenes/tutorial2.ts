@@ -1,72 +1,92 @@
 import Phaser from "phaser";
+import Result, { RESULT_DEFAULT } from "../../objects/results";
+
 import { Player } from "../../objects/player";
 import { Player_Arms } from "../../objects/player_arms";
+import { Ingredient } from "../../objects/dish_ing";
+import { Crate } from "../../objects/crate";
+import { Stove } from "../../objects/stove";
+import { Orders } from "../../objects/orders";
 
 export type Collidable =
     | Phaser.Types.Physics.Arcade.GameObjectWithBody
     | Phaser.Tilemaps.Tile;
 
 export default class Tutorial2 extends Phaser.Scene {
-    constructor() {
-        super({ key: "Tutorial2" });
-    }
+    private result: Result;
 
+    //Variables concerning input or the player.
     private mouseClicked: boolean;
     private player: Player;
     private player_arms: Player_Arms;
     private cursors: Phaser.Input.Keyboard.KeyboardPlugin | null;
 
-    private itemGroup?: Phaser.Physics.Arcade.Group;
-    private heldItem: Phaser.Physics.Arcade.Sprite | null;
+    //Variables concerning popups, and informationals.
+    private popup: Phaser.GameObjects.Container;
+    private infoTextBackground: Phaser.GameObjects.Graphics;
+    private infoText: Phaser.GameObjects.Text;
 
-    private continueButton: Phaser.GameObjects.Text;
+    //Variables concerning other game objects.
+    private stove: Stove;
+    private itemGroup?: Phaser.Physics.Arcade.Group;
+    private heldItem: Ingredient | null | undefined;
+    private orderses: Orders[] = [];
+    private crates: Crate[] = [];
+    private cratePositions = [
+        { x: 80, y: 140, ingredient: "BA" },
+        { x: 80, y: 210, ingredient: "BL" },
+        { x: 80, y: 280, ingredient: "BR" },
+        { x: 80, y: 350, ingredient: "BU" },
+        { x: 80, y: 420, ingredient: "EG" },
+        { x: 80, y: 490, ingredient: "MI" },
+    ];
+
+    constructor() {
+        super({ key: "Tutorial2" });
+        this.result = RESULT_DEFAULT;
+    }
+
+    init(data: Result) {
+        this.result = data;
+    }
 
     create() {
-        //Creates tile and map.
-        const map = this.make.tilemap({ key: "map_1" });
-        const tileset = map.addTilesetImage("Room_Builder_48x48", "tiles"); //Tilemap name, then key preloader name
-
-        // Initialize the continue button
-        this.continueButton = this.add
-            .text(
-                this.cameras.main.width - 200, // Positioned in the bottom right
-                this.cameras.main.height - 90,
-                "Continue",
-                {
-                    font: "bold 28px Bangers",
-
-                    backgroundColor: "rgba(60, 145, 250, 0.5)",
-                    color: "#FFFFFF", // White text
-                    align: "center",
-                    fixedWidth: 180,
-                    fixedHeight: 50,
-                    padding: {
-                        top: 10,
-                        bottom: 10,
-                        left: 10,
-                        right: 10,
-                    },
-                }
-            )
-            .setInteractive({ useHandCursor: true }) // Makes the button clickable
-            .setOrigin(0.5, 0.5)
-            .setVisible(false); // Start with the button hidden
-
-        // Add a click event listener to the button
-        this.continueButton.on("pointerdown", () => {
-            this.scene.start("LevelSelect");
+        //Sets result score.
+        this.result = RESULT_DEFAULT;
+        //Creates stove object.
+        this.stove = new Stove({
+            scene: this,
+            x: this.cameras.main.displayWidth / 2 - 40,
+            y: this.cameras.main.displayHeight / 2 + 20,
         });
-
-        //Creates and randomizes tomato position.
-        let x, y;
-        const numOfObjects = 10;
-        this.itemGroup = this.physics.add.group();
-        for (let i = 0; i < numOfObjects; i++) {
-            x = Phaser.Math.RND.between(20, 1180);
-            y = Phaser.Math.RND.between(50, 700);
-            this.itemGroup.add(this.physics.add.sprite(x, y, "tomato"));
+        this.stove.createAnims();
+        //Create initial orders objects.
+        let x = 792;
+        let y = 144;
+        for (let i = 0; i < 3; i++) {
+            this.orderses.push(
+                new Orders({
+                    scene: this,
+                    x: x,
+                    y: y,
+                    num_order: i,
+                })
+            );
+            y += 96;
         }
-
+        //Create crates
+        this.cratePositions.forEach((position) => {
+            this.crates.push(
+                new Crate({
+                    scene: this,
+                    x: position.x,
+                    y: position.y,
+                    ingredient: position.ingredient,
+                })
+            );
+        });
+        //Create itemgroup
+        this.itemGroup = this.physics.add.group();
         //Creates player input and player object.
         this.cursors = this.input.keyboard;
         this.player = new Player({
@@ -75,44 +95,227 @@ export default class Tutorial2 extends Phaser.Scene {
             y: this.cameras.main.displayHeight / 2,
             cursors: this.cursors,
         });
-        this.player.createAnims();
         this.player_arms = new Player_Arms({
             scene: this,
             x: this.player.x,
             y: this.player.y,
         });
+        this.player.createAnims();
         this.player_arms.createAnims();
 
+        //Add overlap between player_arms and stove.
+        this.physics.add.overlap(
+            this.player_arms,
+            this.stove,
+            (playerArms) => {
+                (playerArms as Player_Arms).stoveOverlap = true;
+            },
+            (playerArms) => {
+                return !(playerArms as Player_Arms).stoveOverlap;
+            },
+            this
+        );
         //Add overlap between player_arms and game objects.
         this.physics.add.overlap(
             this.player_arms,
             this.itemGroup,
             (playerArms, item) => {
                 (playerArms as Player_Arms).overlapping = true;
-                this.heldItem = item as Phaser.Physics.Arcade.Sprite;
+                this.heldItem = item as Ingredient;
             },
             (playerArms) => {
                 return !(playerArms as Player_Arms).hasItem;
             },
             this
         );
+        //Add overlap between player_arms and crates.
+        this.crates.forEach((crate) => {
+            this.physics.add.overlap(
+                this.player_arms,
+                crate,
+                (playerArms) => {
+                    (playerArms as Player_Arms).crateOverlap = true;
+                    (crate as Crate).crateTouched = true;
+                },
+                (playerArms) => {
+                    return !(playerArms as Player_Arms).crateOverlap;
+                },
+                this
+            );
+        });
+        //Add overlap between player_arms and order group.
+        this.orderses.forEach((orders) => {
+            this.physics.add.overlap(
+                this.player_arms,
+                orders,
+                (playerArms) => {
+                    (playerArms as Player_Arms).ordersOverlap = true;
+                    (orders as Orders).ordersTouched = true;
+                },
+                (playerArms) => {
+                    return !(playerArms as Player_Arms).ordersOverlap;
+                },
+                this
+            );
+        });
 
-        if (tileset) {
+        //Creates tile and map.
+        const map = this.make.tilemap({ key: "map_d" });
+        const tileset = map.addTilesetImage("Room_Builder_48x48", "tiles");
+        const tileset_2 = map.addTilesetImage("Interiors_48x48", "i_tiles");
+        if (tileset && tileset_2) {
             //Tile Parameters
-            const belowLayer = map.createLayer("Below Player", tileset, 0, 0);
-            const aboveLayer = map.createLayer("Above Player", tileset, 0, 0);
+            const floorLayer = map.createLayer("Floor", tileset, 0, 0);
+            const obj1Layer = map.createLayer("Objects_Below", tileset_2, 0, 0);
+            const wallLayer = map.createLayer("Walls", tileset, 0, 0);
             //Set collision for tiles with collides key
-            aboveLayer?.setCollisionByProperty({ collides: true });
+            obj1Layer?.setCollisionByProperty({ collides: true });
+            wallLayer?.setCollisionByProperty({ collides: true });
             //Set scale & depth of layers
-            belowLayer?.setScale(1);
-            belowLayer?.setDepth(-2);
-            aboveLayer?.setScale(1);
-            aboveLayer?.setDepth(-1);
+            floorLayer?.setScale(1);
+            floorLayer?.setDepth(-20);
+            obj1Layer?.setScale(1);
+            obj1Layer?.setDepth(-19);
+            wallLayer?.setScale(1);
+            wallLayer?.setDepth(-18);
             //Set collision
-            if (aboveLayer) {
-                this.physics.add.collider(this.player, aboveLayer);
-                this.physics.add.collider(this.player_arms, aboveLayer);
+            if (obj1Layer) {
+                this.physics.add.collider(this.player, obj1Layer);
+                this.physics.add.collider(this.player_arms, obj1Layer);
             }
+            if (wallLayer) {
+                this.physics.add.collider(this.player, wallLayer);
+                this.physics.add.collider(this.player_arms, wallLayer);
+            }
+        }
+
+        //Initialize Popup (in orders.ts)
+        this.popup = Orders.initializePopup(this);
+
+
+        const textBoxWidth = 500; 
+        const textBoxHeight = 130; 
+        const startX = (this.cameras.main.width - textBoxWidth) / 2;
+        const startY = this.cameras.main.height - textBoxHeight - 10; 
+
+       
+        const graphics = this.add.graphics();
+        graphics.fillStyle(0xffffff, 0.7);
+        graphics.fillRoundedRect(
+            startX,
+            startY,
+            textBoxWidth,
+            textBoxHeight,
+            15
+        ); 
+
+        
+        this.add
+            .text(
+                startX + textBoxWidth / 2,
+                startY + textBoxHeight / 2,
+                "1. Walk up to the reciepts in the top left\n2. Walk up to your ingredients, tap for the one you want\n3. Carry it to the pot & click to add\n4. Stand over the pot and click to get your final order\n5. Bring it to the reciept!",
+                {
+                    font: "19px Bangers",
+                    color: "#000000",
+                }
+            )
+            .setOrigin(0.5, 0.5); 
+    }
+
+    //Helper functions
+    resetAll() {
+        this.player_arms.overlapping = false;
+        this.player_arms.stoveOverlap = false;
+        this.player_arms.crateOverlap = false;
+        if (!this.input.mousePointer.leftButtonDown()) {
+            this.mouseClicked = false;
+        }
+        this.crates.forEach((crate) => {
+            crate.crateTouched = false;
+        });
+        this.player_arms.crateOverlap = false;
+        this.orderses.forEach((orders) => {
+            orders.ordersTouched = false;
+        });
+        this.player_arms.ordersOverlap = false;
+    }
+    pickupItem(pickingUp: boolean) {
+        if (pickingUp) {
+            this.player_arms.hasItem = true;
+            this.player_arms.playAnims(true);
+            this.heldItem?.setPosition(this.player.x, this.player.y - 50);
+            this.mouseClicked = true;
+        } else {
+            //Holding item
+            this.player_arms.playAnims(true);
+            this.heldItem?.setPosition(this.player.x, this.player.y - 50);
+        }
+    }
+    interactWithStove() {
+        if (
+            this.input.mousePointer.leftButtonDown() &&
+            this.player_arms.stoveOverlap &&
+            this.stove.inStove.length > 0 &&
+            !this.mouseClicked &&
+            !this.heldItem
+        ) {
+            this.itemGroup?.add(this.stove.makeDish());
+            this.result.dishes_made++;
+        }
+    }
+    interactWithCrates() {
+        if (
+            this.input.mousePointer.leftButtonDown() &&
+            this.player_arms.crateOverlap &&
+            !this.mouseClicked
+        ) {
+            let touchedCrate: Crate | undefined;
+            this.crates.forEach((crate) => {
+                if (crate.crateTouched) {
+                    touchedCrate = crate;
+                    crate.crateTouched = false;
+                }
+            });
+            if (touchedCrate) {
+                touchedCrate.createIngredient(
+                    this.itemGroup,
+                    touchedCrate.name
+                );
+            }
+        }
+    }
+    interactWithOrders() {
+        if (this.player_arms.ordersOverlap) {
+            let touchedOrder: Orders | undefined;
+            this.orderses.forEach((orders) => {
+                if (orders.ordersTouched) {
+                    touchedOrder = orders;
+                    orders.ordersTouched = false;
+                }
+            });
+            if (touchedOrder) {
+                Orders.showOrderInfo(this, this.popup, touchedOrder);
+
+                if (
+                    this.input.mousePointer.leftButtonDown() &&
+                    this.heldItem &&
+                    typeof this.heldItem.name === "string" && // Check if name is a string
+                    typeof touchedOrder.dish_texture === "string" && // Check if dish_texture
+                    !this.mouseClicked
+                ) {
+                    if (this.heldItem.name === touchedOrder.dish_texture) {
+                        touchedOrder.destroy();
+                        this.heldItem.destroy();
+                        this.heldItem = null;
+                        this.player_arms.hasItem = false;
+                        this.mouseClicked = true;
+                        this.result.money_made += 0.25;
+                    }
+                }
+            }
+        } else {
+            this.popup.setVisible(false);
         }
     }
 
@@ -122,35 +325,52 @@ export default class Tutorial2 extends Phaser.Scene {
         this.player_arms.setVelocity(0);
         this.player.movePlayer(this.player_arms);
 
-        //GrabObjects function and associated math.
+        //Check if overlapping with an order.
+        if (this.player_arms.ordersOverlap) {
+            this.interactWithOrders();
+        } else {
+            this.popup.setVisible(false);
+        }
+
+        //Left mouse button is down
+        const leftButtonDown = this.input.mousePointer.leftButtonDown();
+        //Player is not holding an item.
         if (!this.player_arms.hasItem) {
-            // If player_arms is not holding an item.
             if (
-                this.input.mousePointer.leftButtonDown() &&
+                leftButtonDown &&
                 this.player_arms.overlapping &&
                 !this.mouseClicked
             ) {
-                //If LMB is clicked, and arms are overlapping, grab item.
-                this.player_arms.hasItem = true;
-                this.player_arms.flipY = true;
-                this.player_arms.anims.play("grab");
-                //Position item above the player.
-                this.heldItem?.setPosition(this.player.x, this.player.y - 50);
-                this.mouseClicked = true;
+                this.pickupItem(true);
             } else {
-                //If no item is grabbed/LMB not pressed
-                this.player_arms.flipY = false;
-                this.player_arms.anims.play("idle");
+                this.player_arms.playAnims(false);
+                //Check to see if player clicked to interact with stove.
+                this.interactWithStove();
+                this.interactWithCrates();
+                this.mouseClicked = true;
             }
         } else {
-            //If holding item
-            this.player_arms.flipY = true;
-            this.player_arms.anims.play("grab");
-            //Position above head.
-            this.heldItem?.setPosition(this.player.x, this.player.y - 50);
-            //If LMB released while holding item, drop it
+            //Player is holding an item.
+            this.pickupItem(false);
+
+            //If statement that checks if overlapping with stove.
             if (
-                this.input.mousePointer.leftButtonDown() &&
+                leftButtonDown &&
+                this.player_arms.stoveOverlap &&
+                this.heldItem &&
+                !this.mouseClicked
+            ) {
+                //Disable rendering of item, put in stove, prevent from being able to be interacted with.
+                this.heldItem.setPosition(3000, 3000); //send item offscreen for now, will delete later
+                this.stove.insertItem(this.heldItem);
+                this.heldItem.disableBody(true, true);
+                //Clear referenced item, set hasItem to false.
+                this.heldItem = null;
+                this.player_arms.hasItem = false;
+                this.mouseClicked = true;
+            } else if (
+                leftButtonDown &&
+                !this.player_arms.stoveOverlap &&
                 !this.mouseClicked
             ) {
                 this.heldItem?.setY(this.player.y + 10);
@@ -159,16 +379,7 @@ export default class Tutorial2 extends Phaser.Scene {
                 this.mouseClicked = true;
             }
         }
-        //Simple mouseclick check
-        if (!this.input.mousePointer.leftButtonDown()) {
-            this.mouseClicked = false;
-        }
-        this.player_arms.overlapping = false;
+        //Reset booleans
+        this.resetAll();
     }
-
-
-
-
-
-
 }

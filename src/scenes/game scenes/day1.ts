@@ -216,7 +216,7 @@ export default class day1 extends Phaser.Scene {
             .text(
                 startX + textBoxWidth / 2,
                 startY + textBoxHeight / 2,
-                "First Come First Serve: Make sure to look at Order #1 and complete\nthat first for optimal execution! Go in order from the first order to the last\n1. Walk up to the reciepts in the top left\n2. Walk up to your ingredients, tap for the one you want\n3. Carry it to the pot, and add however many ingredients you need to the pot\n4. Stand over the pot and click to get your final order\n5. Bring it to the reciept!",
+                "First Come First Serve: Make sure to look at Order #1 and complete\nthat first for optimal execution! Go in order from the first order to the last :)",
                 {
                     font: "17px Bangers",
                     color: "#000000",
