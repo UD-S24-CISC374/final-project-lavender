@@ -132,20 +132,52 @@ export default class Tutorial extends Phaser.Scene {
             .setDepth(101)
             .setVisible(false);
 
-        // Initialize the continue button
+        // Button dimensions and position
+        const buttonX = 950;
+        const buttonY = 550;
+        const buttonWidth = 150;
+        const buttonHeight = 54;
+        const cornerRadius = 25;
+
+        // Graphics object for the button
+        const buttonGraphics = this.add.graphics();
+        buttonGraphics.fillStyle(0xadd8e6, 0.8); 
+        buttonGraphics.fillRoundedRect(
+            buttonX,
+            buttonY,
+            buttonWidth,
+            buttonHeight,
+            cornerRadius
+        );
+        buttonGraphics.lineStyle(2, 0xffffff, 1); 
+        buttonGraphics.strokeRoundedRect(
+            buttonX,
+            buttonY,
+            buttonWidth,
+            buttonHeight,
+            cornerRadius
+        );
+
+        const hitArea = new Phaser.Geom.Rectangle(
+            buttonX,
+            buttonY,
+            buttonWidth,
+            buttonHeight
+        );
+        buttonGraphics.setInteractive(hitArea, Phaser.Geom.Rectangle.Contains);
+
+        // text over the button
         this.continueButton = this.add
             .text(
-                this.cameras.main.width - 200, // Positioned in the bottom right
-                this.cameras.main.height - 90,
+                buttonX + buttonWidth / 2,
+                buttonY + buttonHeight / 2,
                 "Continue",
                 {
-                    font: "bold 28px Bangers",
-
-                    backgroundColor: "rgba(60, 145, 250, 0.5)",
-                    color: "#FFFFFF", // White text
+                    font: "35px Bangers",
+                    color: "#FFFFFF",
                     align: "center",
-                    fixedWidth: 180,
-                    fixedHeight: 50,
+                    fixedWidth: buttonWidth,
+                    fixedHeight: buttonHeight,
                     padding: {
                         top: 10,
                         bottom: 10,
@@ -154,9 +186,10 @@ export default class Tutorial extends Phaser.Scene {
                     },
                 }
             )
-            .setInteractive({ useHandCursor: true }) // Makes the button clickable
             .setOrigin(0.5, 0.5)
-            .setVisible(false); // Start with the button hidden
+            .setDepth(101)
+            .setInteractive({ useHandCursor: true })
+            .setVisible(false);
 
         // Add a click event listener to the button
         this.continueButton.on("pointerdown", () => {
@@ -312,11 +345,11 @@ export default class Tutorial extends Phaser.Scene {
         this.tweens.add({
             targets: [this.secondTextBackground, this.secondInstructions],
             alpha: { from: 1, to: 0 },
-            duration: 3000, // Adjust duration for a slower or faster fade
+            duration: 2000, 
             onComplete: () => {
                 this.secondTextBackground.setVisible(false);
                 this.secondInstructions.setVisible(false);
-                this.fadeInThirdText(); // call to fade to 3rd scene
+                this.fadeInThirdText(); 
             },
         });
     }
@@ -327,9 +360,8 @@ export default class Tutorial extends Phaser.Scene {
         this.tweens.add({
             targets: [this.thirdTextBackground, this.thirdInstructions],
             alpha: { from: 0, to: 1 },
-            duration: 3000,
+            duration: 2000,
             onComplete: () => {
-                // Show the continue button after the text fades in
                 this.continueButton.setVisible(true);
             },
         });

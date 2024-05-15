@@ -30,21 +30,78 @@ export default class informationScene2 extends Phaser.Scene {
             wordWrap: { width: 900 },
         });
 
-        // Next and back buttons with interactive handlers
+        // Button dimensions and positions
+        const tutorialButtonX = 950; // Right side
+        const backButtonX = 100; // Left side
+        const buttonY = 550;
+        const buttonWidth = 150;
+        const buttonHeight = 50;
+        const cornerRadius = 25;
+
+        // Tutorial button graphics
+        const tutorialButtonGraphics = this.add.graphics();
+        tutorialButtonGraphics.fillStyle(0xadd8e6, 0.8); // Blue fill
+        tutorialButtonGraphics.fillRoundedRect(
+            tutorialButtonX,
+            buttonY,
+            buttonWidth,
+            buttonHeight,
+            cornerRadius
+        );
+        tutorialButtonGraphics.lineStyle(2, 0xffffff, 1); // White outline
+        tutorialButtonGraphics.strokeRoundedRect(
+            tutorialButtonX,
+            buttonY,
+            buttonWidth,
+            buttonHeight,
+            cornerRadius
+        );
+
+        // Back button graphics
+        const backButtonGraphics = this.add.graphics();
+        backButtonGraphics.fillStyle(0xadd8e6, 0.8); // Blue fill
+        backButtonGraphics.fillRoundedRect(
+            backButtonX,
+            buttonY,
+            buttonWidth,
+            buttonHeight,
+            cornerRadius
+        );
+        backButtonGraphics.lineStyle(2, 0xffffff, 1); // White outline
+        backButtonGraphics.strokeRoundedRect(
+            backButtonX,
+            buttonY,
+            buttonWidth,
+            buttonHeight,
+            cornerRadius
+        );
+
+        // Tutorial button
         let nextButton2 = this.add
-            .text(950, 550, "Tutorial", {
-                font: "40px Bangers",
-                color: "#ffffff",
-                backgroundColor: "rgba(255, 255, 255, 0.4)",
-            })
+            .text(
+                tutorialButtonX + buttonWidth / 2,
+                buttonY + buttonHeight / 2,
+                "Tutorial",
+                {
+                    font: "40px Bangers",
+                    color: "#ffffff",
+                }
+            )
+            .setOrigin(0.5, 0.5)
             .setInteractive();
 
+        // Back button
         let backButton = this.add
-            .text(100, 550, "Back", {
-                font: "40px Bangers",
-                color: "#ffffff",
-                backgroundColor: "rgba(255, 255, 255, 0.4)",
-            })
+            .text(
+                backButtonX + buttonWidth / 2,
+                buttonY + buttonHeight / 2,
+                "Back",
+                {
+                    font: "40px Bangers",
+                    color: "#ffffff",
+                }
+            )
+            .setOrigin(0.5, 0.5)
             .setInteractive();
 
         // Button click events
