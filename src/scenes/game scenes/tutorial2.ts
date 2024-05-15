@@ -212,19 +212,19 @@ export default class Tutorial2 extends Phaser.Scene {
             .text(
                 startX + textBoxWidth / 2,
                 startY + textBoxHeight / 2,
-                "1. Walk up to the reciepts in the top left\n2. Walk up to your ingredients, tap for the one you want\n3. Carry it to the pot & click to add\n4. Stand over the pot and click to get your final order\n5. Bring it to the reciept!",
+                "1. Walk up to the orders in the top left\n2. Walk up to your ingredients, tap for the one you want\n3. Carry it to the pot & click to add\n4. Stand over the pot and click to get your final order\n5. Bring it to the reciept!",
                 {
-                    font: "19px Bangers",
+                    font: "21px Bangers",
                     color: "#000000",
                 }
             )
             .setOrigin(0.5, 0.5);
 
         // Button dimensions and position
-        const buttonX = 950;
-        const buttonY = 550;
+        const buttonX = 940;
+        const buttonY = 410;
         const buttonWidth = 150;
-        const buttonHeight = 54;
+        const buttonHeight = 56;
         const cornerRadius = 25;
 
         // Graphics object for the button

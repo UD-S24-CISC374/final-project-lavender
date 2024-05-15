@@ -81,13 +81,13 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image("banana", "assets/img/dishes/ingredients/banana.png");
         this.load.image(
             "blueberry",
-            "assets/img/dishes/ingredients/blueberry_4.png"
+            "assets/img/dishes/ingredients/blueberry.png"
         );
 
         this.load.image("bread", "assets/img/dishes/ingredients/bread.png");
         this.load.image("butter", "assets/img/dishes/ingredients/butter.png");
         this.load.image("eggs", "assets/img/dishes/ingredients/egg.png");
-        this.load.image("milk", "assets/img/dishes/ingredients/mulk.png");
+        this.load.image("milk", "assets/img/dishes/ingredients/milk.png");
 
         //Additional Images
         this.load.image("tomato", "assets/img/Tomato.png");

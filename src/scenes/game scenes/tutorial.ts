@@ -136,7 +136,7 @@ export default class Tutorial extends Phaser.Scene {
         const buttonX = 950;
         const buttonY = 550;
         const buttonWidth = 150;
-        const buttonHeight = 54;
+        const buttonHeight = 56;
         const cornerRadius = 25;
 
         // Graphics object for the button
