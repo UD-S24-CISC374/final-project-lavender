@@ -45,7 +45,7 @@ export default class informationScene extends Phaser.Scene {
 
         // Graphics object for the button
         const buttonGraphics = this.add.graphics();
-        buttonGraphics.fillStyle(0xadd8e6, 0.8); // Blue fill
+        buttonGraphics.fillStyle(0xadd8e6, 0.8); 
         buttonGraphics.fillRoundedRect(
             buttonX,
             buttonY,
@@ -53,7 +53,7 @@ export default class informationScene extends Phaser.Scene {
             buttonHeight,
             cornerRadius
         );
-        buttonGraphics.lineStyle(2, 0xffffff, 1); // White outline
+        buttonGraphics.lineStyle(2, 0xffffff, 1); 
         buttonGraphics.strokeRoundedRect(
             buttonX,
             buttonY,
@@ -69,7 +69,7 @@ export default class informationScene extends Phaser.Scene {
             buttonHeight
         );
         buttonGraphics.setInteractive(hitArea, Phaser.Geom.Rectangle.Contains);
-
+ 
         let nextButton = this.add
             .text(
                 buttonX + buttonWidth / 2,

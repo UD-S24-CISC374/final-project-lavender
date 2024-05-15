@@ -81,23 +81,19 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image("banana", "assets/img/dishes/ingredients/banana.png");
         this.load.image(
             "blueberry",
-            "assets/img/dishes/ingredients/blueberry_4.png"
+            "assets/img/dishes/ingredients/blueberry.png"
         );
-
-        //cursor
-        this.load.image("arrow", "assets/img/title_assets/arrow.png");
 
         this.load.image("bread", "assets/img/dishes/ingredients/bread.png");
         this.load.image("butter", "assets/img/dishes/ingredients/butter.png");
         this.load.image("eggs", "assets/img/dishes/ingredients/egg.png");
-        this.load.image("milk", "assets/img/dishes/ingredients/mulk.png");
+        this.load.image("milk", "assets/img/dishes/ingredients/milk.png");
 
         //Additional Images
         this.load.image("tomato", "assets/img/Tomato.png");
         this.load.image("kitchen1", "assets/img/cartoon-kitchen.jpg");
         this.load.image("kitchen2", "assets/img/restaurant_oven.jpg");
-        this.load.image("tomato", "assets/img/Tomato.png");
-        this.load.image("soup", "assets/img/tomato-soup.png");
+      
         //Dish preload
         this.load.image("BA", "assets/img/dishes/Baked_Banana.png"); //baked banana
         this.load.image("BR_EG", "assets/img/dishes/Egg_Sandwich.png"); //egg sandwich
