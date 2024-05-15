@@ -8,8 +8,8 @@ Lavender
 
 # Developers
 
-* Joshua Taing (jsmtaing@udel.edu)
-* Joanna Crisomia (email)
+-   Joshua Taing (jsmtaing@udel.edu)
+-   Joanna Crisomia (email)
 
 # Blurb
 
@@ -21,7 +21,7 @@ Use the mouse and the LMB to navigate through the menus. Once in-game, use WASD 
 
 # Screenshot
 
-TEXT GOES HERE
+<img src="docs\large.png" width="800">
 
 # Gameplay Video
 
@@ -33,5 +33,5 @@ Link to our [egdd](https://ud-s24-cisc374.github.io/final-project-lavender/docs/
 
 # Credits
 
-- Tilesets: https://limezu.itch.io/
-- Some Cooking Assets: https://hello-erika.itch.io/
+-   Tilesets: https://limezu.itch.io/
+-   Some Cooking Assets: https://hello-erika.itch.io/
