@@ -1,7 +1,7 @@
 {
-    "name": "final-project",
+    "name": "Schedulesine",
     "version": "4.0.0",
-    "description": "Phaser 3 Final Project",
+    "description": "Phaser 3 Final Project: Cooking-genre phaser game for learning scheduling algorithms.",
     "homepage": "https://github.com/UD-S24-CISC374/final-project-template#readme",
     "main": "index.js",
     "scripts": {
@@ -21,11 +21,11 @@
         "html5 game",
         "TypeScript",
         "webpack",
-        "starter"
+        "Overcooked"
     ],
     "author": {
-        "name": "Austin Cory Bart",
-        "url": "https://github.com/acbart"
+        "name": "Joshua Taing & Joanna Crisomia",
+        "url": "https://github.com/jsmtaing & https://github.com/Joan-cris"
     },
     "repository": {
         "type": "git",
