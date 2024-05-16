@@ -257,6 +257,53 @@ export default class day1 extends Phaser.Scene {
             this.heldItem?.setPosition(this.player.x, this.player.y - 50);
         }
     }
+    generateMoreOrders() {
+        let x = 980;
+        let y = 144;
+        if (this.orders_cnt <= 0) {
+            //Add new orders.
+            for (let i = 0; i < 3; i++) {
+                this.orderses.push(
+                    new Orders({
+                        scene: this,
+                        x: x,
+                        y: y,
+                        num_order: i,
+                    })
+                );
+                y += 96;
+            }
+            //Recreate collisions.
+            this.orderses.forEach((orders) => {
+                this.physics.add.overlap(
+                    this.player_arms,
+                    orders,
+                    (playerArms) => {
+                        (playerArms as Player_Arms).ordersOverlap = true;
+                        (orders as Orders).ordersTouched = true;
+                    },
+                    (playerArms) => {
+                        return !(playerArms as Player_Arms).ordersOverlap;
+                    },
+                    this
+                );
+            });
+            this.orders_cnt = 3;
+        }
+    }
+    orderAlgo(strategy: number) {
+        // Check which order strategy is being used
+        if (strategy === 0) {
+            // Sort orders based on order number in ascending order
+            this.orderses.sort((a, b) => a.num_order - b.num_order);
+        } else if (strategy === 1) {
+            // Sort orders based on the number of ingredients in ascending order
+            this.orderses.sort((a, b) => a.num_ingredients - b.num_ingredients);
+        } else if (strategy === 2) {
+            // Sort orders based on price in ascending order
+            this.orderses.sort((a, b) => a.price_dec - b.price_dec);
+        }
+    }
     interactWithStove() {
         if (
             this.input.mousePointer.leftButtonDown() &&
@@ -323,51 +370,40 @@ export default class day1 extends Phaser.Scene {
             this.popup.setVisible(false);
         }
     }
-    generateMoreOrders() {
-        let x = 980;
-        let y = 144;
-        if (this.orders_cnt <= 0) {
-            //Add new orders.
-            for (let i = 0; i < 3; i++) {
-                this.orderses.push(
-                    new Orders({
-                        scene: this,
-                        x: x,
-                        y: y,
-                        num_order: i,
-                    })
-                );
-                y += 96;
+    interactWithConveyor() {
+        // Check if overlapping with conveyor and holding an item
+        this.orderAlgo(1);
+        if (
+            this.player_arms.conveyorOverlap &&
+            this.player_arms.hasItem &&
+            this.heldItem &&
+            this.input.mousePointer.leftButtonDown()
+        ) {
+            // Check if the held item matches any orders
+            const matchingOrderIndex = this.orderses.findIndex(
+                (order) => order.dish_texture === this.heldItem?.name
+            );
+
+            if (matchingOrderIndex !== -1) {
+                const matchingOrder = this.orderses[matchingOrderIndex];
+                // Check if the matched order is the first one based on the current strategy
+                if (matchingOrderIndex === 0) {
+                    // Delete the order and the held item
+                    console.log("Matching Order Found:", matchingOrder);
+                    matchingOrder.destroy();
+                    this.heldItem.destroy();
+                    this.heldItem = null;
+                    this.player_arms.hasItem = false;
+                    this.orderses.splice(matchingOrderIndex, 1); // Remove the order from the array
+
+                    // Increment the result (assuming you want to increment something)
+                    this.result.money_made += matchingOrder.price_dec;
+                    this.result.dishes_made++;
+                    this.orders_cnt--;
+                    this.orderAlgo(1);
+                }
             }
-            //Recreate collisions.
-            this.orderses.forEach((orders) => {
-                this.physics.add.overlap(
-                    this.player_arms,
-                    orders,
-                    (playerArms) => {
-                        (playerArms as Player_Arms).ordersOverlap = true;
-                        (orders as Orders).ordersTouched = true;
-                    },
-                    (playerArms) => {
-                        return !(playerArms as Player_Arms).ordersOverlap;
-                    },
-                    this
-                );
-            });
-            this.orders_cnt = 3;
-        }
-    }
-    orderAlgo(strategy: number) {
-        // Check which order strategy is being used
-        if (strategy === 0) {
-            // Sort orders based on order number in ascending order
-            this.orderses.sort((a, b) => a.num_order - b.num_order);
-        } else if (strategy === 1) {
-            // Sort orders based on the number of ingredients in ascending order
-            this.orderses.sort((a, b) => a.num_ingredients - b.num_ingredients);
-        } else if (strategy === 2) {
-            // Sort orders based on price in ascending order
-            this.orderses.sort((a, b) => a.price_dec - b.price_dec);
+            this.orderAlgo(1);
         }
     }
 
@@ -386,6 +422,11 @@ export default class day1 extends Phaser.Scene {
 
         //Left mouse button is down
         const leftButtonDown = this.input.mousePointer.leftButtonDown();
+
+        //Check if player interacts with conveyor.
+        this.orderAlgo(1);
+        this.interactWithConveyor();
+        this.orderAlgo(1);
 
         //Player is not holding an item.
         if (!this.player_arms.hasItem) {
