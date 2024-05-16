@@ -25,6 +25,7 @@ export default class day1 extends Phaser.Scene {
     private popup: Phaser.GameObjects.Container;
 
     //Variables concerning other game objects.
+    private strategy: number;
     private stove: Stove;
     private conveyor: Conveyor;
     private itemGroup?: Phaser.Physics.Arcade.Group;
@@ -53,21 +54,22 @@ export default class day1 extends Phaser.Scene {
     create() {
         //Sets result score.
         this.result = RESULT_DEFAULT;
+
+        //Sets strategy (0 is FIFO, 1 is SJN, 2 is PRIORITY)
+        this.strategy = 1;
+
         //Creates conveyor object
         this.conveyor = new Conveyor({
             scene: this,
             x: this.cameras.main.displayWidth / 2,
             y: 96,
         });
-        this.conveyor.createAnims();
         //Creates stove object.
         this.stove = new Stove({
             scene: this,
             x: this.cameras.main.displayWidth / 2,
             y: this.cameras.main.displayHeight / 2 + 48,
         });
-        this.stove.createAnims();
-
         //Create initial orders objects.
         let x = 980;
         let y = 144;
@@ -109,6 +111,10 @@ export default class day1 extends Phaser.Scene {
             x: this.player.x,
             y: this.player.y,
         });
+
+        //Create Animations
+        this.conveyor.createAnims();
+        this.stove.createAnims();
         this.player.createAnims();
         this.player_arms.createAnims();
 
@@ -300,8 +306,8 @@ export default class day1 extends Phaser.Scene {
             // Sort orders based on the number of ingredients in ascending order
             this.orderses.sort((a, b) => a.num_ingredients - b.num_ingredients);
         } else if (strategy === 2) {
-            // Sort orders based on price in ascending order
-            this.orderses.sort((a, b) => a.price_dec - b.price_dec);
+            // Sort orders based on price in descending order. (Higher price, higher priority)
+            this.orderses.sort((a, b) => b.price_dec - a.price_dec);
         }
     }
     interactWithStove() {
@@ -310,10 +316,23 @@ export default class day1 extends Phaser.Scene {
             this.player_arms.stoveOverlap &&
             this.stove.inStove.length > 0 &&
             !this.mouseClicked &&
-            !this.heldItem
+            !this.heldItem &&
+            !this.stove.isCooking
         ) {
-            this.itemGroup?.add(this.stove.makeDish());
-            this.result.dishes_made++;
+            //Play stove animation.
+            this.stove.anims.play("on");
+            this.stove.isCooking = true;
+
+            // Add a delay before making the dish
+            setTimeout(() => {
+                // Make the dish
+                this.itemGroup?.add(this.stove.makeDish());
+                this.result.dishes_made++;
+
+                // Stop the stove animation after making the dish
+                this.stove.anims.play("off");
+                this.stove.isCooking = false;
+            }, 1000); //1000 = 1 second
         }
     }
     interactWithCrates() {
@@ -348,23 +367,6 @@ export default class day1 extends Phaser.Scene {
             });
             if (touchedOrder) {
                 Orders.showOrderInfo(this, this.popup, touchedOrder);
-                // if (
-                //     this.input.mousePointer.leftButtonDown() &&
-                //     this.heldItem &&
-                //     typeof this.heldItem.name === "string" && // Check if name is a string
-                //     typeof touchedOrder.dish_texture === "string" && // Check if dish_texture
-                //     !this.mouseClicked
-                // ) {
-                //     if (this.heldItem.name === touchedOrder.dish_texture) {
-                //         touchedOrder.destroy();
-                //         this.heldItem.destroy();
-                //         this.heldItem = null;
-                //         this.player_arms.hasItem = false;
-                //         this.mouseClicked = true;
-                //         this.result.money_made += 0.25;
-                //         this.orders_cnt--;
-                //     }
-                // }
             }
         } else {
             this.popup.setVisible(false);
@@ -372,7 +374,7 @@ export default class day1 extends Phaser.Scene {
     }
     interactWithConveyor() {
         // Check if overlapping with conveyor and holding an item
-        this.orderAlgo(1);
+        this.orderAlgo(this.strategy);
         if (
             this.player_arms.conveyorOverlap &&
             this.player_arms.hasItem &&
@@ -389,7 +391,6 @@ export default class day1 extends Phaser.Scene {
                 // Check if the matched order is the first one based on the current strategy
                 if (matchingOrderIndex === 0) {
                     // Delete the order and the held item
-                    console.log("Matching Order Found:", matchingOrder);
                     matchingOrder.destroy();
                     this.heldItem.destroy();
                     this.heldItem = null;
@@ -400,10 +401,19 @@ export default class day1 extends Phaser.Scene {
                     this.result.money_made += matchingOrder.price_dec;
                     this.result.dishes_made++;
                     this.orders_cnt--;
-                    this.orderAlgo(1);
+                } else {
+                    //Say that it was completed in wrong order.
+                    this.heldItem.destroy();
+                    this.heldItem = null;
+                    this.player_arms.hasItem = false;
                 }
+            } else {
+                //Delete object if doesn't match.
+                this.heldItem.destroy();
+                this.heldItem = null;
+                this.player_arms.hasItem = false;
             }
-            this.orderAlgo(1);
+            this.orderAlgo(this.strategy);
         }
     }
 
@@ -424,9 +434,7 @@ export default class day1 extends Phaser.Scene {
         const leftButtonDown = this.input.mousePointer.leftButtonDown();
 
         //Check if player interacts with conveyor.
-        this.orderAlgo(1);
         this.interactWithConveyor();
-        this.orderAlgo(1);
 
         //Player is not holding an item.
         if (!this.player_arms.hasItem) {
