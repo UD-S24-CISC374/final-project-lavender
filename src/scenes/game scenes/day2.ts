@@ -30,14 +30,15 @@ export default class day1 extends Phaser.Scene {
     private itemGroup?: Phaser.Physics.Arcade.Group;
     private heldItem: Ingredient | null | undefined;
     private orderses: Orders[] = [];
+    private orders_cnt: number;
     private crates: Crate[] = [];
     private cratePositions = [
-        { x: 144, y: 140, ingredient: "BA" },
-        { x: 144, y: 210, ingredient: "BL" },
-        { x: 144, y: 280, ingredient: "BR" },
-        { x: 144, y: 350, ingredient: "BU" },
-        { x: 144, y: 420, ingredient: "EG" },
-        { x: 144, y: 490, ingredient: "MI" },
+        { x: 192, y: 132, ingredient: "BA" },
+        { x: 192, y: 216, ingredient: "BL" },
+        { x: 192, y: 300, ingredient: "BR" },
+        { x: 192, y: 384, ingredient: "BU" },
+        { x: 192, y: 468, ingredient: "EG" },
+        { x: 192, y: 552, ingredient: "MI" },
     ];
 
     constructor() {
@@ -62,10 +63,11 @@ export default class day1 extends Phaser.Scene {
         //Creates stove object.
         this.stove = new Stove({
             scene: this,
-            x: this.cameras.main.displayWidth / 2 - 40,
-            y: this.cameras.main.displayHeight / 2 + 20,
+            x: this.cameras.main.displayWidth / 2,
+            y: this.cameras.main.displayHeight / 2 + 48,
         });
         this.stove.createAnims();
+
         //Create initial orders objects.
         let x = 980;
         let y = 144;
@@ -80,6 +82,7 @@ export default class day1 extends Phaser.Scene {
             );
             y += 96;
         }
+        this.orders_cnt = 3;
         //Create crates
         this.cratePositions.forEach((position) => {
             this.crates.push(
@@ -164,6 +167,18 @@ export default class day1 extends Phaser.Scene {
                 this
             );
         });
+        //Add overlap between player_arms and conveyor.
+        this.physics.add.overlap(
+            this.player_arms,
+            this.conveyor,
+            (playerArms) => {
+                (playerArms as Player_Arms).conveyorOverlap = true;
+            },
+            (playerArms) => {
+                return !(playerArms as Player_Arms).conveyorOverlap;
+            },
+            this
+        );
 
         //Creates tile and map.
         const map = this.make.tilemap({ key: "map_revamp" });
@@ -217,6 +232,7 @@ export default class day1 extends Phaser.Scene {
         this.player_arms.overlapping = false;
         this.player_arms.stoveOverlap = false;
         this.player_arms.crateOverlap = false;
+        this.player_arms.conveyorOverlap = false;
         if (!this.input.mousePointer.leftButtonDown()) {
             this.mouseClicked = false;
         }
@@ -285,26 +301,73 @@ export default class day1 extends Phaser.Scene {
             });
             if (touchedOrder) {
                 Orders.showOrderInfo(this, this.popup, touchedOrder);
-
-                if (
-                    this.input.mousePointer.leftButtonDown() &&
-                    this.heldItem &&
-                    typeof this.heldItem.name === "string" && // Check if name is a string
-                    typeof touchedOrder.dish_texture === "string" && // Check if dish_texture
-                    !this.mouseClicked
-                ) {
-                    if (this.heldItem.name === touchedOrder.dish_texture) {
-                        touchedOrder.destroy();
-                        this.heldItem.destroy();
-                        this.heldItem = null;
-                        this.player_arms.hasItem = false;
-                        this.mouseClicked = true;
-                        this.result.money_made += 0.25;
-                    }
-                }
+                // if (
+                //     this.input.mousePointer.leftButtonDown() &&
+                //     this.heldItem &&
+                //     typeof this.heldItem.name === "string" && // Check if name is a string
+                //     typeof touchedOrder.dish_texture === "string" && // Check if dish_texture
+                //     !this.mouseClicked
+                // ) {
+                //     if (this.heldItem.name === touchedOrder.dish_texture) {
+                //         touchedOrder.destroy();
+                //         this.heldItem.destroy();
+                //         this.heldItem = null;
+                //         this.player_arms.hasItem = false;
+                //         this.mouseClicked = true;
+                //         this.result.money_made += 0.25;
+                //         this.orders_cnt--;
+                //     }
+                // }
             }
         } else {
             this.popup.setVisible(false);
+        }
+    }
+    generateMoreOrders() {
+        let x = 980;
+        let y = 144;
+        if (this.orders_cnt <= 0) {
+            //Add new orders.
+            for (let i = 0; i < 3; i++) {
+                this.orderses.push(
+                    new Orders({
+                        scene: this,
+                        x: x,
+                        y: y,
+                        num_order: i,
+                    })
+                );
+                y += 96;
+            }
+            //Recreate collisions.
+            this.orderses.forEach((orders) => {
+                this.physics.add.overlap(
+                    this.player_arms,
+                    orders,
+                    (playerArms) => {
+                        (playerArms as Player_Arms).ordersOverlap = true;
+                        (orders as Orders).ordersTouched = true;
+                    },
+                    (playerArms) => {
+                        return !(playerArms as Player_Arms).ordersOverlap;
+                    },
+                    this
+                );
+            });
+            this.orders_cnt = 3;
+        }
+    }
+    orderAlgo(strategy: number) {
+        // Check which order strategy is being used
+        if (strategy === 0) {
+            // Sort orders based on order number in ascending order
+            this.orderses.sort((a, b) => a.num_order - b.num_order);
+        } else if (strategy === 1) {
+            // Sort orders based on the number of ingredients in ascending order
+            this.orderses.sort((a, b) => a.num_ingredients - b.num_ingredients);
+        } else if (strategy === 2) {
+            // Sort orders based on price in ascending order
+            this.orderses.sort((a, b) => a.price_dec - b.price_dec);
         }
     }
 
@@ -323,6 +386,7 @@ export default class day1 extends Phaser.Scene {
 
         //Left mouse button is down
         const leftButtonDown = this.input.mousePointer.leftButtonDown();
+
         //Player is not holding an item.
         if (!this.player_arms.hasItem) {
             if (
@@ -350,7 +414,6 @@ export default class day1 extends Phaser.Scene {
                 !this.mouseClicked
             ) {
                 //Disable rendering of item, put in stove, prevent from being able to be interacted with.
-                this.heldItem.setPosition(3000, 3000); //send item offscreen for now, will delete later
                 this.stove.insertItem(this.heldItem);
                 this.heldItem.disableBody(true, true);
                 //Clear referenced item, set hasItem to false.
@@ -370,6 +433,7 @@ export default class day1 extends Phaser.Scene {
         }
         //Reset booleans
         this.conveyor.anims.play("run", true);
+        this.generateMoreOrders();
         this.resetAll();
     }
 }

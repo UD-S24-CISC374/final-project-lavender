@@ -1,5 +1,4 @@
 import Phaser from "phaser";
-import { Orders } from "./orders";
 
 interface ConProps {
     scene: Phaser.Scene;
@@ -25,39 +24,5 @@ export class Conveyor extends Phaser.Physics.Arcade.Sprite {
             frameRate: 24,
             repeat: -1,
         });
-    }
-    static orderAlgo(
-        strategy: number,
-        orders: Array<Orders>,
-        order_count: number
-    ) {
-        //Strat. number determines which algorithm is being used.
-        //Generate algorithms.
-        //0 = FIFO, 1 = SJN, 2 = Priority (money)
-        if (strategy == 0) {
-            if (order_count == 3) {
-                //
-            } else if (order_count == 2) {
-                //
-            } else if (order_count == 1) {
-                //
-            }
-        } else if (strategy == 1) {
-            if (order_count == 3) {
-                //
-            } else if (order_count == 2) {
-                //
-            } else if (order_count == 1) {
-                //
-            }
-        } else if (strategy == 2) {
-            if (order_count == 3) {
-                //
-            } else if (order_count == 2) {
-                //
-            } else if (order_count == 1) {
-                //
-            }
-        }
     }
 }
