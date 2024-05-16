@@ -12,11 +12,13 @@ interface StoveProps {
 export class Stove extends Phaser.Physics.Arcade.Sprite {
     inStove: Array<Ingredient>;
     itemCount: number;
+    isCooking: boolean;
 
     constructor(config: StoveProps) {
         super(config.scene, config.x, config.y, "stove");
         this.inStove = [];
         this.itemCount = 0;
+        this.isCooking = false;
         config.scene.add.existing(this);
         config.scene.physics.add.existing(this, false);
     }
