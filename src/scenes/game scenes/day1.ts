@@ -43,7 +43,7 @@ export default class Day_1 extends Phaser.Scene {
     ];
 
     constructor() {
-        super({ key: "Day_2" });
+        super({ key: "Day_1" });
         this.result = RESULT_DEFAULT;
     }
 
