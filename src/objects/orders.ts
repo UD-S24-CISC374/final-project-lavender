@@ -17,7 +17,10 @@ export class Orders extends Phaser.Physics.Arcade.Image {
     // - parts: Array<Ingredient>;
 
     name: string;
+    num_order: number;
+    num_ingredients: number;
     price: string;
+    price_dec: number;
     parts: string;
     dish_texture: string;
     dish_name: string;
@@ -26,8 +29,9 @@ export class Orders extends Phaser.Physics.Arcade.Image {
     constructor(config: OrdersProps) {
         super(config.scene, config.x, config.y, "order");
         this.name = "Order #" + (config.num_order + 1);
+        this.price = this.generateRandPrice(1, 20);
         this.generateRandDish();
-        this.price = this.generateRandPrice(1, 100);
+        this.num_order = config.num_order + 1;
         this.ordersTouched = false;
 
         config.scene.add.existing(this);
@@ -43,6 +47,7 @@ export class Orders extends Phaser.Physics.Arcade.Image {
         const cents = Math.floor(Math.random() * 100);
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const price = dollar + cents / 100;
+        this.price_dec = price;
         return "$" + price.toFixed(2);
     }
 
@@ -58,21 +63,26 @@ export class Orders extends Phaser.Physics.Arcade.Image {
         ];
         this.dish_texture = textArrar[randNum];
         if (randNum == 0) {
-            this.dish_name = "Baked Banana";
+            this.dish_name = "Baked Banana\n" + this.price;
             this.parts = "• Banana";
+            this.num_ingredients = 1;
         } else if (randNum == 1) {
-            this.dish_name = "Egg Sandwich";
+            this.dish_name = "Egg Sandwich\n" + this.price;
             this.parts = "• Egg\n• Bread";
+            this.num_ingredients = 2;
         } else if (randNum == 2) {
-            this.dish_name = "Fruit Smoothie";
+            this.dish_name = "Fruit Smoothie\n" + this.price;
             this.parts = "• Banana       • Milk\n• Blueberry";
+            this.num_ingredients = 3;
         } else if (randNum == 3) {
-            this.dish_name = "Banana Bread";
+            this.dish_name = "Banana Bread\n" + this.price;
             this.parts = "• Banana       • Bread\n• Butter       • Egg";
+            this.num_ingredients = 4;
         } else if (randNum == 4) {
-            this.dish_name = "Blueberry French Toast";
+            this.dish_name = "Blueberry French Toast\n" + this.price;
             this.parts =
                 "• Blueberries\n• Bread       • Butter\n• Eggs         • Milk";
+            this.num_ingredients = 5;
         }
     }
 
@@ -138,9 +148,4 @@ export class Orders extends Phaser.Physics.Arcade.Image {
         container.setPosition(x, y);
         container.setVisible(true);
     }
-
-    //static orderAlgo(strategy: number) {
-    //    //Strat. number determines which algorithm is being used.
-    //    //0 = FIFO, 1 = SJN, 2 = Priority (money)
-    //}
 }

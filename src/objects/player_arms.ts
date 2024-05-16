@@ -12,6 +12,7 @@ export class Player_Arms extends Phaser.Physics.Arcade.Sprite {
     stoveOverlap: boolean;
     crateOverlap: boolean;
     ordersOverlap: boolean;
+    conveyorOverlap: boolean;
 
     constructor(config: ArmsProps) {
         super(config.scene, config.x, config.y, "chef_arms");
@@ -20,6 +21,7 @@ export class Player_Arms extends Phaser.Physics.Arcade.Sprite {
         this.stoveOverlap = false;
         this.crateOverlap = false;
         this.ordersOverlap = false;
+        this.conveyorOverlap = false;
         config.scene.add.existing(this);
         config.scene.physics.add.existing(this, false);
         this.setCollideWorldBounds(true);
