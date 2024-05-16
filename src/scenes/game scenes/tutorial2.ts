@@ -7,12 +7,11 @@ import { Ingredient } from "../../objects/dish_ing";
 import { Crate } from "../../objects/crate";
 import { Stove } from "../../objects/stove";
 import { Orders } from "../../objects/orders";
+import { Conveyor } from "../../objects/conveyor";
 
-export type Collidable =
-    | Phaser.Types.Physics.Arcade.GameObjectWithBody
-    | Phaser.Tilemaps.Tile;
-
+//Price Priority (First in First Out)
 export default class Tutorial2 extends Phaser.Scene {
+    //Variable that holds the score.
     private result: Result;
 
     //Variables concerning input or the player.
@@ -20,26 +19,27 @@ export default class Tutorial2 extends Phaser.Scene {
     private player: Player;
     private player_arms: Player_Arms;
     private cursors: Phaser.Input.Keyboard.KeyboardPlugin | null;
+    private continueButton: Phaser.GameObjects.Text;
 
     //Variables concerning popups, and informationals.
     private popup: Phaser.GameObjects.Container;
-    private infoTextBackground: Phaser.GameObjects.Graphics;
-    private infoText: Phaser.GameObjects.Text;
-    private continueButton: Phaser.GameObjects.Text;
 
     //Variables concerning other game objects.
+    private strategy: number;
     private stove: Stove;
+    private conveyor: Conveyor;
     private itemGroup?: Phaser.Physics.Arcade.Group;
     private heldItem: Ingredient | null | undefined;
     private orderses: Orders[] = [];
+    private orders_cnt: number;
     private crates: Crate[] = [];
     private cratePositions = [
-        { x: 80, y: 140, ingredient: "BA" },
-        { x: 80, y: 210, ingredient: "BL" },
-        { x: 80, y: 280, ingredient: "BR" },
-        { x: 80, y: 350, ingredient: "BU" },
-        { x: 80, y: 420, ingredient: "EG" },
-        { x: 80, y: 490, ingredient: "MI" },
+        { x: 192, y: 132, ingredient: "BA" },
+        { x: 192, y: 216, ingredient: "BL" },
+        { x: 192, y: 300, ingredient: "BR" },
+        { x: 192, y: 384, ingredient: "BU" },
+        { x: 192, y: 468, ingredient: "EG" },
+        { x: 192, y: 552, ingredient: "MI" },
     ];
 
     constructor() {
@@ -54,15 +54,24 @@ export default class Tutorial2 extends Phaser.Scene {
     create() {
         //Sets result score.
         this.result = RESULT_DEFAULT;
+
+        //Sets strategy (0 is FIFO, 1 is SJN, 2 is PRIORITY)
+        this.strategy = 2;
+
+        //Creates conveyor object
+        this.conveyor = new Conveyor({
+            scene: this,
+            x: this.cameras.main.displayWidth / 2,
+            y: 96,
+        });
         //Creates stove object.
         this.stove = new Stove({
             scene: this,
-            x: this.cameras.main.displayWidth / 2 - 40,
-            y: this.cameras.main.displayHeight / 2 + 20,
+            x: this.cameras.main.displayWidth / 2,
+            y: this.cameras.main.displayHeight / 2 + 48,
         });
-        this.stove.createAnims();
         //Create initial orders objects.
-        let x = 792;
+        let x = 980;
         let y = 144;
         for (let i = 0; i < 3; i++) {
             this.orderses.push(
@@ -75,6 +84,7 @@ export default class Tutorial2 extends Phaser.Scene {
             );
             y += 96;
         }
+        this.orders_cnt = 3;
         //Create crates
         this.cratePositions.forEach((position) => {
             this.crates.push(
@@ -83,7 +93,7 @@ export default class Tutorial2 extends Phaser.Scene {
                     x: position.x,
                     y: position.y,
                     ingredient: position.ingredient,
-                })
+                }).setScale(1.2)
             );
         });
         //Create itemgroup
@@ -101,6 +111,10 @@ export default class Tutorial2 extends Phaser.Scene {
             x: this.player.x,
             y: this.player.y,
         });
+
+        //Create Animations
+        this.conveyor.createAnims();
+        this.stove.createAnims();
         this.player.createAnims();
         this.player_arms.createAnims();
 
@@ -159,36 +173,60 @@ export default class Tutorial2 extends Phaser.Scene {
                 this
             );
         });
+        //Add overlap between player_arms and conveyor.
+        this.physics.add.overlap(
+            this.player_arms,
+            this.conveyor,
+            (playerArms) => {
+                (playerArms as Player_Arms).conveyorOverlap = true;
+            },
+            (playerArms) => {
+                return !(playerArms as Player_Arms).conveyorOverlap;
+            },
+            this
+        );
 
         //Creates tile and map.
-        const map = this.make.tilemap({ key: "map_d" });
+        const map = this.make.tilemap({ key: "map_revamp" });
         const tileset = map.addTilesetImage("Room_Builder_48x48", "tiles");
-        const tileset_2 = map.addTilesetImage("Interiors_48x48", "i_tiles");
+        const tileset_2 = map.addTilesetImage("Generic_48x48", "g_tiles");
         if (tileset && tileset_2) {
             //Tile Parameters
-            const floorLayer = map.createLayer("Floor", tileset, 0, 0);
-            const obj1Layer = map.createLayer("Objects_Below", tileset_2, 0, 0);
-            const wallLayer = map.createLayer("Walls", tileset, 0, 0);
+            const fwLayer = map.createLayer("Floor & Walls", tileset, 0, 0);
+            const bdLayer = map.createLayer("Border", tileset, 0, 0);
+            const hlLayer = map.createLayer("Holes", tileset_2, 0, 0);
+            const tbLayer = map.createLayer("Table", tileset_2, 0, 0);
             //Set collision for tiles with collides key
-            obj1Layer?.setCollisionByProperty({ collides: true });
-            wallLayer?.setCollisionByProperty({ collides: true });
+            fwLayer?.setCollisionByProperty({ collides: true });
+            bdLayer?.setCollisionByProperty({ collides: true });
+            hlLayer?.setCollisionByProperty({ collides: true });
+            tbLayer?.setCollisionByProperty({ collides: true });
             //Set scale & depth of layers
-            floorLayer?.setScale(1);
-            floorLayer?.setDepth(-20);
-            obj1Layer?.setScale(1);
-            obj1Layer?.setDepth(-19);
-            wallLayer?.setScale(1);
-            wallLayer?.setDepth(-18);
+            fwLayer?.setScale(1);
+            fwLayer?.setDepth(-20);
+            bdLayer?.setScale(1);
+            bdLayer?.setDepth(-19);
+            hlLayer?.setScale(1);
+            hlLayer?.setDepth(-18);
+            tbLayer?.setScale(1);
+            tbLayer?.setDepth(-17);
             //Set collision
-            if (obj1Layer) {
-                this.physics.add.collider(this.player, obj1Layer);
-                this.physics.add.collider(this.player_arms, obj1Layer);
+            if (fwLayer) {
+                this.physics.add.collider(this.player, fwLayer);
+                this.physics.add.collider(this.player_arms, fwLayer);
             }
-            if (wallLayer) {
-                this.physics.add.collider(this.player, wallLayer);
-                this.physics.add.collider(this.player_arms, wallLayer);
+            if (bdLayer) {
+                this.physics.add.collider(this.player, bdLayer);
+                this.physics.add.collider(this.player_arms, bdLayer);
+            }
+            if (tbLayer) {
+                this.physics.add.collider(this.player, tbLayer);
+                this.physics.add.collider(this.player_arms, tbLayer);
             }
         }
+
+        //Initialize Popup (in orders.ts)
+        this.popup = Orders.initializePopup(this);
 
         //Initialize Popup (in orders.ts)
         this.popup = Orders.initializePopup(this);
@@ -212,7 +250,7 @@ export default class Tutorial2 extends Phaser.Scene {
             .text(
                 startX + textBoxWidth / 2,
                 startY + textBoxHeight / 2,
-                "1. Walk up to the orders in the top left\n2. Walk up to your ingredients, tap for the one you want\n3. Carry it to the pot & click to add\n4. Stand over the pot and click to get your final order\n5. Bring it to the reciept!",
+                "1. Walk up to the orders in the top right.\n2. Walk up to your ingredients, tap for the one you want\n3. Carry it to the pot & click to add.\n4. Stand over the pot and click to get your final order\n5. Bring it to the conveyor to turn in!",
                 {
                     font: "21px Bangers",
                     color: "#000000",
@@ -290,6 +328,7 @@ export default class Tutorial2 extends Phaser.Scene {
         this.player_arms.overlapping = false;
         this.player_arms.stoveOverlap = false;
         this.player_arms.crateOverlap = false;
+        this.player_arms.conveyorOverlap = false;
         if (!this.input.mousePointer.leftButtonDown()) {
             this.mouseClicked = false;
         }
@@ -314,16 +353,76 @@ export default class Tutorial2 extends Phaser.Scene {
             this.heldItem?.setPosition(this.player.x, this.player.y - 50);
         }
     }
+    generateMoreOrders() {
+        let x = 980;
+        let y = 144;
+        if (this.orders_cnt <= 0) {
+            //Add new orders.
+            for (let i = 0; i < 3; i++) {
+                this.orderses.push(
+                    new Orders({
+                        scene: this,
+                        x: x,
+                        y: y,
+                        num_order: i,
+                    })
+                );
+                y += 96;
+            }
+            //Recreate collisions.
+            this.orderses.forEach((orders) => {
+                this.physics.add.overlap(
+                    this.player_arms,
+                    orders,
+                    (playerArms) => {
+                        (playerArms as Player_Arms).ordersOverlap = true;
+                        (orders as Orders).ordersTouched = true;
+                    },
+                    (playerArms) => {
+                        return !(playerArms as Player_Arms).ordersOverlap;
+                    },
+                    this
+                );
+            });
+            this.orders_cnt = 3;
+        }
+    }
+    orderAlgo(strategy: number) {
+        // Check which order strategy is being used
+        if (strategy === 0) {
+            // Sort orders based on order number in ascending order
+            this.orderses.sort((a, b) => a.num_order - b.num_order);
+        } else if (strategy === 1) {
+            // Sort orders based on the number of ingredients in ascending order
+            this.orderses.sort((a, b) => a.num_ingredients - b.num_ingredients);
+        } else if (strategy === 2) {
+            // Sort orders based on price in descending order. (Higher price, higher priority)
+            this.orderses.sort((a, b) => b.price_dec - a.price_dec);
+        }
+    }
     interactWithStove() {
         if (
             this.input.mousePointer.leftButtonDown() &&
             this.player_arms.stoveOverlap &&
             this.stove.inStove.length > 0 &&
             !this.mouseClicked &&
-            !this.heldItem
+            !this.heldItem &&
+            !this.stove.isCooking
         ) {
-            this.itemGroup?.add(this.stove.makeDish());
-            this.result.dishes_made++;
+            //Play stove animation.
+            this.stove.anims.play("on");
+            this.stove.isCooking = true;
+
+            // Add a delay before making the dish
+            setTimeout(() => {
+                // Make the dish
+                this.itemGroup?.add(this.stove.makeDish());
+                this.result.dishes_made++;
+
+                // Stop the stove animation after making the dish
+                this.stove.anims.play("off");
+                this.stove.isCooking = false;
+            }, 1000); //1000 = 1 second
         }
     }
     interactWithCrates() {
@@ -358,26 +457,53 @@ export default class Tutorial2 extends Phaser.Scene {
             });
             if (touchedOrder) {
                 Orders.showOrderInfo(this, this.popup, touchedOrder);
-
-                if (
-                    this.input.mousePointer.leftButtonDown() &&
-                    this.heldItem &&
-                    typeof this.heldItem.name === "string" && // Check if name is a string
-                    typeof touchedOrder.dish_texture === "string" && // Check if dish_texture
-                    !this.mouseClicked
-                ) {
-                    if (this.heldItem.name === touchedOrder.dish_texture) {
-                        touchedOrder.destroy();
-                        this.heldItem.destroy();
-                        this.heldItem = null;
-                        this.player_arms.hasItem = false;
-                        this.mouseClicked = true;
-                        this.result.money_made += 0.25;
-                    }
-                }
             }
         } else {
             this.popup.setVisible(false);
+        }
+    }
+    interactWithConveyor() {
+        // Check if overlapping with conveyor and holding an item
+        this.orderAlgo(this.strategy);
+        if (
+            this.player_arms.conveyorOverlap &&
+            this.player_arms.hasItem &&
+            this.heldItem &&
+            this.input.mousePointer.leftButtonDown()
+        ) {
+            // Check if the held item matches any orders
+            const matchingOrderIndex = this.orderses.findIndex(
+                (order) => order.dish_texture === this.heldItem?.name
+            );
+
+            if (matchingOrderIndex !== -1) {
+                const matchingOrder = this.orderses[matchingOrderIndex];
+                // Check if the matched order is the first one based on the current strategy
+                if (matchingOrderIndex === 0) {
+                    // Delete the order and the held item
+                    matchingOrder.destroy();
+                    this.heldItem.destroy();
+                    this.heldItem = null;
+                    this.player_arms.hasItem = false;
+                    this.orderses.splice(matchingOrderIndex, 1); // Remove the order from the array
+
+                    // Increment the result (assuming you want to increment something)
+                    this.result.money_made += matchingOrder.price_dec;
+                    this.result.dishes_made++;
+                    this.orders_cnt--;
+                } else {
+                    //Say that it was completed in wrong order.
+                    this.heldItem.destroy();
+                    this.heldItem = null;
+                    this.player_arms.hasItem = false;
+                }
+            } else {
+                //Delete object if doesn't match.
+                this.heldItem.destroy();
+                this.heldItem = null;
+                this.player_arms.hasItem = false;
+            }
+            this.orderAlgo(this.strategy);
         }
     }
 
@@ -396,6 +522,10 @@ export default class Tutorial2 extends Phaser.Scene {
 
         //Left mouse button is down
         const leftButtonDown = this.input.mousePointer.leftButtonDown();
+
+        //Check if player interacts with conveyor.
+        this.interactWithConveyor();
+
         //Player is not holding an item.
         if (!this.player_arms.hasItem) {
             if (
@@ -423,7 +553,6 @@ export default class Tutorial2 extends Phaser.Scene {
                 !this.mouseClicked
             ) {
                 //Disable rendering of item, put in stove, prevent from being able to be interacted with.
-                this.heldItem.setPosition(3000, 3000); //send item offscreen for now, will delete later
                 this.stove.insertItem(this.heldItem);
                 this.heldItem.disableBody(true, true);
                 //Clear referenced item, set hasItem to false.
@@ -442,6 +571,8 @@ export default class Tutorial2 extends Phaser.Scene {
             }
         }
         //Reset booleans
+        this.conveyor.anims.play("run", true);
+        this.generateMoreOrders();
         this.resetAll();
     }
 }
