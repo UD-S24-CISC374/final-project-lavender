@@ -11,7 +11,7 @@ import { Orders } from "../../objects/orders";
 import { Conveyor } from "../../objects/conveyor";
 
 //SJN (Shortest Job Next)
-export default class day1 extends Phaser.Scene {
+export default class Day_2 extends Phaser.Scene {
     //Variable that holds the score.
     private result: Result;
 
@@ -231,6 +231,34 @@ export default class day1 extends Phaser.Scene {
         new Timer({ scene: this, x: 300, y: 60, duration: 150 }, () => {
             this.scene.start("EndScore", this.result);
         });
+
+        //Initialize instructions popup.
+        const textBoxWidth = 590; // Width of the text box
+        const textBoxHeight = 150; // Height of the text box
+        const startX = (this.cameras.main.width - textBoxWidth) / 2;
+        const startY = this.cameras.main.height - textBoxHeight - 10; // 10 pixels from the bottom
+        // Create a graphics object for the text background
+        const graphics = this.add.graphics();
+        graphics.fillStyle(0xffffff, 0.7);
+        graphics.fillRoundedRect(
+            startX,
+            startY,
+            textBoxWidth,
+            textBoxHeight,
+            15
+        ); // Rounded
+        // Add text on top of the graphics object
+        this.add
+            .text(
+                startX + textBoxWidth / 2,
+                startY + textBoxHeight / 2,
+                "Shortest Job Next: Make sure to look at the number of ingredients!\nComplete orders going from the ones with the shortest steps!",
+                {
+                    font: "17px Bangers",
+                    color: "#000000",
+                }
+            )
+            .setOrigin(0.5, 0.5); // Center text in the box
     }
 
     //Helper functions
