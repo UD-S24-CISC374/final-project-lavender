@@ -233,11 +233,11 @@ export default class Day_2 extends Phaser.Scene {
         });
 
         //Initialize instructions popup.
-        const textBoxWidth = 590; // Width of the text box
-        const textBoxHeight = 150; // Height of the text box
+        const textBoxWidth = 510; // Width of the text box
+        const textBoxHeight = 80; // Height of the text box
         const startX = (this.cameras.main.width - textBoxWidth) / 2;
         const startY = this.cameras.main.height - textBoxHeight - 10; // 10 pixels from the bottom
-        // Create a graphics object for the text background
+        
         const graphics = this.add.graphics();
         graphics.fillStyle(0xffffff, 0.7);
         graphics.fillRoundedRect(
@@ -246,7 +246,7 @@ export default class Day_2 extends Phaser.Scene {
             textBoxWidth,
             textBoxHeight,
             15
-        ); // Rounded
+        ); 
         // Add text on top of the graphics object
         this.add
             .text(
@@ -254,7 +254,7 @@ export default class Day_2 extends Phaser.Scene {
                 startY + textBoxHeight / 2,
                 "Shortest Job Next: Make sure to look at the number of ingredients!\nComplete orders going from the ones with the shortest steps!",
                 {
-                    font: "17px Bangers",
+                    font: "18px Bangers",
                     color: "#000000",
                 }
             )

@@ -233,8 +233,8 @@ export default class Day_3 extends Phaser.Scene {
         });
 
         //Initialize instructions popup.
-        const textBoxWidth = 590; // Width of the text box
-        const textBoxHeight = 150; // Height of the text box
+        const textBoxWidth = 520; // Width of the text box
+        const textBoxHeight = 80; // Height of the text box
         const startX = (this.cameras.main.width - textBoxWidth) / 2;
         const startY = this.cameras.main.height - textBoxHeight - 10; // 10 pixels from the bottom
         // Create a graphics object for the text background
@@ -252,9 +252,9 @@ export default class Day_3 extends Phaser.Scene {
             .text(
                 startX + textBoxWidth / 2,
                 startY + textBoxHeight / 2,
-                "Priority: The only thing we prioritize is price! Complete\n orders based on how much they cost, starting with what costs the most!",
+                "Priority: The only thing we prioritize is price! Complete orders based\non how much they cost, starting with what costs the most!",
                 {
-                    font: "17px Bangers",
+                    font: "18px Bangers",
                     color: "#000000",
                 }
             )

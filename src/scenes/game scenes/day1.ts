@@ -234,7 +234,7 @@ export default class Day_1 extends Phaser.Scene {
 
         //Initialize instructions popup.
         const textBoxWidth = 590; // Width of the text box
-        const textBoxHeight = 150; // Height of the text box
+        const textBoxHeight = 80; // Height of the text box
         const startX = (this.cameras.main.width - textBoxWidth) / 2;
         const startY = this.cameras.main.height - textBoxHeight - 10; // 10 pixels from the bottom
         // Create a graphics object for the text background
@@ -246,19 +246,19 @@ export default class Day_1 extends Phaser.Scene {
             textBoxWidth,
             textBoxHeight,
             15
-        ); // Rounded
+        ); 
         // Add text on top of the graphics object
         this.add
             .text(
                 startX + textBoxWidth / 2,
                 startY + textBoxHeight / 2,
-                "First Come First Serve: Make sure to look at the orders's numbers! Complete\n orders going from first to the last!",
+                "First Come First Serve: Make sure to look at the orders's numbers! Complete\norders going from first to the last!",
                 {
-                    font: "17px Bangers",
+                    font: "18px Bangers",
                     color: "#000000",
                 }
             )
-            .setOrigin(0.5, 0.5); // Center text in the box
+            .setOrigin(0.5, 0.5); 
     }
 
     //Helper functions
