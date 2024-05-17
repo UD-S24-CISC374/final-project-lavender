@@ -434,12 +434,14 @@ export default class Day_3 extends Phaser.Scene {
                     this.heldItem.destroy();
                     this.heldItem = null;
                     this.player_arms.hasItem = false;
+                    this.result.wrong_orders++;
                 }
             } else {
                 //Delete object if doesn't match.
                 this.heldItem.destroy();
                 this.heldItem = null;
                 this.player_arms.hasItem = false;
+                this.result.wrong_orders++;
             }
             this.orderAlgo(this.strategy);
         }

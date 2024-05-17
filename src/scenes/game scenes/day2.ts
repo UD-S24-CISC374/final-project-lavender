@@ -237,7 +237,7 @@ export default class Day_2 extends Phaser.Scene {
         const textBoxHeight = 80; // Height of the text box
         const startX = (this.cameras.main.width - textBoxWidth) / 2;
         const startY = this.cameras.main.height - textBoxHeight - 10; // 10 pixels from the bottom
-        
+
         const graphics = this.add.graphics();
         graphics.fillStyle(0xffffff, 0.7);
         graphics.fillRoundedRect(
@@ -246,7 +246,7 @@ export default class Day_2 extends Phaser.Scene {
             textBoxWidth,
             textBoxHeight,
             15
-        ); 
+        );
         // Add text on top of the graphics object
         this.add
             .text(
@@ -434,12 +434,14 @@ export default class Day_2 extends Phaser.Scene {
                     this.heldItem.destroy();
                     this.heldItem = null;
                     this.player_arms.hasItem = false;
+                    this.result.wrong_orders++;
                 }
             } else {
                 //Delete object if doesn't match.
                 this.heldItem.destroy();
                 this.heldItem = null;
                 this.player_arms.hasItem = false;
+                this.result.wrong_orders++;
             }
             this.orderAlgo(this.strategy);
         }

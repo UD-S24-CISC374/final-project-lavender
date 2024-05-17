@@ -246,7 +246,7 @@ export default class Day_1 extends Phaser.Scene {
             textBoxWidth,
             textBoxHeight,
             15
-        ); 
+        );
         // Add text on top of the graphics object
         this.add
             .text(
@@ -258,7 +258,7 @@ export default class Day_1 extends Phaser.Scene {
                     color: "#000000",
                 }
             )
-            .setOrigin(0.5, 0.5); 
+            .setOrigin(0.5, 0.5);
     }
 
     //Helper functions
@@ -434,12 +434,14 @@ export default class Day_1 extends Phaser.Scene {
                     this.heldItem.destroy();
                     this.heldItem = null;
                     this.player_arms.hasItem = false;
+                    this.result.wrong_orders++;
                 }
             } else {
                 //Delete object if doesn't match.
                 this.heldItem.destroy();
                 this.heldItem = null;
                 this.player_arms.hasItem = false;
+                this.result.wrong_orders++;
             }
             this.orderAlgo(this.strategy);
         }

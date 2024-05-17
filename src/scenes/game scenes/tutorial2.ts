@@ -387,19 +387,6 @@ export default class Tutorial2 extends Phaser.Scene {
             this.orders_cnt = 3;
         }
     }
-    orderAlgo(strategy: number) {
-        // Check which order strategy is being used
-        if (strategy === 0) {
-            // Sort orders based on order number in ascending order
-            this.orderses.sort((a, b) => a.num_order - b.num_order);
-        } else if (strategy === 1) {
-            // Sort orders based on the number of ingredients in ascending order
-            this.orderses.sort((a, b) => a.num_ingredients - b.num_ingredients);
-        } else if (strategy === 2) {
-            // Sort orders based on price in descending order. (Higher price, higher priority)
-            this.orderses.sort((a, b) => b.price_dec - a.price_dec);
-        }
-    }
     interactWithStove() {
         if (
             this.input.mousePointer.leftButtonDown() &&
@@ -464,7 +451,6 @@ export default class Tutorial2 extends Phaser.Scene {
     }
     interactWithConveyor() {
         // Check if overlapping with conveyor and holding an item
-        this.orderAlgo(this.strategy);
         if (
             this.player_arms.conveyorOverlap &&
             this.player_arms.hasItem &&
@@ -478,32 +464,23 @@ export default class Tutorial2 extends Phaser.Scene {
 
             if (matchingOrderIndex !== -1) {
                 const matchingOrder = this.orderses[matchingOrderIndex];
-                // Check if the matched order is the first one based on the current strategy
-                if (matchingOrderIndex === 0) {
-                    // Delete the order and the held item
-                    matchingOrder.destroy();
-                    this.heldItem.destroy();
-                    this.heldItem = null;
-                    this.player_arms.hasItem = false;
-                    this.orderses.splice(matchingOrderIndex, 1); // Remove the order from the array
+                // Delete the order and the held item
+                matchingOrder.destroy();
+                this.heldItem.destroy();
+                this.heldItem = null;
+                this.player_arms.hasItem = false;
+                this.orderses.splice(matchingOrderIndex, 1); // Remove the order from the array
 
-                    // Increment the result (assuming you want to increment something)
-                    this.result.money_made += matchingOrder.price_dec;
-                    this.result.dishes_made++;
-                    this.orders_cnt--;
-                } else {
-                    //Say that it was completed in wrong order.
-                    this.heldItem.destroy();
-                    this.heldItem = null;
-                    this.player_arms.hasItem = false;
-                }
+                // Increment the result (assuming you want to increment something)
+                this.result.money_made += matchingOrder.price_dec;
+                this.result.dishes_made++;
+                this.orders_cnt--;
             } else {
                 //Delete object if doesn't match.
                 this.heldItem.destroy();
                 this.heldItem = null;
                 this.player_arms.hasItem = false;
             }
-            this.orderAlgo(this.strategy);
         }
     }
 
