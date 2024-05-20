@@ -29,10 +29,11 @@ export default class EndScore extends Phaser.Scene {
                 this.cameras.main.displayWidth * 0.5,
                 this.cameras.main.displayHeight * 0.5,
                 `Dishes Made: ${this.result.dishes_made}
+                \nFailed Orders: ${this.result.wrong_orders}
                 \nMoney Made: ${this.result.money_made}`,
                 {
-                    font: "bold 16px Bangers",
-                    color: "#355E3B",
+                    font: "bold 30px Bangers",
+                    color: "#FFFFFF",
                 }
             )
             .setOrigin(0.5);
