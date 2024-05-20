@@ -23,6 +23,7 @@ export default class Day_1 extends Phaser.Scene {
 
     //Variables concerning popups, and informationals.
     private popup: Phaser.GameObjects.Container;
+    private buttonSound: Phaser.Sound.BaseSound;
 
     //Variables concerning other game objects.
     private strategy: number;
@@ -52,6 +53,7 @@ export default class Day_1 extends Phaser.Scene {
     }
 
     create() {
+        this.buttonSound = this.sound.add("buttonSound");
         //Sets result score.
         this.result = RESULT_DEFAULT;
 
@@ -299,19 +301,19 @@ export default class Day_1 extends Phaser.Scene {
             .setOrigin(0.5, 0.5)
             .setInteractive();
 
-            backButton.on("pointerdown", () =>
-                this.scene.start("LevelSelect")
-            );
+        backButton.on("pointerdown", () => {
+            this.buttonSound.play();
+            this.scene.start("LevelSelect")});
 
-            // Cursor change on hover
-            backButton.on(
-                "pointerover",
-                () => (this.game.canvas.style.cursor = "pointer")
-            );
-            backButton.on(
-                "pointerout",
-                () => (this.game.canvas.style.cursor = "default")
-            );
+        // Cursor change on hover
+        backButton.on(
+            "pointerover",
+            () => (this.game.canvas.style.cursor = "pointer")
+        );
+        backButton.on(
+            "pointerout",
+            () => (this.game.canvas.style.cursor = "default")
+        );
     }
 
     //Helper functions

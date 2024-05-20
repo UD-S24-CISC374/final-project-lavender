@@ -23,6 +23,7 @@ export default class Tutorial2 extends Phaser.Scene {
 
     //Variables concerning popups, and informationals.
     private popup: Phaser.GameObjects.Container;
+    private buttonSound: Phaser.Sound.BaseSound;
 
     //Variables concerning other game objects.
     private strategy: number;
@@ -52,6 +53,7 @@ export default class Tutorial2 extends Phaser.Scene {
     }
 
     create() {
+        this.buttonSound = this.sound.add("buttonSound");
         //Sets result score.
         this.result = RESULT_DEFAULT;
 
@@ -319,6 +321,7 @@ export default class Tutorial2 extends Phaser.Scene {
 
         // Add a click event listener to the button
         this.continueButton.on("pointerdown", () => {
+            this.buttonSound.play();
             this.scene.start("LevelSelect");
         });
     }

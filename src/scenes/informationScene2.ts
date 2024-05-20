@@ -5,7 +5,10 @@ export default class informationScene2 extends Phaser.Scene {
         super({ key: "informationScene2" });
     }
 
+    private buttonSound: Phaser.Sound.BaseSound;
+
     create() {
+        this.buttonSound = this.sound.add("buttonSound");
         // Screen for topic information
         this.add.image(500, 300, "kitchen1");
 
@@ -105,10 +108,14 @@ export default class informationScene2 extends Phaser.Scene {
             .setInteractive();
 
         // Button click events
-        nextButton2.on("pointerdown", () => this.scene.start("Tutorial"));
-        backButton.on("pointerdown", () =>
-            this.scene.start("informationScene")
-        );
+        nextButton2.on("pointerdown", () => {
+            this.buttonSound.play();
+            this.scene.start("Tutorial");
+        });
+        backButton.on("pointerdown", () => {
+            this.buttonSound.play();
+            this.scene.start("informationScene");
+        });
 
         // Cursor change on hover
         backButton.on(

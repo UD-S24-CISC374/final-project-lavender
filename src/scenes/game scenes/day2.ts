@@ -14,6 +14,7 @@ import { Conveyor } from "../../objects/conveyor";
 export default class Day_2 extends Phaser.Scene {
     //Variable that holds the score.
     private result: Result;
+    private buttonSound: Phaser.Sound.BaseSound;
 
     //Variables concerning input or the player.
     private mouseClicked: boolean;
@@ -52,6 +53,7 @@ export default class Day_2 extends Phaser.Scene {
     }
 
     create() {
+        this.buttonSound = this.sound.add("buttonSound");
         //Sets result score.
         this.result = RESULT_DEFAULT;
 
@@ -299,7 +301,10 @@ export default class Day_2 extends Phaser.Scene {
             .setOrigin(0.5, 0.5)
             .setInteractive();
 
-        backButton.on("pointerdown", () => this.scene.start("LevelSelect"));
+        backButton.on("pointerdown", () => {
+            this.buttonSound.play();
+            this.scene.start("LevelSelect");
+        });
 
         // Cursor change on hover
         backButton.on(

@@ -32,7 +32,13 @@ export default class Tutorial extends Phaser.Scene {
 
     private continueButton: Phaser.GameObjects.Text;
 
+    private buttonSound: Phaser.Sound.BaseSound;
+
+
+
     create() {
+
+        this.buttonSound = this.sound.add("buttonSound");
         //Creates tile and map.
         const map = this.make.tilemap({ key: "map_1" });
         const tileset = map.addTilesetImage("Room_Builder_48x48", "tiles"); //Tilemap name, then key preloader name
@@ -141,7 +147,7 @@ export default class Tutorial extends Phaser.Scene {
 
         // Graphics object for the button
         const buttonGraphics = this.add.graphics();
-        buttonGraphics.fillStyle(0xadd8e6, 0.8); 
+        buttonGraphics.fillStyle(0xadd8e6, 0.8);
         buttonGraphics.fillRoundedRect(
             buttonX,
             buttonY,
@@ -149,7 +155,7 @@ export default class Tutorial extends Phaser.Scene {
             buttonHeight,
             cornerRadius
         );
-        buttonGraphics.lineStyle(2, 0xffffff, 1); 
+        buttonGraphics.lineStyle(2, 0xffffff, 1);
         buttonGraphics.strokeRoundedRect(
             buttonX,
             buttonY,
@@ -193,6 +199,7 @@ export default class Tutorial extends Phaser.Scene {
 
         // Add a click event listener to the button
         this.continueButton.on("pointerdown", () => {
+            this.buttonSound.play();
             this.scene.start("Tutorial2");
         });
 
@@ -345,11 +352,11 @@ export default class Tutorial extends Phaser.Scene {
         this.tweens.add({
             targets: [this.secondTextBackground, this.secondInstructions],
             alpha: { from: 1, to: 0 },
-            duration: 2000, 
+            duration: 2000,
             onComplete: () => {
                 this.secondTextBackground.setVisible(false);
                 this.secondInstructions.setVisible(false);
-                this.fadeInThirdText(); 
+                this.fadeInThirdText();
             },
         });
     }
