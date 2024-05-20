@@ -1,12 +1,27 @@
 import Phaser from "phaser";
-import MainScene from "./scenes/mainScene";
-import PreloadScene from "./scenes/preloadScene";
 
-const DEFAULT_WIDTH = 1280;
-const DEFAULT_HEIGHT = 720;
+import PreloadScene from "./scenes/preloadScene";
+import TitleScene from "./scenes/titleScene";
+import LevelSelect from "./scenes/levelSelect";
+
+import InformationScene from "./scenes/informationScene";
+import InformationScene2 from "./scenes/informationScene2";
+import GameIntro from "./scenes/GameIntro";
+import Tutorial from "./scenes/game scenes/tutorial";
+import Tutorial2 from "./scenes/game scenes/tutorial2";
+
+import Day_1 from "./scenes/game scenes/day1";
+import Day_2 from "./scenes/game scenes/day2";
+import Day_3 from "./scenes/game scenes/day3";
+
+import EndScore from "./scenes/endScore";
+
+//608x480 or 1280x720
+const DEFAULT_WIDTH = 1104;
+const DEFAULT_HEIGHT = 624;
 
 export const CONFIG = {
-    title: "My Untitled Phaser 3 Game",
+    title: "Schedulsine",
     version: "0.0.1",
     type: Phaser.AUTO,
     backgroundColor: "#ffffff",
@@ -17,12 +32,25 @@ export const CONFIG = {
         width: DEFAULT_WIDTH,
         height: DEFAULT_HEIGHT,
     },
-    scene: [PreloadScene, MainScene],
+    scene: [
+        PreloadScene,
+        TitleScene,
+        LevelSelect,
+        InformationScene,
+        InformationScene2,
+        GameIntro,
+        Tutorial,
+        Tutorial2,
+        Day_1,
+        Day_2,
+        Day_3,
+        EndScore,
+    ],
     physics: {
         default: "arcade",
         arcade: {
             debug: false,
-            gravity: { y: 300 },
+            gravity: { y: 0 },
         },
     },
     input: {
