@@ -6,6 +6,7 @@ export default class GameIntro extends Phaser.Scene {
     private dialogText?: Phaser.GameObjects.Text;
     private index = 0;
     private timerEvent?: Phaser.Time.TimerEvent;
+    
 
     constructor() {
         super({ key: "GameIntro" });
@@ -14,7 +15,103 @@ export default class GameIntro extends Phaser.Scene {
     create() {
         this.cameras.main.setBackgroundColor("#add8e6");
         this.createDialogBox();
-        this.createNextButton();
+
+        // Button dimensions and positions
+        const tutorialButtonX = 950; // Right side
+        const backButtonX = 100; // Left side
+        const buttonY = 550;
+        const buttonWidth = 150;
+        const buttonHeight = 50;
+        const cornerRadius = 25;
+
+        // Tutorial button graphics
+        const tutorialButtonGraphics = this.add.graphics();
+        tutorialButtonGraphics.fillStyle(0xadd8e6, 0.8); // Blue fill
+        tutorialButtonGraphics.fillRoundedRect(
+            tutorialButtonX,
+            buttonY,
+            buttonWidth,
+            buttonHeight,
+            cornerRadius
+        );
+        tutorialButtonGraphics.lineStyle(2, 0xffffff, 1); // White outline
+        tutorialButtonGraphics.strokeRoundedRect(
+            tutorialButtonX,
+            buttonY,
+            buttonWidth,
+            buttonHeight,
+            cornerRadius
+        );
+
+        // Back button graphics
+        const backButtonGraphics = this.add.graphics();
+        backButtonGraphics.fillStyle(0xadd8e6, 0.8); // Blue fill
+        backButtonGraphics.fillRoundedRect(
+            backButtonX,
+            buttonY,
+            buttonWidth,
+            buttonHeight,
+            cornerRadius
+        );
+        backButtonGraphics.lineStyle(2, 0xffffff, 1); // White outline
+        backButtonGraphics.strokeRoundedRect(
+            backButtonX,
+            buttonY,
+            buttonWidth,
+            buttonHeight,
+            cornerRadius
+        );
+
+        let nextButton2 = this.add
+            .text(
+                tutorialButtonX + buttonWidth / 2,
+                buttonY + buttonHeight / 2,
+                "Continue",
+                {
+                    font: "35px Bangers",
+                    color: "#ffffff",
+                }
+            )
+            .setOrigin(0.5, 0.5)
+            .setInteractive();
+
+        // Back button
+        let backButton = this.add
+            .text(
+                backButtonX + buttonWidth / 2,
+                buttonY + buttonHeight / 2,
+                "Back",
+                {
+                    font: "35px Bangers",
+                    color: "#ffffff",
+                }
+            )
+            .setOrigin(0.5, 0.5)
+            .setInteractive();
+
+        // Button click events
+        nextButton2.on("pointerdown", () => this.scene.start("Day_1"));
+        backButton.on("pointerdown", () =>
+            this.scene.start("LevelSelect")
+        );
+
+        // Cursor change on hover
+        backButton.on(
+            "pointerover",
+            () => (this.game.canvas.style.cursor = "pointer")
+        );
+        backButton.on(
+            "pointerout",
+            () => (this.game.canvas.style.cursor = "default")
+        );
+        nextButton2.on(
+            "pointerover",
+            () => (this.game.canvas.style.cursor = "pointer")
+        );
+        nextButton2.on(
+            "pointerout",
+            () => (this.game.canvas.style.cursor = "default")
+        );
     }
 
     private createDialogBox(): void {
@@ -63,26 +160,5 @@ export default class GameIntro extends Phaser.Scene {
         }
         this.dialogText.text += this.content[this.index];
         this.index++;
-    }
-
-    private createNextButton(): void {
-        const width = this.cameras.main.width;
-        const height = this.cameras.main.height;
-        const nextButton = this.add.rectangle(
-            width - 100,
-            height - 50,
-            100,
-            50
-        );
-        nextButton.setInteractive({ useHandCursor: true });
-        nextButton.on("pointerdown", () => this.scene.start("Day_1"));
-
-        this.add
-            .text(nextButton.x, nextButton.y, "Next", {
-                font: "38px Arial",
-                color: "#ffffff",
-                backgroundColor: "rgba(255, 255, 255, 0.4)",
-            })
-            .setOrigin(0.5);
     }
 }

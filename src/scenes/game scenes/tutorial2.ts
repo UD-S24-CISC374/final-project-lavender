@@ -231,7 +231,7 @@ export default class Tutorial2 extends Phaser.Scene {
         //Initialize Popup (in orders.ts)
         this.popup = Orders.initializePopup(this);
 
-        const textBoxWidth = 500;
+        const textBoxWidth = 540;
         const textBoxHeight = 130;
         const startX = (this.cameras.main.width - textBoxWidth) / 2;
         const startY = this.cameras.main.height - textBoxHeight - 10;
@@ -250,9 +250,9 @@ export default class Tutorial2 extends Phaser.Scene {
             .text(
                 startX + textBoxWidth / 2,
                 startY + textBoxHeight / 2,
-                "1. Walk up to the orders in the top right.\n2. Walk up to your ingredients, tap for the one you want\n3. Carry it to the pot & click to add.\n4. Stand over the pot and click to get your final order\n5. Bring it to the conveyor to turn in!",
+                "1. Walk up to the orders in the top right to see what you need to collect.\n2. Walk up to your ingredients, click anywhere on the screen to select it,\nand click again to pick it up \n3. Carry it to the pot & click anywhere to add.\n4. Stand over the pot and click to get your final order\n5. Bring it to the conveyor to turn in!",
                 {
-                    font: "21px Bangers",
+                    font: "18px Bangers",
                     color: "#000000",
                 }
             )
