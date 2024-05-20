@@ -6,13 +6,14 @@ export default class GameIntro extends Phaser.Scene {
     private dialogText?: Phaser.GameObjects.Text;
     private index = 0;
     private timerEvent?: Phaser.Time.TimerEvent;
-    
+    private buttonSound: Phaser.Sound.BaseSound;
 
     constructor() {
         super({ key: "GameIntro" });
     }
 
     create() {
+        this.buttonSound = this.sound.add("buttonSound");
         this.cameras.main.setBackgroundColor("#add8e6");
         this.createDialogBox();
 
@@ -90,10 +91,12 @@ export default class GameIntro extends Phaser.Scene {
             .setInteractive();
 
         // Button click events
-        nextButton2.on("pointerdown", () => this.scene.start("Day_1"));
-        backButton.on("pointerdown", () =>
-            this.scene.start("LevelSelect")
-        );
+        nextButton2.on("pointerdown", () => {
+            this.buttonSound.play();
+            this.scene.start("Day_1")});
+        backButton.on("pointerdown", () => {
+            this.buttonSound.play();
+            this.scene.start("LevelSelect")});
 
         // Cursor change on hover
         backButton.on(
