@@ -259,6 +259,59 @@ export default class Day_1 extends Phaser.Scene {
                 }
             )
             .setOrigin(0.5, 0.5);
+
+        // Back button graphics
+        const backButtonX = 70; // Left side
+        const buttonY = 30;
+        const buttonWidth = 80;
+        const buttonHeight = 50;
+        const cornerRadius = 25;
+
+        const backButtonGraphics = this.add.graphics();
+        backButtonGraphics.fillStyle(0xadd8e6, 0.8); // Blue fill
+        backButtonGraphics.fillRoundedRect(
+            backButtonX,
+            buttonY,
+            buttonWidth,
+            buttonHeight,
+            cornerRadius
+        );
+        backButtonGraphics.lineStyle(2, 0xffffff, 1); // White outline
+        backButtonGraphics.strokeRoundedRect(
+            backButtonX,
+            buttonY,
+            buttonWidth,
+            buttonHeight,
+            cornerRadius
+        );
+
+        // Back button
+        let backButton = this.add
+            .text(
+                backButtonX + buttonWidth / 2,
+                buttonY + buttonHeight / 2,
+                "Exit",
+                {
+                    font: "25px bold Bangers",
+                    color: "#ffffff",
+                }
+            )
+            .setOrigin(0.5, 0.5)
+            .setInteractive();
+
+            backButton.on("pointerdown", () =>
+                this.scene.start("LevelSelect")
+            );
+
+            // Cursor change on hover
+            backButton.on(
+                "pointerover",
+                () => (this.game.canvas.style.cursor = "pointer")
+            );
+            backButton.on(
+                "pointerout",
+                () => (this.game.canvas.style.cursor = "default")
+            );
     }
 
     //Helper functions
